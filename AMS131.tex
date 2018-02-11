@@ -1,0 +1,44 @@
+% LaTeX template adapted from: https://www.overleaf.com/latex/templates/simple-math-homework-template/tbszsswsndrz
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+\usepackage[]{amssymb} %gives us the character \varnothing
+\usepackage{amsmath} %for equations
+\usepackage[]{listings} %for code blocks
+\usepackage{graphicx} %for diagrams
+\usepackage{fancyhdr} %for headers
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{tikz} % for drawings
+\usepackage{multicol}
+\usetikzlibrary{arrows.meta,shapes.arrows,chains,decorations.pathreplacing}
+
+
+\graphicspath{}
+\pagestyle{fancy}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0em}
+\rhead{Pete Wilcox | pcwilcox@ucsc.edu}
+\lhead{AMS 131: Cheat Sheet}  
+
+\begin{document}
+    \subsection*{Experiments and Events:}
+        \paragraph*{Def:} An experiment is a process whose outcome is not known in advance with certainy.
+        \paragraph*{Sample Space: } Collection of \textit{all} possible outcomes of an experiment. $S$ or $\Omega$. Each outcome is an element of the sample space $s \in S$.
+    \subsection*{Operations: }
+        \paragraph*{Union: } \( x \in S: A \cup B = \{x \in A \text{ or } x \in B\}\)
+            \begin{itemize}
+                \item[] \(A \cup B = B \cup A \)
+                \item[] \(A \cup A = A \)
+                \item[] \(A \cup \emptyset = A \)
+                \item[] \(A \cup S = S \)
+                \item[] \(A \subset B \Rightarrow A \cup B = B\)
+                \item[] \(A_1, A_2, \dots, A_n \Rightarrow A_1 \cup A_2 \cup \dots \cup A_n = \bigcup\limits_{i=1}^{i=n} A_i\)
+                \item[] \(\bigcup\limits_{i=1}^{\infty} A_i \rightarrow \bigcup\limits_{i\in I}A_i \)
+                \item[] \( (A \cup B) \cup C = A \cup (B \cup C) = A \cup B \cup C \)
+            \end{itemize}
+        \paragraph*{Intersections: } \( A \cap B = \{ x \in A \text{ and } x \in B\} = AB \)            
+
+            
+
+\end{document}
