@@ -24,10 +24,16 @@
 \begin{document}
 \begin{multicols}{3}
     \subsection*{Experiments and Events:}
-        \paragraph*{Def:} An experiment is a process whose outcome is not known in advance with certainy.
-        \paragraph*{Sample Space: } Collection of \textit{all} possible outcomes of an experiment. $S$ or $\Omega$. Each outcome is an element of the sample space $s \in S$.
+        \paragraph*{Def:} 
+            An experiment is a process whose outcome is not known in advance with certainy.
+
+        \paragraph*{Sample Space: } 
+            Collection of \textit{all} possible outcomes of an experiment. $S$ or $\Omega$. Each outcome is an element of the sample space $s \in S$.
+
     \subsection*{Operations: }
-        \paragraph*{Union: } \( x \in S: A \cup B = \{x \in A \text{ or } x \in B\}\)
+        \paragraph*{Union: } 
+            \( x \in S: A \cup B = \{x \in A \text{ or } x \in B\}\)
+            
             \begin{itemize}
                 \item[] \(A \cup B = B \cup A \)
                 \item[] \(A \cup A = A \)
@@ -38,7 +44,10 @@
                 \item[] \(\bigcup\limits_{i=1}^{\infty} A_i \rightarrow \bigcup\limits_{i\in I}A_i \)
                 \item[] \( (A \cup B) \cup C = A \cup (B \cup C) = A \cup B \cup C \)
             \end{itemize}
-        \paragraph*{Intersections: } \( A \cap B = \{ x \in A \text{ and } x \in B\} = AB \)            
+
+        \paragraph*{Intersections: } 
+            \( A \cap B = \{ x \in A \text{ and } x \in B\} = AB \)            
+            
             \begin{itemize}
                 \item[] \(A \cap B = B \cap A \)
                 \item[] \(A \cap A = A \)
@@ -49,7 +58,10 @@
                 \item[] \(\bigcap\limits_{i=1}^{n}A_i = A_1 \cap A_2 \cap \dots \cap A_n \)
                 \item[] \( (A \cap B) \cap C = A \cap (B \cap C) = A \cap B \cap C\)
             \end{itemize}
-        \paragraph*{Complements: } \(A^c = \{x \in S: x \notin A\}\)
+        
+        \paragraph*{Complements: } 
+            \(A^c = \{x \in S: x \notin A\}\)
+            
             \begin{itemize}
                 \item[] \((A^c)^c = A\)
                 \item[] \(\emptyset^c = S\)
@@ -57,8 +69,13 @@
                 \item[] \(A\cup A^c = S\)
                 \item[] \(A \cap A^c = \emptyset\)
             \end{itemize}
-    \subsection*{Dijoint Events: } $A$ and $B$ are \textit{disjoint} or \textit{mutually exclusive} if $A$ and $B$ have no outcomes in common. This happens only if \(A \cap B = \emptyset \).
-        \paragraph*{Def:} A collection \(A_1, \dots, A_n\) is a collection of disjoint evens if and only if \(A_i \cap A_j = \emptyset, \forall i, j, i \neq j\)
+    
+    \subsection*{Dijoint Events: } 
+        $A$ and $B$ are \textit{disjoint} or \textit{mutually exclusive} if $A$ and $B$ have no outcomes in common. This happens only if \(A \cap B = \emptyset \).
+        
+        \paragraph*{Def:} 
+            A collection \(A_1, \dots, A_n\) is a collection of disjoint evens if and only if \(A_i \cap A_j = \emptyset, \forall i, j, i \neq j\)
+            
             \begin{itemize}
                 \item[] \(\left (\bigcup\limits_{i\in I} A_i \right)^c = \bigcap\limits_{i\in I}A_i^c \)
                 \item[] \((A\cup B)^c = A^c \cap B^c \)
@@ -67,7 +84,10 @@
                 \Rightarrow x \in A^c \text{ and } x \in B^c \\
                 \Rightarrow x \in A^c \cap B^c \)
             \end{itemize}
-    \subsection*{Probabilities: } Functions over $S$ that measure the likelihood of events.
+
+    \subsection*{Probabilities: } 
+        Functions over $S$ that measure the likelihood of events.
+
             \begin{itemize}
                 \item[] $\forall A: Pr(A) \geq 0$
                 \item[] $Pr(S) = 1$
@@ -82,14 +102,34 @@
                 \item[]\(\forall A: 0 \leq Pr(A) \leq 1\)
                 \item[]\(Pr(A\cup B) = Pr(A) + Pr(B) - Pr(A\cap B)\)
             \end{itemize}
-    \subsection*{Finite Sample Spaces: } \(S := \{s_1, s_2, \dots, s_n \}\)
-        \paragraph*{} To obtain a probability distribution over $S$ we need to specify \(Pr(s_i) = P_i, \forall i = 1, 2, \dots, n\), such that \(\sum\limits_{i=1}^{n}P_i = 1\)
 
-        \paragraph*{Def: } A sample space $S$ with $n$ outcomes $s_1, \dots, s_n$ is a \textit{simple sample space} if the probability assigned to each outcome is $\frac{1}{n}$. If $A$ contains $m$ outcomes then \(Pr(A) = \frac{m}{n}\).
+    \subsection*{Finite Sample Spaces: } 
+        \(S := \{s_1, s_2, \dots, s_n \}\)
+        
+        \paragraph*{} 
+            To obtain a probability distribution over $S$ we need to specify \(Pr(s_i) = P_i, \forall i = 1, 2, \dots, n\), such that \(\sum\limits_{i=1}^{n}P_i = 1\)
+
+        \paragraph*{Def: } 
+            A sample space $S$ with $n$ outcomes $s_1, \dots, s_n$ is a \textit{simple sample space} if the probability assigned to each outcome is $\frac{1}{n}$. If $A$ contains $m$ outcomes then \(Pr(A) = \frac{m}{n}\).
 
     \subsection*{Counting Methods: }
-        \paragraph*{Multiplication Rule: } Suppose an experiment has $k$ parts \((k \geq 2)\) such that the $i^{th}$ part of the experiement has $n_i$ possible outcomes, $i = 1, \dots, k$, and that \textit{all possible outcomes can occur regardless of which outcomes have occurred in other parts}. The sample space $S$ will contain vectors of the form $(u_1, u_2, \dots, u_k)$. $u_i$ is one of the $n_i$ possible outcomes of part $i$. The total number of vectors is $n_1 \cdot n_2 \cdot \dots \cdot n_k$.
-        \paragraph*{Permutations: } Given an array of $n$ elements the first position can be filled with $n$ different elements, the second with $n-1$, and so on. $n \cdot (n-1) \cdot (n-2) \cdot \dots \cdot 1 = n!$
+        
+        \paragraph*{Multiplication Rule: } 
+            Suppose an experiment has $k$ parts \((k \geq 2)\) such that the $i^{th}$ part of the experiement has $n_i$ possible outcomes, $i = 1, \dots, k$, and that \textit{all possible outcomes can occur regardless of which outcomes have occurred in other parts}. The sample space $S$ will contain vectors of the form $(u_1, u_2, \dots, u_k)$. $u_i$ is one of the $n_i$ possible outcomes of part $i$. The total number of vectors is $n_1 \cdot n_2 \cdot \dots \cdot n_k$.
+        
+        \paragraph*{Permutations: } 
+            Given an array of $n$ elements the first position can be filled with $n$ different elements, the second with $n-1$, and so on. $n \cdot (n-1) \cdot (n-2) \cdot \dots \cdot 1 = n!$
+
+            \begin{itemize}
+                \item[] \(P_{n,k} = \frac{n!}{(n-k)!}\)
+                \item[] \(P_{n,n} = n!\)
+            \end{itemize}
+
+        \paragraph*{Combinations: }
+            In general we can "combine" $n$ elements taking $k$ at a time in \(C_{n,k} = \frac{P_{n,k}}{k!} = \frac{n!}{(n-k)!k!} = {n \choose k} \). 
+
+        \paragraph*{Multinomial Coefficeints: } Consider splitting $n$ elements into $k (k \geq 2)$ groups in a way such that group $j$ gets $n_j$ elements and $\sum\limits_{j = 1}^{k}n_j = n$. The $n_1$ elements in the first group can be selected in ${n choose n_1}$
+
         \end{multicols}
 
 \end{document}
