@@ -22,6 +22,7 @@
 \lhead{AMS 131: Cheat Sheet}  
 
 \begin{document}
+\begin{multicols}{3}
     \subsection*{Experiments and Events:}
         \paragraph*{Def:} An experiment is a process whose outcome is not known in advance with certainy.
         \paragraph*{Sample Space: } Collection of \textit{all} possible outcomes of an experiment. $S$ or $\Omega$. Each outcome is an element of the sample space $s \in S$.
@@ -38,7 +39,46 @@
                 \item[] \( (A \cup B) \cup C = A \cup (B \cup C) = A \cup B \cup C \)
             \end{itemize}
         \paragraph*{Intersections: } \( A \cap B = \{ x \in A \text{ and } x \in B\} = AB \)            
+            \begin{itemize}
+                \item[] \(A \cap B = B \cap A \)
+                \item[] \(A \cap A = A \)
+                \item[] \(A \cap \emptyset = \emptyset \)
+                \item[] \(A \cap S = A\)
+                \item[] \(A \subset B \Rightarrow A \cap B\)
+                \item[] \(\bigcap\limits_{i\in I}A_i = \bigcap\limits_{i=1}^{\infty}A_i\)
+                \item[] \(\bigcap\limits_{i=1}^{n}A_i = A_1 \cap A_2 \cap \dots \cap A_n \)
+                \item[] \( (A \cap B) \cap C = A \cap (B \cap C) = A \cap B \cap C\)
+            \end{itemize}
+        \paragraph*{Complements: } \(A^c = \{x \in S: x \notin A\}\)
+            \begin{itemize}
+                \item[] \((A^c)^c = A\)
+                \item[] \(\emptyset^c = S\)
+                \item[] \(S^c = \emptyset\)
+                \item[] \(A\cup A^c = S\)
+                \item[] \(A \cap A^c = \emptyset\)
+            \end{itemize}
+    \subsection*{Dijoint Events: } $A$ and $B$ are \textit{disjoint} or \textit{mutually exclusive} if $A$ and $B$ have no outcomes in common. This happens only if \(A \cap B = \emptyset \).
+        \paragraph*{Def:} A collection \(A_1, \dots, A_n\) is a collection of disjoint evens if and only if \(A_i \cap A_j = \emptyset, \forall i, j, i \neq j\)
+            \begin{itemize}
+                \item[] \(\left (\bigcup\limits_{i\in I} A_i \right)^c = \bigcap\limits_{i\in I}A_i^c \)
+                \item[] \((A\cup B)^c = A^c \cap B^c \)
+                \item[] \(x\in(A\cap B)^c \\ 
+                \Rightarrow x \notin A \text{ and } x\notin B \\
+                \Rightarrow x \in A^c \text{ and } x \in B^c \\
+                \Rightarrow x \in A^c \cap B^c \)
+            \end{itemize}
+    \subsection*{Probabilities: } Functions over $S$ that measure the likelihood of events.
+            \begin{itemize}
+                \item[] $\forall A: Pr(A) \geq 0$
+                \item[] $Pr(S) = 1$
+                \item[] For every \textit{infinite sequence} of \textit{disjoint} events \( A_1, A_2, \dots (A_i \in S): \\
+                Pr\left(\bigcup\limits_{i=1}^{\infty}A_i\right) = \sum\limits_{i=1}^{\infty} Pr(A_i) \\
+                Pr(A_1 \cup A_2 \cup \dots \cup A_n \cup \dots) \\
+                = Pr(A_1) + Pr(A_2) + \dots + Pr(A_n) + \dots \)
+                \item[]\(Pr(\emptyset) = 0\)
+                \item[]\(Pr(\bigcup\limits_{i=1}^{n}A_i)=Pr(\bigcup\limits_{i=1}^{n}A_i + \bigcup\limits_{i=n+1}^{\infty}\emptyset) = \sum\limits_{i=1}^{n}Pr(A_i)\)
+            \end{itemize}
 
-            
+        \end{multicols}
 
 \end{document}
