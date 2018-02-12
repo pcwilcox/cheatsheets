@@ -158,6 +158,72 @@
         
         \paragraph*{Bayes' Theorem:}
             $B_1, \ldots, B_k :=$ a partition of $S$ such that $Pr(B_j) > 0, j = 1, \ldots, k$. Assume you have $A$ such that $Pr(A) > 0$. Then: $Pr(B_i|A) = \frac{Pr(A|B_i) \cdot Pr(B_i)}{Pr(A)} = \frac{Pr(A|B_i) \cdot Pr(B_i)}{\sum\limits_{j=1}^{k}Pr(A|B_j) \cdot Pr(B_j)}$
-        \end{multicols}
+        
+        \paragraph*{Random Variables:}
+            \subparagraph*{Def:}
+                A real-valued function on $S$ isa  random variable. A random variable $X$ is a functions that assigns a real number $X(s)=x$ to each possible outcome $s \in S$: $X:S \Rightarrow \mathcal{D}$. $x:=$ a realization of the random variable, $x \in \mathcal{D}$.
+            \subparagraph*{Notation: } 
+                We will be computing $Pr(X \in E)$ for $E \subset \mathcal{D} = Pr(s \in S: X(s) \in E)$
+            \subparagraph*{Discrete Probability Distributions: }
+                A r.v. $X$ has a discrete distribution if it takes a countable number of values. The probability function of a discrete r.v. is $f_X(x) = Pr(X=x)$. Properties:
+
+                \begin{itemize}
+                    \item[] $0 \leq f_X(x) \leq 1$
+                    \item[] $\forall x \notin \mathcal{D}: f_X(x) = 0$
+                    \item[] $\sum\limits_{x \in \mathcal{D}} f_X(x) = 1$
+                    \item[] $Pr(X \in A) = \sum\limits_{x \in A} f_X (x)$
+                \end{itemize}
+
+            \subparagraph*{Uniform Distribution: }
+                $X = x, x \in \{1, 2, \ldots, k\}$ with all values $x$ equally likely. The p.f. is $f_X(x) = Pr(X=x) = $\[ \begin{cases} \frac      {1}{k} & x = 1, 2, \ldots, k \\
+                0 & o.w. \end{cases}
+                    \]
+            \subparagraph*{Bernoulli Distribution: }
+                An event $A$ happens with probability $p$ \\
+            $X$ = \[ \begin{cases} 1 & \text{if $A$ happens} \\ 0 & \text{if $A^c$ happens} \end{cases} \] \\
+                $f_X(x) =$ \[ 
+                    \begin{cases} 
+                        (1-p)   & x = 0 \\ 
+                        p       & x = 1 \\
+                        0       & \text{o.w.} 
+                    \end{cases} \]
+            \subparagraph*{Binomial:}
+                    $n$ Bernoulli trials repeated independently with probability of success $p$. $X :=$ number of success in $n$ trials. $x \in \{0, 1, \ldots, n\}$. $f_X(x) = Pr(X=x) =$
+                    \[
+                        \begin{cases}
+                            {n \choose x} p^x (1-p)^{n-x}   &   x=0, \ldots, n \\
+                            0                               &   \text{o.w.}
+                        \end{cases}
+                        \]
+                        $X \sim Bin(n,p)$
+            \subparagraph*{Hypergeometric: }
+                    A box with $A$ red balls and $B$ blue balls. $n$ balls are drawn \textit{without replacement}. $X :=$ number of red balls. $X \leq min(n, A)$. $max(n-B, 0) \leq X \leq min(n,A)$. $f_X(x) = Pr(X=x) =$ \[
+                        \begin{cases}
+                            \frac{ {A \choose x} \cdot {B \choose n - x}}{{A + B \choose n}}     &   \text{for } max(n-B,0) \leq x \leq min(n,A) \\
+                            0   &   \text{o.w.}
+                        \end{cases}
+                    \]
+            
+            \subparagraph*{Negative-Binomial: }
+                    We repeat Bernoulli trials until $r$ successes are observed. $X :=$ number of failures $= \{0, 1, \ldots\}$. $p :=$ probability of success. $Pr(X = x) = Pr(x \text{ failures before $r$ successes}) = Pr(x \text{ failures and $r-1$ successes in $x + r - 1$ trials}) \cdot Pr(\text{one success in last trial}) = \left[{x+r-1 \choose x } (1-p)^x p^{r-1} \right] \cdot p = {x + r - 1 \choose x} (1 - p)^x p^r$. $f_X(x) = $ \[
+                        \begin{cases}
+                            {x+r-1 \choose x} (1-p)^x p^r   &   x=0,1,2,\ldots \\
+                            0       & \text{o.w.}
+                        \end{cases}
+                    \]
+            \subparagraph*{Geometric: }
+                    Negative binomial with $r=1. f_X(x) = \begin{cases} (1-p)^x p & x=0,1,\ldots \\ 0 & \text{o.w.} \end{cases}$
+
+            \subparagraph*{Poisson: }
+                    Counts occurences of an event. $X$ is a Poisson r.v. with parameter $\lambda$ (intensity) if the p.f. is $f_X(x) = \begin{cases} \frac{e^{-\lambda}\lambda^x}{x!} & x=0,1,2,\ldots \\ 0 & \text{o.w.} \end{cases}$ with $\lambda>0$.
+            \subparagraph*{Continuous Random Variables: }
+                    A r.v. $X$ has a continuous distribution if there is a non-negative $f$ such that $Pr(a \leq X \leq b) = \int_{a}^{b} f(x)dx$. $f$ is the probability density function p.d.f. 
+            \subparagraph*{Cumulative Distribution Function: } 
+                    (c.d.f.) For any r.v. $X$ the c.d.f. is given by $F(x) = Pr(X \leq x)$. Properties: \begin{itemize}
+                        \item[] $\forall x: 0 \leq F(x) \leq 1$
+                        \item[] $F(x)$ is non-decreasing, i.e. if $x_1 < x_2 \Rightarrow \{X \leq x_1 \} \subset \{X \leq x_2 \}$ and so $Pr(X \leq x_1) \leq Pr(X \leq x_2) \Rightarrow F(x_1) \leq F(x_2)$
+                        \item[] $\lim_{x \to -\infty} F(x) = 0$ and $\lim_{x \to \infty} F(x) = 1$
+                    \end{itemize}
+                \end{multicols}
 
 \end{document}
