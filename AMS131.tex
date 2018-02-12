@@ -1,5 +1,5 @@
 % LaTeX template adapted from: https://www.overleaf.com/latex/templates/simple-math-homework-template/tbszsswsndrz
-\documentclass{article}
+\documentclass{article}[10pt]
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[]{amsthm} %lets us use \begin{proof}
@@ -22,7 +22,7 @@
 \lhead{AMS 131: Cheat Sheet}  
 
 \begin{document}
-\begin{multicols}{3}
+\begin{multicols}{2}
     \subsection*{Experiments and Events:}
         \paragraph*{Def:} 
             An experiment is a process whose outcome is not known in advance with certainy.
@@ -110,15 +110,15 @@
             To obtain a probability distribution over $S$ we need to specify \(Pr(s_i) = P_i, \forall i = 1, 2, \dots, n\), such that \(\sum\limits_{i=1}^{n}P_i = 1\)
 
         \paragraph*{Def: } 
-            A sample space $S$ with $n$ outcomes $s_1, \dots, s_n$ is a \textit{simple sample space} if the probability assigned to each outcome is $\frac{1}{n}$. If $A$ contains $m$ outcomes then \(Pr(A) = \frac{m}{n}\).
+            A sample space $S$ with $n$ outcomes $s_1, \ldots, s_n$ is a \textit{simple sample space} if the probability assigned to each outcome is $\frac{1}{n}$. If $A$ contains $m$ outcomes then \(Pr(A) = \frac{m}{n}\).
 
     \subsection*{Counting Methods: }
         
         \paragraph*{Multiplication Rule: } 
-            Suppose an experiment has $k$ parts \((k \geq 2)\) such that the $i^{th}$ part of the experiement has $n_i$ possible outcomes, $i = 1, \dots, k$, and that \textit{all possible outcomes can occur regardless of which outcomes have occurred in other parts}. The sample space $S$ will contain vectors of the form $(u_1, u_2, \dots, u_k)$. $u_i$ is one of the $n_i$ possible outcomes of part $i$. The total number of vectors is $n_1 \cdot n_2 \cdot \dots \cdot n_k$.
+            Suppose an experiment has $k$ parts \((k \geq 2)\) such that the $i^{th}$ part of the experiement has $n_i$ possible outcomes, $i = 1, \ldots, k$, and that \textit{all possible outcomes can occur regardless of which outcomes have occurred in other parts}. The sample space $S$ will contain vectors of the form $(u_1, u_2, \ldots, u_k)$. $u_i$ is one of the $n_i$ possible outcomes of part $i$. The total number of vectors is $n_1 \cdot n_2 \cdot \ldots \cdot n_k$.
         
         \paragraph*{Permutations: } 
-            Given an array of $n$ elements the first position can be filled with $n$ different elements, the second with $n-1$, and so on. $n \cdot (n-1) \cdot (n-2) \cdot \dots \cdot 1 = n!$
+            Given an array of $n$ elements the first position can be filled with $n$ different elements, the second with $n-1$, and so on. $n \cdot (n-1) \cdot (n-2) \cdot \ldots \cdot 1 = n!$
 
             \begin{itemize}
                 \item[] \(P_{n,k} = \frac{n!}{(n-k)!}\)
@@ -128,8 +128,36 @@
         \paragraph*{Combinations: }
             In general we can "combine" $n$ elements taking $k$ at a time in \(C_{n,k} = \frac{P_{n,k}}{k!} = \frac{n!}{(n-k)!k!} = {n \choose k} \). 
 
-        \paragraph*{Multinomial Coefficeints: } Consider splitting $n$ elements into $k (k \geq 2)$ groups in a way such that group $j$ gets $n_j$ elements and $\sum\limits_{j = 1}^{k}n_j = n$. The $n_1$ elements in the first group can be selected in ${n choose n_1}$
-
+        \paragraph*{Multinomial Coefficeints: } 
+            Consider splitting $n$ elements into $k (k \geq 2)$ groups in a way such that group $j$ gets $n_j$ elements and $\sum\limits_{j = 1}^{k}n_j = n$. The $n_1$ elements in the first group can be selected in ${n \choose n_1}$, the second in ${n-n_1 \choose n_2}$, the third in ${n-n_1-n_2 \choose n_3}$ and so on until we complete the $k$ groups. Then: ${n \choose n_1}\cdot{n-n_1 \choose n_2}\cdot{n-n_1-n_2 \choose n_3}\cdot \ldots \cdot{n_k \choose n_k} = {n \choose n_1, n_2, \ldots, n_k}$
+        \paragraph*{Probability of union:}
+            If $A_1, A_2, \ldots, A_n$ are \textit{disjoint events} then \\
+            \(Pr(A_1 \cup A_2 \cup \ldots \cup A_n) \\
+            = Pr(\bigcup\limits_{i=1}^{n}A_i) \\
+            = Pr(A_1) + Pr(A_2) + \ldots + Pr(A_n) \\
+            = \sum\limits_{i=1}^{n}Pr(A_i) \)
+        \subparagraph*{} 
+            If the events are not disjoint: \\
+            \( A_1, A_2: Pr(A_1 \cup A_2) = Pr(A_1) + Pr(A_2) - Pr(A_1 \cap A_2) \\
+            A_1, A_2, A_3: Pr(A_1) + Pr(A_2) + Pr(A_3) - Pr(A_1 \cap A_2) - Pr(A_1 \cap A_3) - Pr(A_2 \cap A_3) + Pr(A_1 \cap A_2 \cap A_3)\)     
+        
+    \subsection*{Conditional Probability: }
+        \paragraph*{}
+            If $A, B$ are events such that $Pr(A) > 0$ and $Pr(B) > 0$ then $Pr(B|A) = \frac{Pr(A\cap B)}{Pr(A)}$ and \\
+            $Pr(A|B) = \frac{Pr(A \cap B)}{Pr(B)}$ \\
+            Furthermore: $Pr(A \cap B) = Pr(B|A) \cdot Pr(A)$ and $Pr(A \cap B) = Pr(A|B) \cdot Pr(B)$. In general: $Pr(A_1 \cap A_2 \cap \ldots \cap A_n) = Pr(A_1) \cdot Pr(A_2 | A_1) \cdot \ldots \cdot Pr(A_n | A_1 \cap A_2 \cap \ldots \cap A_{n-1})$
+        \paragraph*{Independence:}
+            $A, B$ are independent events if $Pr(A|B) = Pr(A)$ and $Pr(B|A) = Pr(B)$. Then, if $A, B$ are independent: $Pr(A \cap B) = Pr(A|B) \cdot Pr(B) = Pr(A) \cdot Pr(B)$ and $Pr(A \cap B) = Pr(B | A) \cdot Pr(A) = Pr(B) \cdot Pr(A)$. In general if $A_1, A_2, \ldots, A_n$ are independent, $Pr(A_1 \cap A_2 \cap \ldots \cap A_n) = Pr(A_1) \cdot Pr(A_2) \cdot \ldots \cdot Pr(A_n)$. Note that if $A \cap B = \emptyset$ then the two events are \textit{not independent}. note that if $A, B$ are independent then $A, B^c$ are also independent.
+        
+        \paragraph*{Conditionally Independent: } 
+            $A_1, \ldots, A_k$ are \textit{conditionally independent} given $B$ if, for every subset $A_{i_1}, \ldots, A_{i_m}: Pr(A_{i_1} \cap \ldots \cap A_{i_m} | B) = Pr(A_{i_1} | B) \cdot \ldots \cdot Pr(A_{i_m} | B)$.
+        
+        \paragraph*{Partitions: }
+            Let $B_1, \ldots, B_k$ be such that $B_i \cap B_j = \emptyset \forall i \neq j$ and $\bigcup\limits_{i = 1}^{k} B_i = S$. Then these events form a partition of $S$. \\
+            $A = A \cap S = A \cap \left(\bigcup\limits_{i = 1}^{k} B_i\right) = (A \cap B_1) \cup (A \cap B_2) \cup \ldots \cup (A \cap B_k)$. Then: $Pr(A) = Pr(A \cap S) = Pr(A \cap \left(\bigcup\limits_{i = 1}^{k} B_i \right)) = Pr(A \cap B_1) + Pr(A \cap B_2) + \ldots + Pr(A \cap B_k) = Pr(A|B_1) \cdot Pr(B_1) + Pr(A|B_2)\cdot Pr(B_2) + \ldots + Pr(A|B_k) \cdot Pr(B_k) = \sum\limits_{i=1}^{k} Pr(A|B_i)\cdot Pr(B_i)$. So, if $B_1, \ldots, B_k$ are a partition of $S$: $Pr(A) = \sum\limits_{i=1}^{k}Pr(A|B_i)\cdot Pr(B_i)$
+        
+        \paragraph*{Bayes' Theorem:}
+            $B_1, \ldots, B_k :=$ a partition of $S$ such that $Pr(B_j) > 0, j = 1, \ldots, k$. Assume you have $A$ such that $Pr(A) > 0$. Then: $Pr(B_i|A) = \frac{Pr(A|B_i) \cdot Pr(B_i)}{Pr(A)} = \frac{Pr(A|B_i) \cdot Pr(B_i)}{\sum\limits_{j=1}^{k}Pr(A|B_j) \cdot Pr(B_j)}$
         \end{multicols}
 
 \end{document}
