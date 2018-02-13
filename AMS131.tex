@@ -57,18 +57,16 @@
 
     \subsection*{Operations: }
         \subparagraph*{Union: } 
-            \( x \in S: A \cup B = \{x \in A \text{ or } x \in B\}\)
+            \[ \begin{matrix}
+                x \in S: A \cup B&= \{x \in A \text{ or } x \in B\}    & \\
+                A \cup B = B \cup A & A \cup A = A \\ 
+                A \cup \emptyset = A & A \cup S = S \\
+                A \subset B \Rightarrow A \cup B = B & \\
+                A_1, A_2, \dots, A_n \Rightarrow A_1 \cup A_2 \cup \dots \cup A_n = \bigcup\limits_{i=1}^{i=n} A_i & \\
+                \bigcup\limits_{i=1}^{\infty} A_i \rightarrow \bigcup\limits_{i\in I}A_i 
+                (A \cup B) \cup C = A \cup (B \cup C) = A \cup B \cup C 
+            \end{matrix} \]
             
-            \begin{itemize}
-                \item[] \(A \cup B = B \cup A \)
-                \item[] \(A \cup A = A \)
-                \item[] \(A \cup \emptyset = A \)
-                \item[] \(A \cup S = S \)
-                \item[] \(A \subset B \Rightarrow A \cup B = B\)
-                \item[] \(A_1, A_2, \dots, A_n \Rightarrow A_1 \cup A_2 \cup \dots \cup A_n = \bigcup\limits_{i=1}^{i=n} A_i\)
-                \item[] \(\bigcup\limits_{i=1}^{\infty} A_i \rightarrow \bigcup\limits_{i\in I}A_i \)
-                \item[] \( (A \cup B) \cup C = A \cup (B \cup C) = A \cup B \cup C \)
-            \end{itemize}
 
         \subparagraph*{Intersections: } 
             \( A \cap B = \{ x \in A \text{ and } x \in B\} = AB \)            
