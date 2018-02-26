@@ -1,0 +1,303 @@
+% LaTeX template adapted from: https://www.overleaf.com/latex/templates/simple-math-homework-template/tbszsswsndrz
+\documentclass{article}
+    \usepackage[utf8]{inputenc}
+    \usepackage[english]{babel}
+    \usepackage[]{amsthm} %lets us use \begin{proof}
+    \usepackage[]{amssymb} %gives us the character \varnothing
+    \usepackage{amsmath} %for equations
+    \usepackage[]{listings} %for code blocks
+    \usepackage{graphicx} %for diagrams
+    \usepackage{fancyhdr} %for headers
+    \usepackage[letterpaper, margin=1in]{geometry}
+    \usepackage{tikz}
+    \usepackage{relsize}
+    \usepackage{forest}
+    \usepackage{float}
+    \usepackage{wrapfig}
+    \usepackage{pythonhighlight}
+    \usepackage{enumitem}
+    \usetikzlibrary{arrows.meta,shapes.arrows,chains,decorations.pathreplacing,matrix}
+    \newlength\myht{}
+  \settoheight{\myht}{\(n-2\)} 
+  \tikzset{%
+    MyStyle/.style={draw, text width=15pt, text height=10pt, text centered,minimum height=\myht+2*2*1mm},
+    myarrow/.style={shape=single arrow, rotate=90, inner sep=5pt, outer sep=0pt, single arrow head extend=0pt, minimum height=0pt, text width=0pt, draw=blue!50, fill=blue!25}
+  }
+  
+  \forestset{%
+    default preamble={
+      for tree={
+        circle,
+        draw,
+        inner sep=0pt,
+        minimum size=.5cm,
+        font=\scriptsize,
+        edge=->,
+        anchor=north
+      }
+    },
+    triangle/.style={isosceles triangle,
+                    draw,
+                    shape border rotate=90,
+                    minimum size=.7cm,
+                    child anchor=apex,
+                    anchor=apex}
+  }
+    
+  \newcommand{\code}[1]{\texttt{#1}}
+    
+    \graphicspath{}
+    \pagestyle{fancy}
+    \setlength{\parindent}{1em}
+    \setlength{\parskip}{0em}
+    \setlength{\intextsep}{1em}
+    \setlength{\columnsep}{1em}
+    \rhead{Pete Wilcox | pcwilcox@ucsc.edu}
+    \lhead{CMPS 101: Cheatsheet}
+  
+    \renewcommand\qedsymbol{\hspace{\fill}\(\blacksquare\)}
+    
+    \title{CMPS 101: Cheatsheat}
+    \author{Pete Wilcox}
+    \date\today
+
+
+    \begin{document}
+
+
+
+
+\begin{python}
+    def find_pairs(node, path):
+    count = 0
+    for i in range(len(path)):
+        ancestor = path[i][0]
+        direction = path[i][1]
+        if direction == 'right' and node.key < ancestor.key:
+            count++
+        if direction == 'left' and node.key > ancestor.key:
+            count++
+    return count + find_pairs(node.left, path.append([node, 'left'])) + 
+        find_pairs(node.right, path.append([node, 'right']))
+\end{python}
+
+\begin{lstlisting}[frame=single,basicstyle=\footnotesize\ttfamily]
+template <class KeyType, class ValueType>
+class Node { // variables could be public, or could add getters/setters
+    int numberKeys;
+    KeyType key[2]; // space for up to 2 keys
+    ValueType value[2]; // space for the corresponding values
+    Node* subtree[3]; // pointers to the up to 3 subtrees
+}
+\end{lstlisting}
+
+\subparagraph*{Inserting a new key:}
+\begin{itemize}[noitemsep]
+    \item Search for the key. If found, deal with duplicates. Otherwise, we've found the leaf.
+    \item Insert the key into the leaf. If the leaf had only one key, we're done.
+    \item Otherwise, fix the new leaf:
+    \item To fix a node with 3 keys \code{[a b c]} 
+    \begin{enumerate}[noitemsep]
+        \item If there is a parent, move \code{b} into it.
+        \item If there is not a parent, make a new root for the tree, assign it height of \code{[a b c].height + 1}, move \code{b} into it.
+        \item Create a node with just \code{a} as the key and make it the left child of the \code{b} node.
+        \item Create a node with just \code{c} as the key and make it the left child of the \code{b} node.
+    \end{enumerate}
+\end{itemize}
+
+\subparagraph*{Deleting a key: }
+\begin{enumerate}[noitemsep]
+    \item Search for the key (call this the \code{target}).
+    \item If the \code{target} is in a leaf, move to step 5.
+    \item If the \code{target} is not in a leaf, search for its \code{successor} in a leaf.
+    \item Swap the \code{target} key with its \code{successor} key. (Leave the heights in the original nodes).
+    \item Now that the \code{target} key is in a leaf, delete it.
+    \item Now that the \code{target} key has been deleted, call \code{fix\_empty()} on the leaf.
+    \item If the leaf still has a key, \code{fix\_empty()} will do nothing. Otherwise it will propagate the changes needed to fix the tree.
+\end{enumerate}
+
+\subparagraph*{\code{fix\_empty()}:}
+\begin{enumerate}[noitemsep]
+    \item If the node still has a key, do nothing.
+    \item If the empty node has a sibling with two keys, perform a rotation in order to borrow a key from the sibling. \\
+    \begin{center}
+        \begin{forest}
+            [\(c\),circle,draw
+                [{\(a,b\)},circle, draw
+                    [\(T_1\),triangle,draw]
+                    [\(T_2\),triangle,draw]
+                    [\(T_3\),triangle,draw]
+                ]
+                [,circle,draw
+                    [\(T\),triangle,draw]
+                ]
+            ]
+        \end{forest}
+        \(\Rightarrow\)
+        \begin{forest}
+            [\(b\),circle,draw
+                [{\(a\)},circle, draw
+                    [\(T_1\),triangle,draw]
+                    [\(T_2\),triangle,draw]
+                ]
+                [\(c\),circle,draw
+                    [\(T_3\),triangle,draw]
+                    [\(T\),triangle,draw]
+                ]
+            ]
+        \end{forest}
+    \end{center}
+    In this instance don't adjust the heights.
+    
+    \item If the empty node has two siblings and one has two keys, it's similar. Either the same thing can be done (if the sibling is adjacent) or, if it's two hops away: \\
+    \begin{center}
+        \begin{forest}
+            [{\(c,e\)},circle,draw
+                [{\(a,b\)},circle,draw
+                    [\(T_1\),triangle,draw]
+                    [\(T_2\),triangle,draw]
+                    [\(T_3\),triangle,draw]
+                ]
+                [\(d\),circle,draw
+                    [\(T_4\),triangle,draw]
+                    [\(T_5\),triangle,draw]
+                ]
+                [,circle,draw
+                    [\(T\),triangle,draw]
+                ]
+            ]
+        \end{forest}
+        \(\Rightarrow\)
+        \begin{forest}
+            [{\(b,e\)},circle,draw
+                [{\(a\)},circle,draw
+                    [\(T_1\),triangle,draw]
+                    [\(T_2\),triangle,draw]
+                ]
+                [{\(c,d\)},circle,draw
+                    [\(T_3\),triangle,draw]
+                    [\(T_4\),triangle,draw]
+                    [\(T_5\),triangle,draw]
+                ]
+                [,circle,draw
+                    [\(T\),triangle,draw]
+                ]
+            ]
+        \end{forest}
+        \(\Rightarrow\)
+        \begin{forest}
+            [{\(b,d\)},circle,draw
+                [{\(a\)},circle,draw
+                    [\(T_1\),triangle,draw]
+                    [\(T_2\),triangle,draw]
+                ]
+                [{\(c\)},circle,draw
+                    [\(T_3\),triangle,draw]
+                    [\(T_4\),triangle,draw]
+                ]
+                [\(e\),circle,draw
+                    [\(T_5\),triangle,draw]
+                    [\(T\),triangle,draw]
+                ]
+            ]
+        \end{forest}
+    \end{center}
+    \item If no sibling of the empty node has two keys, then the next case is that the empty node has two siblings. In that case the empty node borrows from the parent: \\
+        \begin{center}
+            \begin{forest}
+                [{\(b,d\)},circle,draw
+                    [\(a\),circle,draw
+                        [\(T_1\),triangle,draw]
+                        [\(T_2\),triangle,draw]
+                    ]
+                    [\(c\),circle,draw
+                        [\(T_3\),triangle,draw]
+                        [\(T_4\),triangle,draw]
+                    ]
+                    [,circle,draw
+                        [\(T\),triangle,draw]
+                    ]
+                ]
+            \end{forest}
+            \(\Rightarrow\)
+            \begin{forest}
+                [{\(c\)},circle,draw
+                    [{\(a,b\)},circle,draw
+                        [\(T_1\),triangle,draw]
+                        [\(T_2\),triangle,draw]
+                        [\(T_3\),triangle,draw]
+                    ]
+                    [\(d\),circle,draw
+                        [\(T_4\),triangle,draw]
+                        [\(T\),triangle,draw]
+                    ]
+                ]
+            \end{forest}
+        \end{center}
+    \item Lastly, if the node has only one sibling with only one key, the parent is merged with the sibling into a node with two keys, and the empty is pushed up: \\
+        \begin{center}
+            \begin{forest}
+                [\(b\),circle,draw
+                    [\(a\),circle,draw
+                        [\(T_1\),triangle,draw]
+                        [\(T_2\),triangle,draw]
+                    ]
+                    [\(\),circle,draw
+                        [\(T\),triangle,draw]
+                    ]
+                ]
+            \end{forest}
+            \(\Rightarrow\)
+            \begin{forest}
+                [\(\),circle,draw
+                    [{\(a,b\)},circle,draw
+                        [\(T_1\),triangle,draw]
+                        [\(T_2\),triangle,draw]
+                        [\(T\),triangle,draw]
+                    ]
+                ]
+            \end{forest}
+        \end{center}
+
+
+
+        \item In each case, only swap key values. Keep heights the same.
+\end{enumerate}
+
+
+
+\subsection*{K-sorting an array: }
+\begin{lstlisting}
+ksorted(A[], k):
+    B = new 23tree()
+    for i from 0 to k:
+        B.insert(A[i])
+    for i from 0 to n - k:
+        A[i] = B.extractMin()
+        B.insert(A[i+k])
+    for i from n-k to n-1:
+        A[i] = B.extractMin()
+    return A[]
+\end{lstlisting}
+
+\subparagraph*{Other Stuff:}
+\begin{itemize}
+    \item[] \(\sum\limits_{i=1}^{n}i = \frac{n(n+1)}{2},\sum\limits_{i=1}^{n}i^2 = \frac{n(n+1)(2n+1)}{6}, \sum\limits_{i=1}^{n} i^3 = \frac{n^2(n+1)^2}{4}\)
+    \item[] \(\sum\limits_{i=0}^{n}c^i = \frac{c^{n+1}-1}{c-1}, c \neq 1; \sum\limits_{i=0}^{\infty}c^i = \frac{1}{1-c}\)
+    \item[] \(y = \log_bx \rightarrow x = b^y\)
+    \item[] \(\log_bb = 1\)
+    \item[] \(\log_bb^x = x\)
+    \item[] \(b^{\log_bx}=x\)
+    \item[] \(\log_b(x^r)=r\log_bx\)
+    \item[] \(\log_b(xy) = \log_bx+\log_by\)
+    \item[] \(\log_b\left(\frac{x}{y}\right)=\log_bx-\log_by\)
+    \item[] \(a^n a^m = a^{n+m}\)
+    \item[] \((a^n)^m = a^{nm}\)
+    \item[] \(\frac{d}{dx}(a^x) = \ln a\)
+    \item[] \((fg)' = f'g + fg'\)
+    \item[] \(\left(\frac{f}{g}\right)' = \frac{f'g-fg'}{g^2}\)
+    \item[] \(\frac{d}{dx}(f(g(x)))=f'(g(x))g'(x)\)
+    \item[] \(\frac{d}{dx}(e^{g(x)})= g'(x)e^{g(x)}\)
+    \item[] \(\frac{d}{dx}(\ln g(x)) = \frac{g'(x)}{g(x)}\)
+\end{itemize}
+\end{document}
