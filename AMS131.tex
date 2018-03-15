@@ -367,6 +367,73 @@ Continuous case: \(X_1, X_2, \ldots, X_n\) cont. r.v. with joint p.d.f. \(f(x_1,
     \end{pmatrix}
     = A\vec{X}\) (with \(A\) a non-singular matrix). Then \(\vec{X} = A^{-1}\vec{Y}\) and \(g_Y(y) = f_X(A^{-1})\cdot\frac{1}{\left|\det A\right|}\)
 
+\subparagraph*{Markov Chains: }
+A sequence of r.v.'s \(X_1, X_2, \ldots\) is a stochastic process with discrete time parameter. \(X_1\) is the initial state and \(X_n\) is the state at time \(n\). A stochastic process with discrete time parameter is a Markov chain if for each \(n\), \(\Pr(X_{n+1} \leq b | X_1 = x_1, X_2 = x_2, \ldots, X_n = x_n) = \Pr(X_{n+1} = \leq b | X_n = x_n)\). A Markov Chain is finite if there are finite possible states. Then: \(\Pr(X_1 = x_1, \ldots, X_n = x_n) = \Pr(X_1 = x_1) \Pr(X_2 = x_2 | X_1 = x_1) \cdots \Pr(X_n = x_n | X_{n-1} = x_{n-1}) \). Transition distributions: When a MC has \(k\) possible states then it has a transition distribution where there exist probabilities \(p_{ij}\) for \(i, j = 1, \ldots , k\) such that \(\forall n: \Pr(X_{n+1} = j | X_n = i) = p_{ij}\) and if \(\Pr(X_{n+1} = j | X_n = i) = p_{ij} \forall n\) then it is a stationary transition distribution. In this case there is a matrix s.t. \(\sum\limits_{j=1}^{k}{p_{ij}}=1,  \forall i\): \\
+\(P = \begin{bmatrix} 
+        p_{11} & \hdots & p_{1k} \\
+        \vdots & \ddots & \vdots \\
+         p_{k1} & \hdots & p_{kk}
+     \end{bmatrix}\)
+     
+Transition of several steps: \(P^m = P \cdot \ldots \cdot P\) Just exponentiate \(P\) and then find the resulting \(p_{ij}\).
+
+\subparagraph*{Expectation: }
+\begin{itemize}
+    \item[] \( E(X) = \int\limits_{-\infty}^{\infty}{x f(x)dx}\)
+    \item[] \( E(X) = \sum\limits_{x}xf(x) = \sum\limits_{x}\Pr(X=x)\)
+    \item[] If \(Y = r(X)\) and \(f(x)\) is the p.d.f. of \(X: E(Y) = \int\limits_{-\infty}^{\infty}{r(x)f(x)dx}\)
+    \item[] \(Y = aX + b \rightarrow E(Y) = aE(X)+b\)
+    \item[] \(a\) constant s.t. \(\Pr(X \geq a) = 1\) then \(E(X) \geq a\)
+    \item[] \(b\) constant s.t. \(\Pr(X \leq b) = 1\) then \(E(X) \leq b\).
+    \item[] If \(X_1, \ldots, X_n \) are r.v. then \(E(X_1+\ldots+X_n) = E(X_1) + \ldots +E(X_n)\)
+    \item[] \(E\left( \sum_{i = 1}^{n}X_i \right) = \sum_{i = 1}^{n}(E(X_i))\)
+    \item[] \(X_1, \ldots, X_n\) independent r.v.'s with finite expectation: \(E\left(\Pi_{i=1}^{n}{X_i} \right) = \Pi_{i=1}^{n}\left(E(X_i)\right)\)
+    \item[] Bernoulli(\(p\)): \(E(X) = p\)
+    \item[] Binomial(\(n,p\)): \(E(X) = np\)
+    \item[] Poisson: \(E(X) = \lambda\)
+    \item[] Geometric: \(E(X) = \frac{1-p}{p}\)
+    \item[] Negative Binomial: \(E(X) = \frac{r(1-p)}{p}\)
+\end{itemize}
+
+\subparagraph*{Variance: }
+\begin{itemize}
+    \item[] \(V(X) = E[(X-\mu)^x]\) with \(\mu = E(X)\)
+    \item[] S.D.: \(\sigma = \sqrt{V(X)}\)
+    \item[] \(V(X) \geq 0\)!!!
+    \item[] \(X\) discrete: \(V(X) = \sum\limits_X{(x-\mu)^2f(x)}\)
+    \item[] \(X\) cont.: \(V(X) = \int\limits_{-\infty}^{\infty}{(x-\mu)^2f(x)dx}\)
+    \item[] \(V(X) = E[(X-\mu)^2] = E(X^2) - \mu^2\)
+    \item[] \(V(X) = 0 \iff \Pr(X = c) = 1\) with \(c\) constant
+    \item[] \(a, b\) constant: \(V(aX+b) = a^2V(X)\)
+    \item[] \(X_1,\ldots,X_n\) independent: \(V(X_1+\ldots+X_n) = V(X_1)+ \ldots + V(X_n)\)
+    \item[] Bernoulli: \(V(X) = p(1-p)\)
+    \item[] Binomial: \(V(X) = np(1-p)\)
+    \item[] Poisson: \(V(X) = \lambda\)
+    \item[] Geometric: \(V(X) = \frac{1-p}{p^2}\)
+    \item[] Negative Binomial: \(V(X) = \frac{r(1-p)}{p^2}\)
+\end{itemize}
+
+\subparagraph*{Covariance: }
+\begin{itemize}
+    \item[] Cov\((X,Y) = E[(X-\mu_X)(Y-\mu_Y)] = E(XY) - \mu_X\mu_Y\)
+    \item[] Discrete: \(E(XY) = \sum\limits_x\sum\limits_yxyf(x,y)\)
+    \item[] Discrete: \(\mu_X = E(X) = \sum\limits_x\sum\limits_yxf(x,y)\)
+    \item[] Discrete: \(\mu_Y = E(Y) = \sum\limits_x\sum\limits_yyf(x,y)\)
+    \item[] Cont: \(E(XY) = \int\limits_{-\infty}^{\infty}\int\limits_{-\infty}^{\infty}{xyf(x,y)dxdy}\)
+    \item[] If \(X\) and \(Y\) are independent: Cov\((X,Y) = 0\)
+\end{itemize}
+\subparagraph*{Correlation: }
+\begin{itemize}
+    \item[] Corr\((X,Y) = \rho(X,Y)\)
+    \item[] \(= \frac{\text{Cov}(X,Y)}{\sqrt{V(X)}\sqrt{V(Y)}}\)
+    \item[] \(=\frac{\text{Cov}(X,Y)}{\sigma_X \sigma_Y}\)
+    \item[] Schwarz Inequality: \([E(UV)]^2 \leq E(U^2)E(V^2)\)
+    \item[] Cauchy-Schwarz Ineq.: \([\text{Cov}(X,Y)]^2 \leq V(X) \cdot V(Y)\) and \( -1 \leq \rho(X,Y) \leq 1\)
+    \item[] Independent: Cov\((X,Y) = 0\) and \(\rho(X,Y) = 0\)
+    \item[] \(X\) r.v. w/ finite variance and \(Y = aX+b\) s.t. \(a \neq 0, a,b,\) constant, then \(a > 0 \rightarrow \rho(X,Y) = 1\) and \(a < 0 \rightarrow \rho(X,Y) = -1\)
+    \item[] \(X,Y\) with finite variance then \(V(X+Y) = V(X)+V(Y) + 2\rho(X,Y)\)
+    \item[] \(V(aX + bY) = a^2 V(X) + b^2 V(Y) + 2ab\rho(X,Y)\)
+\end{itemize}
 
 
     \subparagraph*{Other Stuff:}
