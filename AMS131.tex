@@ -50,64 +50,6 @@
     \setlength{\multicolsep}{1pt}
     \setlength{\columnsep}{2pt}
 
-    \subparagraph*{Fundamentals: } 
-        \begin{itemize}[noitemsep]
-            \item[] \(x \in S: A \cup B= \{x \in A \text{ or } x \in B\}\)
-            \item[] \(A \cup B = B \cup A\), \(A \cup A = A\)
-            \item[] \(A \cup \emptyset = A\), \(A \cup S = S \)
-            \item[] \(A \subset B \Rightarrow A \cup B = B\)
-            \item[] \(A_1, A_2, \dots, A_n \Rightarrow A_1 \cup A_2 \cup \dots \cup A_n = \bigcup\limits_{i=1}^{i=n} A_i\)
-            \item[] \(\bigcup\limits_{i=1}^{\infty} A_i \rightarrow \bigcup\limits_{i\in I}A_i\)
-            \item[] \((A \cup B) \cup C = A \cup (B \cup C) = A \cup B \cup C \)
-            \item[] \( A \cap B = \{ x \in A \text{ and } x \in B\} = AB \)
-            \item[] \(A \cap B = B \cap A \), \(A \cap A = A \)
-            \item[] \(A \cap \emptyset = \emptyset \), \(A \cap S = A\)
-            \item[] \(A \subset B \Rightarrow A \cap B\)
-            \item[] \(\bigcap\limits_{i\in I}A_i = \bigcap\limits_{i=1}^{\infty}A_i\)
-            \item[] \(\bigcap\limits_{i=1}^{n}A_i = A_1 \cap A_2 \cap \dots \cap A_n \)
-            \item[] \( (A \cap B) \cap C = A \cap (B \cap C) = A \cap B \cap C\)
-            \item[] \(A^c = \{x \in S: x \notin A\}\)
-            \item[] \((A^c)^c = A\), \(\emptyset^c = S\), \(S^c = \emptyset\)
-            \item[] \(A\cup A^c = S\), \(A \cap A^c = \emptyset\)
-        \end{itemize}
-
-    \subparagraph*{Disjoint Events: } 
-        \(A\) and \(B\) are \textit{disjoint} or \textit{mutually exclusive} if \(A\) and \(B\) have no outcomes in common. This happens only if \(A \cap B = \emptyset \). A collection \(A_1, \dots, A_n\) is a collection of disjoint evens if and only if \(A_i \cap A_j = \emptyset, \forall i, j, i \neq j\)
-
-        \begin{itemize}[noitemsep]
-            \item[] \(\left (\bigcup\limits_{i\in I} A_i \right)^c = \bigcap\limits_{i\in I}A_i^c \)
-            \item[] \((A\cup B)^c = A^c \cap B^c \)
-            \item[] \(x\in(A\cap B)^c 
-            \Rightarrow x \notin A\) and \(x\notin B \)
-            \item[] \(\Rightarrow x \in A^c \) and \(x \in B^c \)
-            \item[] \(\Rightarrow x \in A^c \cap B^c \)
-        \end{itemize}
-
-    \subparagraph*{Probabilities: } 
-
-        \begin{itemize}[noitemsep]
-            \item[] \(\forall A: \Pr(A) \geq 0\)
-            \item[] \(\Pr(S) = 1\), \(\Pr(\emptyset) = 0\)
-            \item[] \(\Pr(A^c) = 1-\Pr(A)\)
-            \item[] \(A \subset B \Rightarrow \Pr(A) \leq \Pr(B)\)
-            \item[] \(\forall A: 0 \leq \Pr(A) \leq 1\)
-        \end{itemize}
-        For every \textit{infinite sequence} of \textit{disjoint} events: \( A_1, A_2, \dots (A_i \in S)\):
-        \begin{itemize}
-            \item[] \(\Pr\left(\bigcup\limits_{i=1}^{\infty}A_i\right) = \sum\limits_{i=1}^{\infty} \Pr(A_i)\)
-            \item[] \(=  \Pr(A_1 \cup A_2 \cup \dots \cup A_n \cup \dots)\)
-            \item[] \(= \Pr(A_1) + \Pr(A_2) + \dots + \Pr(A_n) + \dots\)
-            \item[] \(\Pr(\bigcup\limits_{i=1}^{n}A_i) = \Pr(\bigcup\limits_{i=1}^{n}A_i + \bigcup\limits_{i=n+1}^{\infty}\emptyset) \)
-            \item[] \(= \sum\limits_{i=1}^{n}\Pr(A_i)\)
-            \item[] \(\Pr(A\cup B) = \Pr(A) + \Pr(B) - \Pr(A\cap B)\)
-        \end{itemize}
-
-    \subparagraph*{Finite Sample Spaces: } 
-        \(S := \{s_1, s_2, \dots, s_n \}\), \(\Pr(s_i) = P_i, \forall i = 1, 2, \dots, n\), s.t. \(\sum\limits_{i=1}^{n}P_i = 1\). A sample space \(S\) with \(n\) outcomes \(s_1, \ldots, s_n\) is a \textit{simple sample space} if the probability assigned to each outcome is \(\frac{1}{n}\). If \(A\) contains \(m\) outcomes then \(\Pr(A) = \frac{m}{n}\).
-
-    \subparagraph*{Multiplication Rule: } 
-        An experiment has \(k\) parts \((k \geq 2)\) s.t. the \(i^{th}\) part has \(n_i\) possible outcomes, \(i = 1, \ldots, k\), and \textit{all possible outcomes can occur regardless of which outcomes have occurred in other parts}. \(S\) will contain vectors of the form \((u_1, u_2, \ldots, u_k)\). \(u_i\) is one of the \(n_i\) possible outcomes of part \(i\). The total number of vectors is \(n_1 \cdot n_2 \cdot \ldots \cdot n_k\).
-
     \subparagraph*{Permutations: } 
         Given an array of \(n\) elements the first position can be filled with \(n\) different elements, the second with \(n-1\), and so on. \(n \cdot (n-1) \cdot (n-2) \cdot \ldots \cdot 1 = n!\)
 
@@ -164,33 +106,8 @@
     \subparagraph*{Conditionally Independent: } 
         \(A_1, A_2, \ldots, A_k\) are \textit{conditionally independent} given \(B\) if, for every subset \(A_{i_1}, \ldots, A_{i_m}: \Pr(A_{i_1} \cap \ldots \cap A_{i_m} | B) = \Pr(A_{i_1} | B) \cdot \ldots \cdot \Pr(A_{i_m} | B)\).
 
-    \subparagraph*{Partitions: }
-        Let \(B_1, \ldots, B_k\) be such that \(B_i \cap B_j = \emptyset \forall i \neq j\) and \(\bigcup_{i = 1}^{k} B_i = S\). Then these events form a partition of \(S\).
-        \begin{itemize}
-            \item[] \(A = A \cap S = A \cap \left(\bigcup_{i = 1}^{k} B_i\right) \)
-            \item[] \(= (A \cap B_1) \cup (A \cap B_2) \cup \ldots \cup (A \cap B_k)\). Then: 
-            \item[] \(\Pr(A) = \Pr(A \cap S) \)
-            \item[] \(= \Pr(A \cap \left(\bigcup_{i = 1}^{k} B_i \right)) \)
-            \item[] \(= \Pr(A \cap B_1) + \Pr(A \cap B_2) + \ldots + \Pr(A \cap B_k)\)
-            \item[] \(=\Pr(A|B_1) \cdot \Pr(B_1) + \Pr(A|B_2)\cdot \Pr(B_2) + \ldots + \Pr(A|B_k) \cdot \Pr(B_k) \)
-            \item[] \(= \sum_{i=1}^{k} \Pr(A|B_i)\cdot \Pr(B_i)\). 
-            \item[]So, if \(B_1, \ldots, B_k\) are a partition of \(S\): \(\Pr(A) = \sum_{i=1}^{k}\Pr(A|B_i)\cdot \Pr(B_i)\)
-        \end{itemize}
-
     \subparagraph*{Bayes' Theorem:}
         Let \(B_1, \ldots, B_k :=\) a partition of \(S\) such that \(\Pr(B_j) > 0, j \in 1, \ldots, k\). Assume you have \(A\) such that \(\Pr(A) > 0\). Then: \(\Pr(B_i|A) = \frac{\Pr(A|B_i) \cdot \Pr(B_i)}{\Pr(A)} = \frac{\Pr(A|B_i) \cdot \Pr(B_i)}{\sum\limits_{j=1}^{k}\Pr(A|B_j) \cdot \Pr(B_j)}\)
-
-    \subparagraph*{Random Variables:}
-        A real-valued function on \(S\) is a  random variable. A random variable \(X\) is a functions that assigns a real number \(X(s)=x\) to each possible outcome \(s \in S\): \(X:S \Rightarrow \mathcal{D}\). \(x:=\) a realization of the random variable, \(x \in \mathcal{D}\). We will be computing \(\Pr(X \in E)\) for \(E \subset \mathcal{D} = \Pr(s \in S: X(s) \in E)\)
-    
-    \subparagraph*{Discrete Probability Distributions: }
-    A r.v. \(X\) has a discrete distribution if it takes a countable number of values. The probability function of a discrete r.v. is \(f_X(x) = \Pr(X=x)\). Properties:
-    \begin{itemize}
-        \item[] \(0 \leq f_X(x) \leq 1\)
-        \item[] \(\forall x \notin \mathcal{D}: f_X(x) = 0\)
-        \item[] \(\sum\limits_{x \in \mathcal{D}} f_X(x) = 1\)
-        \item[] \(\Pr(X \in A) = \sum\limits_{x \in A} f_X (x)\)
-    \end{itemize}
 
     \subparagraph*{Uniform Distribution: }
         \(X = x, x \in \{1, 2, \ldots, k\}\) with all values \(x\) equally likely. The p.f. is \(f_X(x) =\\ \Pr(X=x) =  \begin{cases} \frac      {1}{k} & x = 1, 2, \ldots, k \\ 0 & o.w. \end{cases} \)
@@ -373,8 +290,7 @@ A sequence of r.v.'s \(X_1, X_2, \ldots\) is a stochastic process with discrete 
         p_{11} & \hdots & p_{1k} \\
         \vdots & \ddots & \vdots \\
          p_{k1} & \hdots & p_{kk}
-     \end{bmatrix}\)
-     
+     \end{bmatrix}\)\\     
 Transition of several steps: \(P^m = P \cdot \ldots \cdot P\) Just exponentiate \(P\) and then find the resulting \(p_{ij}\).
 
 \subparagraph*{Expectation: }
@@ -425,16 +341,57 @@ Transition of several steps: \(P^m = P \cdot \ldots \cdot P\) Just exponentiate 
 \subparagraph*{Correlation: }
 \begin{itemize}
     \item[] Corr\((X,Y) = \rho(X,Y)\)
-    \item[] \(= \frac{\text{Cov}(X,Y)}{\sqrt{V(X)}\sqrt{V(Y)}}\)
-    \item[] \(=\frac{\text{Cov}(X,Y)}{\sigma_X \sigma_Y}\)
-    \item[] Schwarz Inequality: \([E(UV)]^2 \leq E(U^2)E(V^2)\)
-    \item[] Cauchy-Schwarz Ineq.: \([\text{Cov}(X,Y)]^2 \leq V(X) \cdot V(Y)\) and \( -1 \leq \rho(X,Y) \leq 1\)
-    \item[] Independent: Cov\((X,Y) = 0\) and \(\rho(X,Y) = 0\)
-    \item[] \(X\) r.v. w/ finite variance and \(Y = aX+b\) s.t. \(a \neq 0, a,b,\) constant, then \(a > 0 \rightarrow \rho(X,Y) = 1\) and \(a < 0 \rightarrow \rho(X,Y) = -1\)
-    \item[] \(X,Y\) with finite variance then \(V(X+Y) = V(X)+V(Y) + 2\rho(X,Y)\)
-    \item[] \(V(aX + bY) = a^2 V(X) + b^2 V(Y) + 2ab\rho(X,Y)\)
+    \item[] \(= \frac{\text{Cov}(X,Y)}{\sqrt{V(X)}\sqrt{V(Y)}} =\frac{\text{Cov}(X,Y)}{\sigma_X \sigma_Y}\)
+    \item[] Schwarz Ineq: \([E(UV)]^2 \leq E(U^2)E(V^2)\)
+    \item[] \([\text{Cov}(X,Y)]^2 \leq V(X) \cdot V(Y)\)
+    \item[] \( -1 \leq \rho(X,Y) \leq 1\)
+    \item[] Indep: Cov\((X,Y) = 0\) and \(\rho(X,Y) = 0\)
+    \item[] \(X\) r.v. w/ finite variance and \(Y = aX+b\) s.t. \(a \neq 0, a,b,\) constant, then
+    \item[] \(a > 0 \rightarrow \rho(X,Y) = 1\) and
+    \item[] \(a < 0 \rightarrow \rho(X,Y) = -1\)
+    \item[] \(X,Y\) w/ finite var. then \(V(X+Y) = V(X)+V(Y) + 2\cdot \text{Cov}(X,Y)\)
+    \item[] \(V(aX + bY) = a^2 V(X) + b^2 V(Y) + 2ab\cdot\text{Cov}(X,Y)\)
 \end{itemize}
 
+\subparagraph*{Conditional Expectation:}
+\begin{itemize}
+    \item[] Def: \(E(Y|X=x)\)
+    \item[] Cont: \(= \int_{-\infty}^{\infty}{y g_Y(y|x)dx}\)
+    \item[] Disc: \(= \sum_{y}{y g_Y(y|x)}\)
+    \item[] \(E(Y|X=x)\) is a function of \(x\) not \(y\)
+    \item[] \(h(x) = E(Y|x)\): \(h(x)\) is not a random variable
+    \item[] \(E(Y|X) \neq E(Y|X=x)\)
+    \item[] \(E(Y|X) = h(X) \rightarrow h(X)\) is a r.v.
+    \item[] \(E(Y|X=x) = h(x) \rightarrow h(X)\) is not a r.v.
+    \item[] \(E(E(Y|X)) = E(Y)\)
+\end{itemize}
+
+\subparagraph*{Conditional Variance: }
+\begin{itemize}
+    \item[] \(V(Y|X=x) = E(Y^2|X=x) - [E(Y|X=x)]^2\)
+    \item[] \(E(Y^2|X=x) = \int_{-\infty}^{\infty}{y^2 g(y|x) dy}\)
+\end{itemize}
+
+\subparagraph*{Standard Normal Distribution:}
+\begin{itemize}
+    \item[] \(X\) has standard normal dist. with \(\mu\) = 0 and \(V\) = 0, \(X \sim N(0,1)\) if:
+    \item[] p.d.f.: \( \phi(x) = \frac{1}{\sqrt{2 \pi}}\exp\left (\frac{-x^2}{2}\right)\)
+    \item[] c.d.f.: \( 
+        \Phi(x) = \Pr(X \leq x) \)
+    \item[] \(= \int_{-\infty}^{x}{\phi(u)du}= \int_{-\infty}^{x}{\frac{1}{\sqrt{2 \pi}} \exp\left(\frac{-u^2}{2}\right)du}\)
+    \item[] \(\phi(x) = \phi(-x)\)
+    \item[] \(\Phi(x) = \Pr(X \leq x) = 1 - \Phi(-x)\)
+    \item[] \(\Phi^{-1}(p) = -\Phi(1-p)\)
+    \item[] \(X \sim N(\mu, \sigma^2) \rightarrow Z = \frac{X-\mu}{\sigma}\)
+    \item[] Then: \(Z \sim N(0,1)\) and cdf of \(X\) is
+    \item[] \(F(x) = \Pr(X \leq x) = \Phi(\frac{x-\mu}{\sigma})\)
+    \item[] Also: \(F^{-1}(p) = \mu + \sigma \Phi^{-1}(p)\)
+    \item[] Linear combo of r.v. \(X_1, \ldots, X_n\) with \(X_i \sim N(\mu_i, \sigma_i^2)\) then:
+    \item[] \(\sum\limits_{i = 1}^{n}{X_i} = X_1 + \cdots + X_n \sim N(\sum\limits_{i = 1}^{n} \mu_i, \sum\limits_{i = 1}^{n} \sigma_i^2)\)
+    \item[] Generally: \(\sum\limits_{i = 1}^{n}{a_i X_i} = N(\sum\limits_{i = 1}^{n}{a_i \mu_i}, \sum\limits_{i = 1}^{n}{a_i^2 \sigma_i^2})\)
+    \item[] Linear combo of r.v.'s: \(E(\bar{X_n}) =  \mu\)
+    \item[] \(V(\bar{X_n}) = \frac{\sigma^2}{n}\)
+\end{itemize}
 
     \subparagraph*{Other Stuff:}
     \begin{itemize}
@@ -451,6 +408,10 @@ Transition of several steps: \(P^m = P \cdot \ldots \cdot P\) Just exponentiate 
         \item[] \(\int_{a}^{b}{f(g(x))g'(x)}dx \Rightarrow u=g(x) \Rightarrow \int_{g(a)}^{g(b)}f(u)du\)
         \item[] \(\int udv = uv - \int vdu\)
     \end{itemize}
+
+    
+
+
     \end{multicols}
 
 \end{document}
