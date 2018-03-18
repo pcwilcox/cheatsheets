@@ -8,7 +8,7 @@
 \usepackage[]{listings} %for code blocks
 \usepackage{graphicx} %for diagrams
 \usepackage{fancyhdr} %for headers
-\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage[letterpaper, margin=0.5in]{geometry}
 \usepackage{tikz} % for drawings
 \usepackage{multicol}
 \usepackage{ifthen}
@@ -51,78 +51,49 @@
     \setlength{\columnsep}{2pt}
 
     \subparagraph*{Permutations: } 
-        Given an array of \(n\) elements the first position can be filled with \(n\) different elements, the second with \(n-1\), and so on. \(n \cdot (n-1) \cdot (n-2) \cdot \ldots \cdot 1 = n!\)
-
-        \begin{itemize}
-            \item[] \(P_{n,k} = \frac{n!}{(n-k)!}\)
-            \item[] \(P_{n,n} = n!\)
-        \end{itemize}
-
+        Given an array of \(n\) elements: \(n \cdot (n-1) \cdot (n-2) \cdot \ldots \cdot 1 = n!\) \\
+        \(P_{n,k} = \frac{n!}{(n-k)!}\), \(P_{n,n} = n!\)
+        
     \subparagraph*{Combinations: }
-        In general we can ``combine'' \(n\) elements taking \(k\) at a time in \(C_{n,k} = \frac{P_{n,k}}{k!} = \frac{n!}{(n-k)!k!} = {n \choose k} \). 
+        In general we can ``combine'' \(n\) elements taking \(k\) at a time in\\ \(C_{n,k} = \frac{P_{n,k}}{k!} = \frac{n!}{(n-k)!k!} = {n \choose k} \). 
 
     \subparagraph*{Multinomial Coefficients: } 
-        Consider splitting \(n\) elements into \(k (k \geq 2)\) groups in a way such that group \(j\) gets \(n_j\) elements and \(\sum_{j = 1}^{k}n_j = n\). The \(n_1\) elements in the first group can be selected in \({n \choose n_1}\), the second in \({n-n_1 \choose n_2}\), the third in \({n-n_1-n_2 \choose n_3}\) and so on until we complete the \(k\) groups. Then: \({n \choose n_1}\cdot{n-n_1 \choose n_2}\cdot{n-n_1-n_2 \choose n_3}\cdot \ldots \cdot{n_k \choose n_k} = {n \choose n_1, n_2, \ldots, n_k}\)
+        \(n\) elements into \(k (k \geq 2)\) groups s.t. group \(j\) gets \(n_j\) elements and \(\sum_{j = 1}^{k}n_j = n\). The \(n_1\) elements in the first group can be selected in \({n \choose n_1}\), the second in \({n-n_1 \choose n_2}\), the third in \({n-n_1-n_2 \choose n_3}\) and so on for the \(k\) groups. Then:\\ \({n \choose n_1}\cdot{n-n_1 \choose n_2}\cdot{n-n_1-n_2 \choose n_3}\cdot \ldots \cdot{n_k \choose n_k} = {n \choose n_1, n_2, \ldots, n_k}\)
 
     \subparagraph*{Probability of union:}
-        If \(A_1, A_2, \ldots, A_n\) are \textit{disjoint events} then 
-        \begin{itemize}
-            \item[] \(\Pr(A_1 \cup A_2 \cup \ldots \cup A_n) = \Pr(\bigcup\limits_{i=1}^{n}A_i) \)
-            \item[] \(= \Pr(A_1) + \Pr(A_2) + \ldots + \Pr(A_n) \)
-            \item[] \(= \sum\limits_{i=1}^{n}\Pr(A_i) \)
-        \end{itemize}
+        If \(A_1, A_2, \ldots, A_n\) are \textit{disjoint events} then \(\Pr(A_1 \cup A_2 \cup \ldots \cup A_n) = \Pr(\bigcup\limits_{i=1}^{n}A_i) = \Pr(A_1) + \Pr(A_2) + \ldots + \Pr(A_n) = \sum\limits_{i=1}^{n}\Pr(A_i) \)
         \smallskip
-
-    If the events are not disjoint: 
-        \begin{itemize}
-            \item[] Two events \(A_1, A_2: \Pr(A_1 \cup A_2) = \Pr(A_1) + \Pr(A_2) - \Pr(A_1 \cap A_2)\)
-            \item[] Three events: \(A_1, A_2, A_3: \Pr(A_1 \cup A_2 \cup A_3)\)
-            \item[] \(= \Pr(A_1) + \Pr(A_2) + \Pr(A_3) - \Pr(A_1 \cap A_2) - \Pr(A_1 \cap A_3) - \Pr(A_2 \cap A_3) + \Pr(A_1 \cap A_2 \cap A_3)\)
-        \end{itemize}  
-
+    If the events are not disjoint: \\
+     Two events \(A_1, A_2: \Pr(A_1 \cup A_2) = \Pr(A_1) + \Pr(A_2) - \Pr(A_1 \cap A_2)\)\\
+    Three events: \(A_1, A_2, A_3: \Pr(A_1 \cup A_2 \cup A_3)\)
+    \(= \Pr(A_1) + \Pr(A_2) + \Pr(A_3) - \Pr(A_1 \cap A_2) - \Pr(A_1 \cap A_3) - \Pr(A_2 \cap A_3) + \Pr(A_1 \cap A_2 \cap A_3)\)
+    
     \subparagraph*{Conditional Probability: }
-        If \(A, B\) are events such that \(\Pr(A) > 0\) and \(\Pr(B) > 0\) then 
-        \begin{itemize}
-            \item[] \(\Pr(B|A) = \frac{\Pr(A\cap B)}{\Pr(A)}\) and 
-            \item[] \(\Pr(A|B) = \frac{\Pr(A \cap B)}{\Pr(B)}\) 
-            \item[] Furthermore: 
-            \item[] \(\Pr(A \cap B) = \Pr(B|A) \cdot \Pr(A)\) and 
-            \item[] \(\Pr(A \cap B) = \Pr(A|B) \cdot \Pr(B)\) 
-            \item[] In general: \(\Pr(A_1 \cap A_2 \cap \ldots \cap A_n) \)
-            \item[] \(= \Pr(A_1) \cdot \Pr(A_2 | A_1) \cdot \ldots \cdot \Pr(A_n | A_1 \cap A_2 \cap \ldots \cap A_{n-1})\)
-        \end{itemize}
-
+    \(\Pr(B|A) = \frac{\Pr(A\cap B)}{\Pr(A)}\) and \(\Pr(A|B) = \frac{\Pr(A \cap B)}{\Pr(B)}\) \\
+    \(\Pr(A \cap B) = \Pr(B|A) \cdot \Pr(A)\) and  \\
+    \(\Pr(A \cap B) = \Pr(A|B) \cdot \Pr(B)\)  \\
+    In general: \(\Pr(A_1 \cap A_2 \cap \ldots \cap A_n) \)\\
+    \(= \Pr(A_1) \cdot \Pr(A_2 | A_1) \cdot \ldots \cdot \Pr(A_n | A_1 \cap A_2 \cap \ldots \cap A_{n-1})\)
+    
     \subparagraph*{Independence:}
-        \(A, B\) are independent events if \(\Pr(A|B) = \Pr(A)\) and \(\Pr(B|A) = \Pr(B)\). Then, if \(A, B\) are independent: 
-        \begin{itemize}
-            \item[] \(\Pr(A \cap B) = \Pr(A|B) \cdot \Pr(B) = \Pr(A) \cdot \Pr(B)\) and 
-            \item[] \(\Pr(A \cap B) = \Pr(B | A) \cdot \Pr(A) = \Pr(B) \cdot \Pr(A)\).
-            \item[] In general if \(A_1, A_2, \ldots, A_n\) are independent: 
-            \item[] \(\Pr(A_1 \cap A_2 \cap \ldots \cap A_n) = \Pr(A_1) \cdot \Pr(A_2) \cdot \ldots \cdot \Pr(A_n)\). 
-            \item[] Note that if \(A \cap B = \emptyset\) then the two events are \textit{not independent}. 
-            \item[] Note that if \(A, B\) are independent then \(A, B^c\) are also independent.
-        \end{itemize}
+        \(A, B\) are independent events if \(\Pr(A|B) = \Pr(A)\) and \(\Pr(B|A) = \Pr(B)\). Then: \\
+        \(\Pr(A \cap B) = \Pr(A|B) \cdot \Pr(B) = \Pr(A) \cdot \Pr(B)\) \\
+        \(\Pr(A \cap B) = \Pr(B | A) \cdot \Pr(A) = \Pr(B) \cdot \Pr(A)\)\\
+        In general if \(A_1, A_2, \ldots, A_n\) are independent: \(\Pr(A_1 \cap \ldots \cap A_n) = \Pr(A_1) \cdot \ldots \cdot \Pr(A_n)\). Note that if \(A \cap B = \emptyset\) then the two events are \textit{not independent}.  Note that if \(A, B\) are independent then \(A, B^c\) are also independent.
 
     \subparagraph*{Conditionally Independent: } 
         \(A_1, A_2, \ldots, A_k\) are \textit{conditionally independent} given \(B\) if, for every subset \(A_{i_1}, \ldots, A_{i_m}: \Pr(A_{i_1} \cap \ldots \cap A_{i_m} | B) = \Pr(A_{i_1} | B) \cdot \ldots \cdot \Pr(A_{i_m} | B)\).
 
     \subparagraph*{Bayes' Theorem:}
-        Let \(B_1, \ldots, B_k :=\) a partition of \(S\) such that \(\Pr(B_j) > 0, j \in 1, \ldots, k\). Assume you have \(A\) such that \(\Pr(A) > 0\). Then: \(\Pr(B_i|A) = \frac{\Pr(A|B_i) \cdot \Pr(B_i)}{\Pr(A)} = \frac{\Pr(A|B_i) \cdot \Pr(B_i)}{\sum\limits_{j=1}^{k}\Pr(A|B_j) \cdot \Pr(B_j)}\)
+    \(\Pr(B_i|A)\\ = \frac{\Pr(A|B_i) \cdot \Pr(B_i)}{\Pr(A)}
+     = \frac{\Pr(A|B_i) \cdot \Pr(B_i)}{\sum_{j=1}^{k}\Pr(A|B_j) \cdot \Pr(B_j)}\)
 
     \subparagraph*{Uniform Distribution: }
-        \(X = x, x \in \{1, 2, \ldots, k\}\) with all values \(x\) equally likely. The p.f. is \(f_X(x) =\\ \Pr(X=x) =  \begin{cases} \frac      {1}{k} & x = 1, 2, \ldots, k \\ 0 & o.w. \end{cases} \)
+        \(X = x, x \in \{1, 2, \ldots, k\}\) with all values \(x\) equally likely. The p.f. is \(f_X(x) = \frac{1}{k} \{x | x = 1, 2, \ldots, k\}\)
+    
 
     \subparagraph*{Bernoulli Distribution: }
-        An event \(A\) happens with probability \(p\):
-        \begin{itemize}
-            \item[] \(X = \begin{cases} 1 & \text{if \(A\) happens} \\ 0 & \text{if \(A^c\) happens} \end{cases} \) 
-            \item[] \(f_X(x) =
-    \begin{cases} 
-    (1-p)   & x = 0 \\ 
-    p       & x = 1 \\
-    0       & \text{o.w.} 
-    \end{cases} \)
-\end{itemize}
+        An event \(A\) happens with probability \(p\):\\ \(f_X(x) = p \text{ if } x = 1, (1-p) \text{ if } x = 0\)
 
     \subparagraph*{Binomial:}
         \(n\) Bernoulli trials repeated independently with probability of success \(p\). 
@@ -135,75 +106,43 @@
     {n \choose x} p^x (1-p)^{n-x}   &   x=0, \ldots, n \\
     0                               &   \text{o.w.}
     \end{cases} \)
-            \item[] \(\rightarrow X \sim Bin(n,p)\)
+            \item[] \(\rightarrow X \sim \text{Bin}(n,p)\)
         \end{itemize}
 
         \subparagraph*{Quantile Function: }
         \(X\) continuous r.v. \(F^{-1}(p)\) is the quantile function of \(X\) for \(0 \leq p \leq 1. F^{-1}(p) = x \Rightarrow p = F(x)\).
 
     \subparagraph*{Joint Continuous Distributions: }
-    Joint p.d.f. given by \(f_{X,Y}(x,y) = \Pr((X,Y) \in A) = \iint\limits_{A} f(x,y)dxdy\). To find the joint c.d.f. just integrate.
+    Joint p.d.f. given by \(f_{X,Y}(x,y) = \Pr((X,Y) \in A) = \iint{f(x,y)dxdy}\). To find the joint c.d.f. just integrate.
 
-        \subparagraph*{Negative-Binomial: }
-        \begin{itemize}
-            \item[] We repeat Bernoulli trials until \(r\) successes are observed. 
-            \item[] \(X :=\) number of failures \(= \{0, 1, \ldots\}\). 
-            \item[] \(p :=\) probability of success. 
-            \item[] \(\Pr(X = x) = \Pr(x \text{ failures before \(r\) successes}) \)
-            \item[] \( = \Pr(x\) failures and \(r-1\) successes in \(x + r - 1\) trials\()) \cdot \Pr(\)one success in last trial\()\)
-            \item[] \(= \left[{x+r-1 \choose x } (1-p)^x p^{r-1} \right] \cdot p = {x + r - 1 \choose x} (1 - p)^x p^r\).
-            \item[] \(f_X(x) =
+        \subparagraph*{Negative-Binomial: } Bernoulli trials until \(r\) successes are observed. \(X :=\) number of failures \(= \{0, 1, \ldots\}\). \(p :=\) probability of success. \(\Pr(X = x) = \Pr(x \text{ failures before \(r\) successes}) = \Pr(x\) failures, \(r-1\) successes,  \(x + r - 1\) trials\()) \cdot \Pr(\)one success in last trial\() = {x + r - 1 \choose x} (1 - p)^x p^r\).\\
+        \(f_X(x) =
     \begin{cases}
     {x+r-1 \choose x} (1-p)^x p^r   &   x=0,1,2,\ldots \\
     0       & \text{o.w.}
     \end{cases}\)
-\end{itemize}
-    \subparagraph*{Hypergeometric: }
-        \begin{itemize}
-            \item[] A box with \(A\) red balls and \(B\) blue balls.
-            \item[] \(n\) balls are drawn \textit{without replacement}. 
-            \item[] \(X :=\) number of red balls. 
-            \item[] \(X \leq \min(n, A)\). 
-            \item[] \(\max(n-B, 0) \leq X \leq \min(n,A) \rightarrow f_X(x) = \)
-            \item[] \(
+
+    \subparagraph*{Hypergeometric: } A box with \(A\) red balls and \(B\) blue balls. \(n\) balls are drawn \textit{without replacement}. \(X :=\) number of red balls \(\leq \min(n, A)\). \(\max(n-B, 0) \leq X \leq \min(n,A)\). Bounds: \(\max(n-B,0) \leq x \leq \min(n,A)\\\rightarrow f_X(x) = 
     \begin{cases}
-    \frac{ {A \choose x} \cdot {B \choose n - x}}{{A + B \choose n}}     &    \max(n-B,0) \leq x \leq \min(n,A) \\
+    \frac{ {A \choose x} \cdot {B \choose n - x}}{{A + B \choose n}}     & \text{bounds}    \\
     0   &   \text{o.w.}
     \end{cases}
     \)
-\end{itemize}
-
-    
 
     \subparagraph*{Geometric: }
-        Negative binomial with \(r=1\)
-        \begin{itemize}
-            \item[] \(f_X(x) = \begin{cases} {(1-p)}^x p & x=0,1,\ldots \\ 0 & \text{o.w.} \end{cases}\)
-        \end{itemize}
-
+        Negative binomial with \(r=1 \\
+        f_X(x) = \begin{cases} {(1-p)}^x p & x=0,1,\ldots \\ 0 & \text{o.w.} \end{cases}\)
+        
     \subparagraph*{Poisson: }
         Counts occurences of an event. \(X\) is a Poisson r.v. with parameter \(\lambda\) (intensity) if the p.f. is \(f_X(x) = \begin{cases} \frac{e^{-\lambda}\lambda^x}{x!} & x=0,1,2,\ldots \\ 0 & \text{o.w.} \end{cases}\) with \(\lambda>0\).
 
-    \subparagraph*{Continuous Random Variables: }
-        A r.v. \(X\) has a cont. distribution if there is a non-negative \(f\) s.t. \(\Pr(a \leq X \leq b) = \int_{a}^{b} f(x)dx\). \(f\) is the probability density function p.d.f. To find the normalizing constant integrate the p.d.f. over the domain, it must equal 1.
-
     \subparagraph*{Cumulative Distribution Function: } 
         (c.d.f.) For any r.v. \(X\) the c.d.f. is given by \(F(x) = \Pr(X \leq x)\). Properties: 
-        \begin{itemize}
-            \item[] \(\forall x: 0 \leq F(x) \leq 1\)
-            \item[] \(F(x)\) is non-decreasing, i.e. if \(x_1 < x_2 \Rightarrow \{X \leq x_1 \} \subset \{X \leq x_2 \}\) and so \(\Pr(X \leq x_1) \leq \Pr(X \leq x_2) \Rightarrow F(x_1) \leq F(x_2)\)
-            \item[] \(\lim_{x \to -\infty} F(x) = 0\) and \(\lim_{x \to \infty} F(x) = 1\)
-        \end{itemize}
-        \smallskip
-        For a continuous r.v.:
-        \begin{itemize}
-            \item[] \(F(x) = \Pr(X \leq x) = \int_{-\infty}^{\infty}f(t)dt\)
-            \item[] \(F'(x) = f(x)\)
-            \item[] \(\Pr(a < X \leq b) = \Pr(a \leq X \leq b) = \Pr(a \leq X < b) = \Pr(a < X < b)\)
-        \end{itemize}
-        \smallskip
-    In general, \(X \sim Unif[a,b] \Rightarrow f(x) = \begin{cases} \frac{1}{b-a} & a \leq x \leq b \\ 0 & \text{o.w.} \end{cases}\). \\
-    The c.d.f.: \(F(x) = \begin{cases} 0 & x < a \\ \frac{x-a}{b-a} & a \leq x \leq b \\ 1 x > b \end{cases}\)
+        If \(x_1 < x_2 \Rightarrow \{X \leq x_1 \} \subset \{X \leq x_2 \}\) and so \(\Pr(X \leq x_1) \leq \Pr(X \leq x_2) \Rightarrow F(x_1) \leq F(x_2) \\
+        \lim_{x \to -\infty} F(x) = 0\) and \(\lim_{x \to \infty} F(x) = 1\)\\
+        For a continuous r.v.: \\\(F(x) = \Pr(X \leq x) = \int_{-\infty}^{x}f(t)dt\) \\ 
+    In general, \(X \sim Unif[a,b] \Rightarrow \\f(x) = \begin{cases} \frac{1}{b-a} & a \leq x \leq b \\ 0 & \text{o.w.} \end{cases}\). 
+    \\\(F(x) = \begin{cases} 0 & x < a \\ \frac{x-a}{b-a} & a \leq x \leq b \\ 1 & x > b \end{cases}\)
 
 
 
@@ -214,34 +153,14 @@
         Two r.v. are independent if they produce independent events: \(\Pr(X \in A, Y \in B) = \Pr(X \in A) \cdot \Pr(Y \in B)\). This implies: \(\Pr(X \leq x, Y \leq y) = \Pr(X \leq x) \cdot \Pr(Y \leq y) \Rightarrow F(x,y) = F_X(x) \cdot F_Y(y)\).
 
     \subparagraph*{Conditional Distributions: }
-        \(X, Y\) discrete r.v. with p.f. \(f_X(x), f_Y(y)\) and joint p.f. \(f(x,y)\). Then:
-        \begin{itemize}
-            \item[] \(\Pr(X = x | Y = y) = \frac{\Pr(X = x, Y = y)}{\Pr(Y = y)} = \frac{f(x,y)}{f_Y(y)}\).
-        \end{itemize}
-        This is a new distribution and the p.f. is (p.f. of \((X|Y)\)):
-        \begin{itemize}
-            \item[] \(g_X(x|y) = \begin{cases} \frac{f(x,y)}{f_Y(y)} & \forall x,y: f_Y(y) > 0 \\ 0 & \text{o.w.}\end{cases}\)
-        \end{itemize}
-        Note that 
-        \begin{itemize}
-            \item[] \(\sum_x{y_X(x|y)} = \sum_x{\frac{f(x,y)}{f_Y(y)}} \)
-             \(= \frac{1}{f_Y(y)} \cdot \sum_x{f(x,y)} = \frac{f_Y(y)}{f_Y(y)} = 1\). 
-            \item[]
-        \end{itemize}
-    We can also define the conditional distribution of \(Y\) given \(X=x\) by:
-        \begin{itemize}
-            \item[] \(g_Y(y|x) = \begin{cases} \frac{f(x,y)}{f_X(x)} & \forall x,y: f_X(x) > 0 \\ 0 & \text{o.w.} \end{cases}\)
-        \end{itemize}
-    In the continuous case \(X, Y\) with joint p.d.f. \(f(x,y)\) and marginal p.d.f.'s \(f_X(x)\) and \(f_Y(y)\): 
-\begin{itemize}
-\item[] \(g_X(x|y) = \begin{cases} \frac{f(x,y)}{f_Y(y)} & f_Y(y) > 0 \\ 0 & \text{o.w.} \end{cases} \)
-\item[] \(g_Y(y|x) = \begin{cases} \frac{f(x,y)}{f_X(x)} & f_X(x) > 0 \\ 0 & \text{o.w.} \end{cases}\).
-\end{itemize}
- Again note that 
- \begin{itemize}
-    \item[] \(\int\limits_{-\infty}^{\infty}g_X(x|y)dx = \int\limits_{-\infty}^{\infty} \frac{f(x,y)}{f_Y(y)}dx = \frac{1}{f_Y(y)} \int\limits_{-\infty}^{\infty}f(x,y)dx \)
-    \item[] \(= \frac{1}{f_Y(y)} \cdot f_Y(y) = 1\).
- \end{itemize}
+        \(X, Y\) discrete r.v. with p.f. \(f_X(x), f_Y(y)\) and joint p.f. \(f(x,y)\). Then: \\
+        \(\Pr(X = x | Y = y) = \frac{\Pr(X = x, Y = y)}{\Pr(Y = y)} = \frac{f(x,y)}{f_Y(y)}\). \\
+        \(g_X(x|y) = \begin{cases} \frac{f(x,y)}{f_Y(y)} & \forall x,y: f_Y(y) > 0 \\ 0 & \text{o.w.}\end{cases} \\
+        \sum_x{f_X(x|y)} = \sum_x{\frac{f(x,y)}{f_Y(y)}} \)
+             \(= \frac{1}{f_Y(y)} \cdot \sum_x{f(x,y)} = \frac{f_Y(y)}{f_Y(y)} = 1\). \\
+    In the continuous case \(X, Y\) with joint p.d.f. \(f(x,y)\) and marginal p.d.f.'s \(f_X(x)\) and \(f_Y(y)\): \\
+    \(g_X(x|y) = \begin{cases} \frac{f(x,y)}{f_Y(y)} & f_Y(y) > 0 \\ 0 & \text{o.w.} \end{cases} \\
+    \int\limits_{-\infty}^{\infty}g_X(x|y)dx = \int\limits_{-\infty}^{\infty} \frac{f(x,y)}{f_Y(y)}dx = \frac{1}{f_Y(y)} \int\limits_{-\infty}^{\infty}f(x,y)dx = \frac{1}{f_Y(y)} \cdot f_Y(y) = 1\)
 
 \subparagraph*{Multivariate Distributions:}
  \(X_1, X_2, \ldots, X_n\) have a joint discrete distribution if \((X_, \dots, X_n)\) can have only a countable sequence of values in \(\mathcal{R}^n\). The joint p.f. is \(f(x_1,\dots,x_n) = \Pr(X_1=x_1, X_2=x_2,\ldots,X_n=x_n)\). \(X_1, X_2, \ldots, X_n\) have a joint continuous distribution if there exists \(f\) such that \(f\left((X_1,\ldots,X_n)\in \mathcal{C}\right) = \int\limits_{\mathcal{C}}\dots\int f(x_1,\ldots,x_n)dx_1\ldots dx_n\). Here \(f(x_1,\ldots,x_n)\) is the joint p.d.f. and \(f(x_1,\ldots,x_n) = \frac{d^nF(x_1,\ldots,x_n)}{dx_1\ldots dx_2}\). \(F(x_1,\ldots,x_n) = \Pr(X_1 \leq x_1, X_2 \leq x_2, \ldots, X_n \leq x_n)\).
@@ -257,9 +176,9 @@
 
 \subparagraph*{Functions of two or more R.V.s:}
  Discrete case: \(X_1, X_2, \ldots, X_n\) r.v. with joint p.f. \(f(x_1, \ldots, x_n\):
-\(Y_1 = r_1(X_1,\ldots,X_n)\) \dots \(Y_m = r_m(X_1,\ldots,X_n)\). Let \(A := \{(x_1,\ldots,x_n)\):= such that \(y_1 = r(x_1,\ldots,x_n) \dots y_m = r(x_1,\ldots,x_n)\)\}. Then: \(g(y_1,\ldots,y_m)=\Pr(Y_1=y_1,\ldots,Y_m=y_m)=\sum\limits_{(x_1,\ldots,x_n)\in A}{f(x_1,\ldots,x_n)}\) \\
+\(Y_1 = r_1(X_1,\ldots,X_n)\) \dots \(Y_m = r_m(X_1,\ldots,X_n)\). Let \(A := \{(x_1,\ldots,x_n)\):= such that \(y_1 = r(x_1,\ldots,x_n) \dots y_m = r(x_1,\ldots,x_n)\)\}. Then: \(g(y_1,\ldots,y_m)=\Pr(Y_1=y_1,\ldots,Y_m=y_m)=\sum\limits_{(x_1,\ldots,x_n)\in A}{f(x_1,\ldots,x_n)}\). \\
 
-Continuous case: \(X_1, X_2, \ldots, X_n\) cont. r.v. with joint p.d.f. \(f(x_1, \ldots, x_n)\). Let \(Y = r(X_1,\ldots,X_n) \rightarrow A_y = \{(x_1,\ldots,x_n)\) s.t. \(r(x_1,\ldots,x_n) \leq y\}\) Then the c.d.f. of \(Y\) is \(G(y) = \Pr(Y \leq y) = \Pr\left( r(X_1,\ldots,X_n) \leq y \right) = \int\limits_{A_y}\cdots\int{f(x_1,\ldots,x_n)}dx_1dx_2\ldots dx_n\). The density/p.d.f. of \(Y\) is \(g(y) = \frac{dG(y)}{dy}\).
+Continuous case: \(X_1, X_2, \ldots, X_n\) cont. r.v. with joint p.d.f. \(f(x_1, \ldots, x_n)\). Let \(Y = r(X_1,\ldots,X_n) \rightarrow A_y = \{(x_1,\ldots,x_n)\) s.t. \(r(x_1,\ldots,x_n) \leq y\}\) Then the c.d.f. of \(Y\) is \(G(y) = \Pr(Y \leq y) = \Pr\left( r(X_1,\ldots,X_n) \leq y \right) = \int\limits_{A_y}\ldots\int{f(x_1,\ldots,x_n)}dx_1dx_2\ldots dx_n\). The density/p.d.f. of \(Y\) is \(g(y) = \frac{dG(y)}{dy}\). If \(Y = a_1 X_1 + a_2 X_2 + b \Rightarrow g(y) = \int_{-\infty}^{\infty}f\left(\frac{y-a_2 x_2 - b}{a_1},x_2\right)\left|\frac{1}{a_1}\right|dx_2\)
 
 \subparagraph*{Transformations: }
  \(X_1,\ldots,X_n\) cont. r.v.'s with joint pdf \(f(x_1,\ldots,x_n)\). Let \(Y_1 = r_1(X_1,\ldots,X_n), \dots, Y_n = r_n (X_1, \ldots, X_n)\). To find the joint pdf of \(Y_1, \ldots, Y_2\) for a one-to-one differentiable transformation \(x_1 = s_1 (y_1,\ldots,y_n), \dots, x_n = s_n (y_1, \ldots, y_n) \rightarrow \) The joint pdf of \(Y_1,\ldots,Y_n\) is \(g(y_1,\ldots,y_n) = f(s_1,\ldots,s_n)\left|J\right|\) where \(J = \det \begin{bmatrix}
@@ -285,7 +204,7 @@ Continuous case: \(X_1, X_2, \ldots, X_n\) cont. r.v. with joint p.d.f. \(f(x_1,
     = A\vec{X}\) (with \(A\) a non-singular matrix). Then \(\vec{X} = A^{-1}\vec{Y}\) and \(g_Y(y) = f_X(A^{-1})\cdot\frac{1}{\left|\det A\right|}\)
 
 \subparagraph*{Markov Chains: }
-A sequence of r.v.'s \(X_1, X_2, \ldots\) is a stochastic process with discrete time parameter. \(X_1\) is the initial state and \(X_n\) is the state at time \(n\). A stochastic process with discrete time parameter is a Markov chain if for each \(n\), \(\Pr(X_{n+1} \leq b | X_1 = x_1, X_2 = x_2, \ldots, X_n = x_n) = \Pr(X_{n+1} = \leq b | X_n = x_n)\). A Markov Chain is finite if there are finite possible states. Then: \(\Pr(X_1 = x_1, \ldots, X_n = x_n) = \Pr(X_1 = x_1) \Pr(X_2 = x_2 | X_1 = x_1) \cdots \Pr(X_n = x_n | X_{n-1} = x_{n-1}) \). Transition distributions: When a MC has \(k\) possible states then it has a transition distribution where there exist probabilities \(p_{ij}\) for \(i, j = 1, \ldots , k\) such that \(\forall n: \Pr(X_{n+1} = j | X_n = i) = p_{ij}\) and if \(\Pr(X_{n+1} = j | X_n = i) = p_{ij} \forall n\) then it is a stationary transition distribution. In this case there is a matrix s.t. \(\sum\limits_{j=1}^{k}{p_{ij}}=1,  \forall i\): \\
+A sequence of r.v.'s \(X_1, X_2, \ldots\) is a stochastic process with discrete time parameter. \(X_1\) is the initial state and \(X_n\) is the state at time \(n\). A stochastic process with discrete time parameter is a Markov chain if for each \(n\), \(\Pr(X_{n+1} \leq b | X_1 = x_1, X_2 = x_2, \ldots, X_n = x_n) = \Pr(X_{n+1} = \leq b | X_n = x_n)\). A Markov Chain is finite if there are finite possible states. Then: \(\Pr(X_1 = x_1, \ldots, X_n = x_n) = \Pr(X_1 = x_1) \Pr(X_2 = x_2 | X_1 = x_1) \ldots \Pr(X_n = x_n | X_{n-1} = x_{n-1}) \). Transition distributions: When a MC has \(k\) possible states then it has a transition distribution where there exist probabilities \(p_{ij}\) for \(i, j = 1, \ldots , k\) such that \(\forall n: \Pr(X_{n+1} = j | X_n = i) = p_{ij}\) and if \(\Pr(X_{n+1} = j | X_n = i) = p_{ij} \forall n\) then it is a stationary transition distribution. In this case there is a matrix s.t. \(\sum\limits_{j=1}^{k}{p_{ij}}=1,  \forall i\): \\
 \(P = \begin{bmatrix} 
         p_{11} & \hdots & p_{1k} \\
         \vdots & \ddots & \vdots \\
@@ -387,10 +306,23 @@ Transition of several steps: \(P^m = P \cdot \ldots \cdot P\) Just exponentiate 
     \item[] \(F(x) = \Pr(X \leq x) = \Phi(\frac{x-\mu}{\sigma})\)
     \item[] Also: \(F^{-1}(p) = \mu + \sigma \Phi^{-1}(p)\)
     \item[] Linear combo of r.v. \(X_1, \ldots, X_n\) with \(X_i \sim N(\mu_i, \sigma_i^2)\) then:
-    \item[] \(\sum\limits_{i = 1}^{n}{X_i} = X_1 + \cdots + X_n \sim N(\sum\limits_{i = 1}^{n} \mu_i, \sum\limits_{i = 1}^{n} \sigma_i^2)\)
+    \item[] \(\sum\limits_{i = 1}^{n}{X_i} = X_1 + \ldots + X_n \sim N(\sum\limits_{i = 1}^{n} \mu_i, \sum\limits_{i = 1}^{n} \sigma_i^2)\)
     \item[] Generally: \(\sum\limits_{i = 1}^{n}{a_i X_i} = N(\sum\limits_{i = 1}^{n}{a_i \mu_i}, \sum\limits_{i = 1}^{n}{a_i^2 \sigma_i^2})\)
     \item[] Linear combo of r.v.'s: \(E(\bar{X_n}) =  \mu\)
     \item[] \(V(\bar{X_n}) = \frac{\sigma^2}{n}\)
+    \item[] If \(Y\) is a linear combo of r.v.'s: \(Y \sim N(\mu, \sigma^2)\)
+    \item[] To find \(\Pr(a < Y < b)\), use \(Z = \frac{Y-\mu}{\sigma}\)
+    \item[] \(\Rightarrow Z \sim N(0,1)\)
+    \item[] Markov Inequality: \(X\) r.v., \(\Pr(X \geq 0) = 1\), then: \(\forall t > 0: \Pr(X \geq t) \leq \frac{E(X)}{t}\)
+    \item[] Chebyshev's Inequality: \(X\) r.v. w/ \(V(X) \Rightarrow \forall t > 0: \Pr(|X - E(X)| \geq t) \leq \frac{V(X)}{t^2}\)
+    \item[] So for \(\bar{X_n}: \Pr(|\bar{X_n} - \mu|\geq t) \leq \frac{V(\bar{X_n}}{t^2} = \frac{\sigma^2}{nt^2}\)
+\end{itemize}
+
+\subparagraph*{Central Limit Theorem:}
+\begin{itemize}
+    \item[] \(X_1,\ldots,X_n\) i.i.d. sample from distribution with mean \(\mu\) and variance \(\sigma^2\). For each \(x (-\infty < x < \infty):\)
+    \item[] \(\Rightarrow \lim_{n \to \infty} \Pr \left( \frac{ \bar{X_n} - \mu }{ \frac{ \sigma }{ \sqrt{n} } }  \leq x \right) = \Phi(x)\)
+    \item[] with \(\Phi(x) =\) the c.d.f. of a standard normal
 \end{itemize}
 
     \subparagraph*{Other Stuff:}
