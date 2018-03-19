@@ -229,7 +229,8 @@ Bernoulli(\(p\)): \(E(X) = p\) \\
 Binomial(\(n,p\)): \(E(X) = np\) \\
 Poisson: \(E(X) = \lambda\) \\ 
 Geometric: \(E(X) = \frac{1-p}{p}\) \\
-Negative Binomial: \(E(X) = \frac{r(1-p)}{p}\) 
+Negative Binomial: \(E(X) = \frac{r(1-p)}{p}\) \\
+Hypergeometric: \(E(X) = \frac{nA}{A+B}\)
 
 \subparagraph*{Variance: } \ \ \\
 \(V(X) = E[(X-\mu)^x]\) with \(\mu = E(X)\) \\
@@ -245,8 +246,12 @@ Bernoulli: \(V(X) = p(1-p)\) \\
 Binomial: \(V(X) = np(1-p)\) \\
 Poisson: \(V(X) = \lambda\) \\
 Geometric: \(V(X) = \frac{1-p}{p^2}\) \\
-Negative Binomial: \(V(X) = \frac{r(1-p)}{p^2}\) 
+Negative Binomial: \(V(X) = \frac{r(1-p)}{p^2}\) \\
+Hypergeometric: \(V(X) = \frac{nAB}{(A+B)^2} \cdot \frac{A+B-n}{A+B-1}\)
 
+\subparagraph*{Conditional Variance: } \ \ \\
+    \(V(Y|X=x) = E(Y^2|X=x) - [E(Y|X=x)]^2\\
+    E(Y^2|X=x) = \int_{-\infty}^{\infty}{y^2 g(y|x) dy}\)
 
 \subparagraph*{Covariance: }
 \begin{itemize}
@@ -284,10 +289,6 @@ Negative Binomial: \(V(X) = \frac{r(1-p)}{p^2}\)
     \item[] \(E(Y|X=x) = h(x) \rightarrow h(X)\) is not a r.v.
     \item[] \(E(E(Y|X)) = E(Y)\)
 \end{itemize}
-
-\subparagraph*{Conditional Variance: } \ \ \\
-    \(V(Y|X=x) = E(Y^2|X=x) - [E(Y|X=x)]^2\\
-    E(Y^2|X=x) = \int_{-\infty}^{\infty}{y^2 g(y|x) dy}\)
 
 \subparagraph*{Standard Normal Distribution:}
 \begin{itemize}
