@@ -50,16 +50,6 @@
     \setlength{\multicolsep}{1pt}
     \setlength{\columnsep}{2pt}
 
-    \subparagraph*{Permutations: } 
-        Given an array of \(n\) elements: \(n \cdot (n-1) \cdot (n-2) \cdot \ldots \cdot 1 = n!\) \\
-        \(P_{n,k} = \frac{n!}{(n-k)!}\), \(P_{n,n} = n!\)
-        
-    \subparagraph*{Combinations: }
-        In general we can ``combine'' \(n\) elements taking \(k\) at a time in\\ \(C_{n,k} = \frac{P_{n,k}}{k!} = \frac{n!}{(n-k)!k!} = {n \choose k} \). 
-
-    \subparagraph*{Multinomial Coefficients: } 
-        \(n\) elements into \(k (k \geq 2)\) groups s.t. group \(j\) gets \(n_j\) elements and \(\sum_{j = 1}^{k}n_j = n\). The \(n_1\) elements in the first group can be selected in \({n \choose n_1}\), the second in \({n-n_1 \choose n_2}\), the third in \({n-n_1-n_2 \choose n_3}\) and so on for the \(k\) groups. Then:\\ \({n \choose n_1}\cdot{n-n_1 \choose n_2}\cdot{n-n_1-n_2 \choose n_3}\cdot \ldots \cdot{n_k \choose n_k} = {n \choose n_1, n_2, \ldots, n_k}\)
-
     \subparagraph*{Probability of union:}
         If \(A_1, A_2, \ldots, A_n\) are \textit{disjoint events} then \(\Pr(A_1 \cup A_2 \cup \ldots \cup A_n) = \Pr(\bigcup\limits_{i=1}^{n}A_i) = \Pr(A_1) + \Pr(A_2) + \ldots + \Pr(A_n) = \sum\limits_{i=1}^{n}\Pr(A_i) \)
         \smallskip
@@ -92,8 +82,7 @@
         \(X = x, x \in \{1, 2, \ldots, k\}\) with all values \(x\) equally likely. The p.f. is \(f_X(x) = \frac{1}{k} \{x | x = 1, 2, \ldots, k\}\)
     
 
-    \subparagraph*{Bernoulli Distribution: }
-        An event \(A\) happens with probability \(p\):\\ \(f_X(x) = p \text{ if } x = 1, (1-p) \text{ if } x = 0\)
+    
 
     \subparagraph*{Binomial:}
         \(n\) Bernoulli trials repeated independently with probability of success \(p\). 
@@ -128,10 +117,6 @@
     0   &   \text{o.w.}
     \end{cases}
     \)
-
-    \subparagraph*{Geometric: }
-        Negative binomial with \(r=1 \\
-        f_X(x) = \begin{cases} {(1-p)}^x p & x=0,1,\ldots \\ 0 & \text{o.w.} \end{cases}\)
         
     \subparagraph*{Poisson: }
         Counts occurences of an event. \(X\) is a Poisson r.v. with parameter \(\lambda\) (intensity) if the p.f. is \(f_X(x) = \begin{cases} \frac{e^{-\lambda}\lambda^x}{x!} & x=0,1,2,\ldots \\ 0 & \text{o.w.} \end{cases}\) with \(\lambda>0\).
@@ -168,6 +153,14 @@
  \subparagraph*{Marginal Distributions: }
     \(X_1, \ldots, X_n\) are cont. r.v. with joint p.d.f. \(f(x_1, \ldots, x_n)\). Then the marginal distribution of \(X_1 = f_{X_1}(x_1) = \int\limits_{- \infty}^{\infty} \dots \int\limits_{- \infty}^{\infty} f(x_1,x_2, \ldots, x_n)dx_2dx_3\ldots dx_n\). \(F(x_1)\) is the marginal c.d.f. of \(X_1\) and \(F(x_1) = \Pr(X_1 \leq x_1) = \Pr(X_1 \leq x_1, X_2 < \infty, \ldots, X_n < \infty)\).
 
+    \subparagraph*{Bernoulli: }
+        An event \(A\) happens with probability \(p\): \(f_X(x) = p \text{ if } x = 1, (1-p) \text{ if } x = 0\)
+
+    \subparagraph*{Geometric: }
+        Negative binomial with \(r=1 \\
+        f_X(x) = \begin{cases} {(1-p)}^x p & x=0,1,\ldots \\ 0 & \text{o.w.} \end{cases}\)
+
+
 \subparagraph*{Conditional Distribution: }
  \(f(x_1, \ldots, x_n)\): joint p.d.f. of \(x_1, \ldots, x_n\); \(f_0(x_1, \ldots, x_k)\): joint p.d.f. of \(x_1, \ldots, x_k\) with \(k < n\). Then \(\forall x_1,\ldots, x_k\) such that \(f_0(x_1, \ldots, x_k) > 0\) the conditional p.d.f. of \(X_{k+1},\ldots,X_n\) given \(X_1 = x_1, \ldots, X_k = x_k\) is \(g(x_{k+1},\ldots,x_n | x_1, \ldots, x_k) = \frac{f(x_1, \ldots, x_n)}{f_0(x_1, \ldots, x_k)}\).
 
@@ -179,6 +172,17 @@
 \(Y_1 = r_1(X_1,\ldots,X_n)\) \dots \(Y_m = r_m(X_1,\ldots,X_n)\). Let \(A := \{(x_1,\ldots,x_n)\):= such that \(y_1 = r(x_1,\ldots,x_n) \dots y_m = r(x_1,\ldots,x_n)\)\}. Then: \(g(y_1,\ldots,y_m)=\Pr(Y_1=y_1,\ldots,Y_m=y_m)=\sum\limits_{(x_1,\ldots,x_n)\in A}{f(x_1,\ldots,x_n)}\). \\
 
 Continuous case: \(X_1, X_2, \ldots, X_n\) cont. r.v. with joint p.d.f. \(f(x_1, \ldots, x_n)\). Let \(Y = r(X_1,\ldots,X_n) \rightarrow A_y = \{(x_1,\ldots,x_n)\) s.t. \(r(x_1,\ldots,x_n) \leq y\}\) Then the c.d.f. of \(Y\) is \(G(y) = \Pr(Y \leq y) = \Pr\left( r(X_1,\ldots,X_n) \leq y \right) = \int\limits_{A_y}\ldots\int{f(x_1,\ldots,x_n)}dx_1dx_2\ldots dx_n\). The density/p.d.f. of \(Y\) is \(g(y) = \frac{dG(y)}{dy}\). If \(Y = a_1 X_1 + a_2 X_2 + b \Rightarrow g(y) = \int_{-\infty}^{\infty}f\left(\frac{y-a_2 x_2 - b}{a_1},x_2\right)\left|\frac{1}{a_1}\right|dx_2\)
+
+\subparagraph*{Permutations: } 
+Given an array of \(n\) elements: \(n \cdot (n-1) \cdot (n-2) \cdot \ldots \cdot 1 = n!\) \\
+\(P_{n,k} = \frac{n!}{(n-k)!}\), \(P_{n,n} = n!\)
+
+\subparagraph*{Combinations: }
+In general we can ``combine'' \(n\) elements taking \(k\) at a time in\\ \(C_{n,k} = \frac{P_{n,k}}{k!} = \frac{n!}{(n-k)!k!} = {n \choose k} \). 
+
+\subparagraph*{Multinomial Coefficients: } 
+\(n\) elements into \(k (k \geq 2)\) groups s.t. group \(j\) gets \(n_j\) elements and \(\sum_{j = 1}^{k}n_j = n\). The \(n_1\) elements in the first group can be selected in \({n \choose n_1}\), the second in \({n-n_1 \choose n_2}\), the third in \({n-n_1-n_2 \choose n_3}\) and so on for the \(k\) groups. Then:\\ \({n \choose n_1}\cdot{n-n_1 \choose n_2}\cdot{n-n_1-n_2 \choose n_3}\cdot \ldots \cdot{n_k \choose n_k} = {n \choose n_1, n_2, \ldots, n_k}\)
+
 
 \subparagraph*{Transformations: }
  \(X_1,\ldots,X_n\) cont. r.v.'s with joint pdf \(f(x_1,\ldots,x_n)\). Let \(Y_1 = r_1(X_1,\ldots,X_n), \dots, Y_n = r_n (X_1, \ldots, X_n)\). To find the joint pdf of \(Y_1, \ldots, Y_2\) for a one-to-one differentiable transformation \(x_1 = s_1 (y_1,\ldots,y_n), \dots, x_n = s_n (y_1, \ldots, y_n) \rightarrow \) The joint pdf of \(Y_1,\ldots,Y_n\) is \(g(y_1,\ldots,y_n) = f(s_1,\ldots,s_n)\left|J\right|\) where \(J = \det \begin{bmatrix}
@@ -271,7 +275,7 @@ Negative Binomial: \(V(X) = \frac{r(1-p)}{p^2}\)
 \subparagraph*{Conditional Expectation:}
 \begin{itemize}
     \item[] Def: \(E(Y|X=x)\)
-    \item[] Cont: \(= \int_{-\infty}^{\infty}{y g_Y(y|x)dx}\)
+    \item[] Cont: \(= \int_{-\infty}^{\infty}{y g_Y(y|x)dy}\)
     \item[] Disc: \(= \sum_{y}{y g_Y(y|x)}\)
     \item[] \(E(Y|X=x)\) is a function of \(x\) not \(y\)
     \item[] \(h(x) = E(Y|x)\): \(h(x)\) is not a random variable
@@ -281,11 +285,9 @@ Negative Binomial: \(V(X) = \frac{r(1-p)}{p^2}\)
     \item[] \(E(E(Y|X)) = E(Y)\)
 \end{itemize}
 
-\subparagraph*{Conditional Variance: }
-\begin{itemize}
-    \item[] \(V(Y|X=x) = E(Y^2|X=x) - [E(Y|X=x)]^2\)
-    \item[] \(E(Y^2|X=x) = \int_{-\infty}^{\infty}{y^2 g(y|x) dy}\)
-\end{itemize}
+\subparagraph*{Conditional Variance: } \ \ \\
+    \(V(Y|X=x) = E(Y^2|X=x) - [E(Y|X=x)]^2\\
+    E(Y^2|X=x) = \int_{-\infty}^{\infty}{y^2 g(y|x) dy}\)
 
 \subparagraph*{Standard Normal Distribution:}
 \begin{itemize}
