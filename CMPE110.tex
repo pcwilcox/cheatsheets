@@ -1,0 +1,308 @@
+% LaTeX template adapted from: https://www.overleaf.com/latex/templates/simple-math-homework-template/tbszsswsndrz
+\documentclass[landscape,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+\usepackage[]{amssymb} %gives us the character \varnothing
+\usepackage{amsmath} %for equations
+\usepackage[]{listings} %for code blocks
+\usepackage{graphicx} %for diagrams
+\usepackage{fancyhdr} %for headers
+\usepackage[letterpaper, margin=0.5in]{geometry}
+\usepackage{tikz} % for drawings
+\usepackage{multicol}
+\usepackage{ifthen}
+\usepackage{enumitem}
+\setlist{nolistsep}
+\setlist[itemize]{leftmargin=0.5pc,itemsep=0.25em}
+\usetikzlibrary{arrows.meta,shapes.arrows,chains,decorations.pathreplacing}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+            {-1ex plus -.5ex minus -.2ex}%
+            {0.5ex plus .2ex}%x
+            {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+            {-1explus -.5ex minus -.2ex}%
+            {0.5ex plus .2ex}%
+            {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+            {-1ex plus -.5ex minus -.2ex}%
+            {1ex plus .2ex}%
+            {\normalfont\small\bfseries}}
+\makeatother
+
+\pagestyle{empty}
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{-0.25em}
+
+\begin{document}
+\footnotesize
+\begin{multicols}{2}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+\subsubsection*{Some Formulae:}
+\begin{itemize}
+    \item[] \(\text{Power} = \text{Capacity} \cdot \text{Voltage}^2 \cdot \text{Frequency}_{0 \rightarrow 1} + \text{Voltage}\cdot I_{\text{leakage}}\)
+    \item[] \(\text{Power} = \frac{\text{Joules}}{\text{Op}} \cdot \frac{\text{Ops}}{\text{Second}}\)
+    \item[] Dennard scaling: 0.7x voltage drop 
+    \item[] Latency: How long it takes to do a task
+    \item[] Throughput: Total work done per unit of time e.g. queries/sec
+    \item[] Clock period: Duration of a clock cycle
+    \item[] Clock frequency: cycles per second
+    \item[] \(\text{Execution Time} = \text{Cycles per Program} \cdot \text{Clock Cycle Time} = \frac{\text{Cycles Per Program}}{\text{Clock Rate}}\)
+    \item[] \(\text{Clock Cycles} = \text{Instruction Count} \cdot \text{Cycles per Instruction}\)
+    \item[] \(\text{CPU Time} = \text{Instruction Count} \cdot \text{CPI} \cdot \text{Clock Cycle Time} = \frac{IC \cdot CPI}{\text{Clock Rate}}\)
+    \item[] \(\text{Exec Time} = \frac{\text{Instructions}}{\text{Program}} \cdot \frac{\text{Clock Cycles}}{\text{Instruction}} \cdot \frac{\text{Seconds}}{\text{Clock Cycle}}\)
+    \item[] Clock Cycles \(= \sum \limits_{i = 1}^{n} \big ( CPI_i \cdot IC_i \big) \)
+    \item[] Weighted average CPI \(= \frac{\text{Clock Cycles}}{\text{Instruction Count}} = \sum \limits_{i=1}^{n} \Big ( CPI_i \cdot \frac {IC_i}{IC} \Big ) \)
+    \item[] Performance \(= \frac{1}{\text{Exec Time}}\)
+    \item[] ``\(X\) is \(n\) faster than \(Y\)'' means \(\frac{Perf_X}{Perf_Y} = \frac{Exec_Y}{Exec_X} = n\)
+    \item[] Energy = Average Power x Execution Time
+    \item[] Optimize for Energy per Instruction: \(Power = \frac{energy}{second} = \frac{energy}{instruction} \cdot \frac{instructions}{second}\)
+    \item[] Amdahl's Law: \(Speedup = \frac{CPUTime_{old}}{CPUTime_{new}} = \frac{CPUTime_{old}}{CPUTime_{old} [(1 - f_x) + \tfrac{f_x}{S_x}]} = \frac{1}{(1 - f_x) + \tfrac{f_x}{s_x}}\)
+    \item[] Parallel Speedup: \(Speedup = \frac{1}{(1 - P) + \tfrac{P}{n}} \rightarrow P = \frac{\frac{1}{Speedup} - 1}{\tfrac{1}{n} - 1}\)
+    \item[] Arithmetic Mean: \(\frac{1}{n} \sum \limits_{i=1}^{n}T_i\) used with times, not rates
+    \item[] Harmonic mean: \(\frac{n}{\sum \limits_{i=1}^{n}\frac{1}{R_i}}\) used with rates not times
+    \item[] Geometric mean: \(\Bigg ( \prod \limits_{i=1}^{n} \frac{T_i}{T_{ri}} \Bigg)^{\tfrac{1}{n}} = \exp\Bigg(\frac{1}{n}\sum \limits_{i=1}^{n}\log\Big(\frac{T_i}{T_{ri}}\Big) \Bigg)\)
+    \item[] Power/performance benchmark: Overall ssj\_ops per Watt = \(\frac{\Big(\sum \limits_{i=0}^{10}ssj\_ops_i\Big)}{\Big(\sum\limits_{i=0}^{10}Power_i\Big)}\)
+    \item[] Perf metrics: 
+    \begin{itemize}
+        \item[] \texttt{time <application>} measures execution time
+        \item[] \texttt{perf record} does low overhead sampling
+        \item[] \texttt{perf topdown} uses hardware performance counters
+    \end{itemize}
+    \item[] Flip flop setup time: \(t_{ck} > t_{pd} + t_s + t_{skew}\)
+\end{itemize}
+
+\subsubsection*{CISC:}
+\begin{itemize}
+    \item[] Multi-cycle complex instructions
+    \item[] Load/store incorporated in instruction
+    \item[] Small code size
+    \item[] High CPI
+    \item[] Low clock frequency
+    \item[] Variable length instructions
+\end{itemize}
+\subsubsection*{RISC:}
+\begin{itemize}
+    \item[] Simple (single-clock) Instructions
+    \item[] Register-to-register separate load instructions
+    \item[] Large code size
+    \item[] Low CPI
+    \item[] High clock frequency
+    \item[] Same length instructions
+    \item[] Simple instruction decode
+    \item[] Instructions:
+    \begin{itemize}
+        \item[] R-type: \texttt{[funct7][rs2][rs1][funct3][rd][opcode]}
+        \item[] I-type: \texttt{[immediate[11:0]][rs1][funct3][rd][opcode]}
+        \item[] S/B-type: \texttt{[imm[11:5]][rs2][rs1][funct3][imm[4:0]][opcode]}
+        \item[] U/J-type: \texttt{[immediate[31:12]][rd][opcode]}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Call and Return:}
+\begin{itemize}
+    \item[] Caller:
+    \begin{itemize}
+        \item[] Save caller-saved registers as needed
+        \item[] Load arguments
+        \item[] Execute \texttt{JAL}
+    \end{itemize}
+    \item[] Callee setup:
+    \begin{itemize}
+        \item[] Allocate memory for new frame (\texttt{xsp} = \texttt{xsp} - frame)
+        \item[] Save callee-saved registers as needed
+        \item[] Set frame pointer (\texttt{xfp} = \texttt{xsp} + frame size - 4)
+    \end{itemize}
+    \item[] Callee return:
+    \begin{itemize}
+        \item[] Place return values in \texttt{x10} and \texttt{x11}
+        \item[] Restore any callee-saved registers
+        \item[] Pop stack (\texttt{xsp} = \texttt{xsp} + frame size)
+        \item[] Return by \texttt{jr xra}
+    \end{itemize}
+    \item[] Caller:
+    \begin{itemize}
+        \item[] Restore any caller-saved registers as needed
+    \end{itemize}
+\end{itemize}
+\subsubsection*{Pipeline stages:}
+\begin{itemize}
+    \item[] IF: Instruction fetch
+    \item[] ID: Instruction decode, register read
+    \item[] EX: execute operation or calculate address
+    \item[] MEM: Access memory command
+    \item[] WB: Write result back to register
+\end{itemize}
+\subsubsection*{Hazards:}
+\begin{itemize}
+    \item[] Structure Hazards: A required hardware resource is busy
+    \item[] Data hazards: Must wait for previous instructions to produce/consume data
+    \begin{itemize}
+        \item[] Read after Write: Instruction \(j\) tries to read before instruction \(i\) tries to write it
+        \item[] Write after Write: Instruction \(j\) tries to write an operand before \(i\) writes its value
+        \item[] Write after Read: Instruction \(j\) tries to write a destination before it is read by \(i\)
+    \end{itemize}
+    \item[] Control hazards: Next PC depends on current instruction result
+\end{itemize}
+\subsubsection*{Forwarding:}
+\begin{itemize}
+    \item[] Identify \textit{producers}: EX and MEM stages
+    \item[] All stages after first producer are sources of forwarding data: MEM and WB
+    \item[] Identify \textit{consumers}: EX and MEM
+    \item[] These are the destinations of forwarded data
+    \item[] Forwarding and Hazard Detection:
+    \begin{verbatim}
+if (MEM/WB.RegWrite && (MEM/WB.RegisterRd != 0) && 
+    !(EX/MEM.RegWrite && (EX/MEM.RegisterRd != 0) && 
+    (EX/MEM.RegisterRd = ID/EX.RegisterRs1)) && (MEM/WB.RegisterRd = ID/EX.RegisterRs1)) 
+        ForwardA = 01
+if (MEM/WB.RegWrite && (MEM/WB.RegisterRd != 0) && 
+    !(EX/MEM.RegWrite && 
+    (EX/MEM.RegisterRd != 0) && (EX/MEM.RegisterRd = ID/EX.RegisterRs2)) && 
+    (MEM/WB.RegisterRd = ID/EX.RegisterRs2)) 
+        ForwardB = 01
+if (ID/EX.MemRead && ((ID/EX.RegisterRd = IF/ID.RegisterRs1) || 
+    (ID/EX.RegisterRd = IF/ID.RegisterRs2))) 
+        stall the pipeline
+    \end{verbatim}
+\end{itemize}
+\subsubsection*{Branch Prediction:}
+\begin{itemize}
+    \item[] Static: predict not-taken
+    \item[] Dynamic:
+    \begin{itemize}
+        \item[] Branch History Table: one entry for each branch, taken/not taken record
+        \item[] Branch Target Buffer: One entry for each branch, computes target address
+    \end{itemize}
+\end{itemize}
+\subsubsection*{Exceptions and Interrupts:}
+\begin{itemize}
+    \item[] Switch from `user' to `kernel' mode
+    \item[] Exceptions: Arises within CPU. Undefined opcode, overflow, etc
+    \item[] Interrupt: External I/O controller, network card, etc
+    \item[] On exceptions:
+    \begin{itemize}
+        \item[] Pass to relevant handler
+        \item[] Then return to program using EPC if possible
+        \item[] All previous instructions completed
+        \item[] Faulting instruction not started
+        \item[] No side effects
+    \end{itemize}
+    \item[] Nullifying instructions: Converts them to a NOP
+\end{itemize}
+\subsubsection*{Going past the 5-stage pipeline:}
+\begin{itemize}
+    \item[] Instruction-level Parallelism:
+    \begin{itemize}
+        \item[] Independence among instructions
+        \item[] Fetch multiple instructions per cycle
+        \item[] Evaluate which ones can go down the pipe together
+    \end{itemize}
+    \item[] Superscalar:
+    \begin{itemize}
+        \item[] Double up on hardware in order to execute multiple instructions simultaneously
+    \end{itemize}
+    \item[] Deeper Pipelines: Increase the number of stages, decrease amount of logic. Higher clock freq.
+    \item[] Register Renaming: Map architectural registers to physical registers in decode stage to get rid of false dependencies. Need more physical registers than architectural ones.
+    \item[] Data flow graph:
+    \begin{itemize}
+        \item[] Scoreboard: bit array, 1-bit for each GPR
+        \begin{itemize}
+            \item[] If the bit is not set, the reg has valid data
+            \item[] If the bit is set, the reg has stale data
+        \end{itemize}
+        \item[] Dispatch in order: RD \(\leftarrow\) Fn(RS,RT)
+        \begin{itemize}
+            \item[] If SB[RS] or SB[RT] is set \(\rightarrow\) RAW, stall
+            \item[] If SB[RD] is set \(\rightarrow\) WAW, stall
+            \item[] Else dispatch to functional unit, set SB[RD]
+        \end{itemize}
+        \item[] Complete out-of-order
+        \item[] Update GPR[RD], clear SB[RD]
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Caching:}
+\begin{itemize}
+    \item[] AMAT: \(\text{Access Time} = \text{hit time} + \text{miss rate} \cdot \text{miss penalty}\)
+    \item[] Three C's of misses:
+    \begin{itemize}
+        \item[] Compulsory: First time you've accessed this item
+        \item[] Capacity: Not enough room in the cache to hold item
+        \item[] Conflict: Item was replaced because of a conflict in its set
+    \end{itemize}
+    \item[] Direct-mapped cache:
+    \begin{itemize}
+        \item[] \(2^n\) bytes total with \(2^m\) byte blocks
+        \item[] Byte select: lower \(m\) bits
+        \item[] Cache index: lower \((n-m)\) bits of the memory address
+        \item[] Cache tag: upper \(32-n\) bits of the memory address
+    \end{itemize}
+    \item[] \(N\)-way set associative:
+    \begin{itemize}
+        \item[] Each memory block can go to one of \(N\) entries in the cache
+        \item[] \(2^n\)-byte cache, \(2^m\)-byte blocks, \(2^a\) set-associative:
+        \begin{itemize}
+            \item[] Cache contains \(2^n/2^m = 2^{n-m}\) blocks
+            \item[] Each cache way contains \(2^{n-m}/2^a = 2^{n-m-a}\) blocks
+            \item[] Byte offset: lowest \(m\) bits
+            \item[] Cache index: next \(n-a\) bits
+        \end{itemize}
+        \item[] Associative caches might use Least Recently Used table for evictions
+        \item[] For \(N\)-way cache, \(N!\) orderings
+    \end{itemize}
+    \item[] Write-through:
+    \begin{itemize}
+        \item[] Main memory updated each cache write
+        \item[] Replacing a cache entry just overwrites new block
+        \item[] Memory write may cause pipeline stalls
+        \item[] Misses are simpler and cheaper
+        \item[] Uses a write buffer | FIFO queue
+    \end{itemize}
+    \item[] Write-back:
+    \begin{itemize}
+        \item[] Only the cache entry is updated on each cache write
+        \item[] Cache and memory entries are inconsistent
+        \item[] Add `dirty' bit to indicate whether memory needs to be updated
+        \item[] Write new value to memory on evictions
+        \item[] Writes are super fast
+    \end{itemize}
+    \item[] Write miss options: Do you allocate for space in the cache on a miss?
+    \item[] Do you fetch the rest of the block contents from memory?
+    \item[] For no-fetch-on-miss must use fine-grained valid bits
+    \item[] Write-back: typically write-allocate, fetch-on-miss
+    \item[] Multilevel caches:
+    \begin{itemize}
+        \item[] Primary L1 caches attached to CPU: small, fast, focuses on hit time
+        \item[] Secondary L2 caches service misses from L1: larger, slower, still faster than DRAM
+    \end{itemize}
+    \item[] Cache Coherency:
+    \begin{itemize}
+        \item[] \(P\) writes \(X\), \(P\) reads \(X \rightarrow \) read returns written value
+        \item[] \(P_1\) writes \(X\), \(P_2\) reads \(X\) later \(\rightarrow \) read returns written value
+        \item[] \(P_1\) writes \(X\), \(P_2\) writes \(X \rightarrow\) all processors see writes in the same order
+        \item[] Single-Writer, Multiple-Read Invariant: For any memory location \(A\), at any given epoch, there exists only one CPU that may write to \(A\) or some number of CPUs that may only read \(A\)
+        \item[] Data-Value Invariant: The value of the memory location at the start of an epoch is the same as the value of the memory location at the end of its last read-write epoch
+        \item[] CPU uses snooping protocols to ensure this:
+        \begin{itemize}
+            \item[] 2-state: very simple hardware and protocol. Write-through, all writes go on interconnect bus.
+            \item[] 3-state MSI: Modified (one cache has valid copy), Shared (one or more have read-only copy), Invalid (invalidated so one copy can go to modify state)
+        \end{itemize}
+
+    \end{itemize}
+\end{itemize}
+
+
+    \end{multicols}
+\end{document}
+
