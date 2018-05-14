@@ -280,6 +280,235 @@ ksorted(A[], k):
     return A[]
 \end{lstlisting}
 
+\pagebreak{}
+
+\subsection*{Insertion Sort:}
+
+\begin{lstlisting}
+Insertion_Sort(A):
+    for j = 2 to A.length:
+        key = A[j]
+        i = j - 1
+        while i > 0 and A[i] > key:
+            A[i + 1] = A[i]
+            i = i - 1
+        A[i + 1] = key
+\end{lstlisting}
+\subparagraph*{Loop Invariant:} At the start of each iteration of the for loop of lines 1-8, the subarray \code{A[1..j-1]} consists of the elements originally in \code{A[1..j-1]}, but in sorted order.
+
+\subparagraph*{Running Time:} \(O(n^2)\)
+
+\subsection*{MergeSort:}
+\begin{lstlisting}
+MergeSort(A):
+    n = len(A)
+    if n > 1:
+        left = A[0..n/2]
+        right = A[(n/2)+1..n-1]
+        lsort = MergeSort(left)
+        rsort = MergeSort(right)
+        return Merge(lsort, rsort)
+    return A
+
+Merge(A,B):
+    i = 0
+    j = 0
+    C = []
+    A[len(A)] = infinity
+    B[len(B)] = infinity
+    while A[i] < infinity or B[j] < infinity:
+        if B[j] < A[i]:
+            C[i + j] = B[j]
+            j += 1
+        else:
+            C[i + j] = A[i]
+            i += 1
+    return C
+\end{lstlisting}
+
+\subsection*{QuickSort:}
+\begin{lstlisting}
+QuickSort(A, p, r):
+    if p < r:
+        q = Partition(A, p, r)
+        QuickSort(A, p, q - 1)
+        Quicksort(A, q + 1, r)
+
+Partition(A, p, r):
+    x = A[r]
+    i = p - 1
+    for j = p to r - 1:
+        if A[j] <= x:
+            i += 1
+            swap(A[i], A[j])
+    swap(A[i + 1], A[r])
+    return i + 1
+\end{lstlisting}
+
+\subsection*{Heaps:}
+\begin{lstlisting}
+Build_Max_Heap(A):
+    A.heap-size = A.length
+    for i = A.length/2 downto 1:
+        Max_Heapify(A,i)
+
+Max_Heapify(A, i)
+    l = Left(i)
+    r = Right(i)
+    if l <= A.heap-size and A[l] > A[i]:
+        largest = l
+    else:
+        largest = i
+    if r <= A.heap-size and A[r] > A[largest]:
+        largest = r
+    if largest != i:
+        swap(A[i], A[largest])
+        Max_Heapify(A, largest)
+
+Parent(i):
+    return i/2
+
+Left(i):
+    return 2*i
+
+Right(i):
+    return 2*i + 1
+
+Insert(A, k):
+    A.heap-size += 1
+    A[A.heap-size] = -infinity
+    Heap_Increase_Key(A, A.heap-size, key)
+
+Heap_Increase_Key(A, i, key):
+    A[i] = key
+    while i > 1 and A[Parent(i)] < A[i]:
+        swap(A[i], A[Parent(i)])
+        i = Parent(i)
+    
+Extract_Max(A):
+    max = A[1]
+    A[1] = A[A.heap-size]
+    A.heap-size = A.heap-size -1
+    Max-Heapify(A,1)
+    return max
+
+\end{lstlisting}
+\subsection*{BFS:}
+
+\begin{lstlisting}
+BFS(G,s):
+    Q = queue()
+    dist = [infinity]
+    pred = [null]
+    color = [white]
+    color[s] = gray
+    dist[s] = 0
+    Q.enqueue(s)
+    while !Q.is_empty():
+        u = Q.dequeue()
+        color[u] = black
+        for v in N(u):
+            if color[v] == white:
+                color[v] = gray
+                pred[v] = u
+                dist[v] = dist[u] + 1
+                Q.enqueue(v)
+\end{lstlisting}
+
+\subparagraph*{BFS Theorem 1:} When \code{BFS(s)} terminates, \(\forall v \in V\) \code{dist[v]} is the shortest path distance from \(s\) to \(v\). Furthermore: \code{v, pred[v], pred[pred[v]],...,s} is such a shortest path in reverse.
+
+\subparagraph*{BFS Theorem 2:} If vertices \(s\) and \(t\) are connected, when \code{BFS(s)} terminates, the color of \(t\) is black. If \(s\) and \(t\) are not connected, when \code{BFS(s)} terminates, the color of \(t\) is white.
+
+\subparagraph*{BFS Theorem 3: (main loop invariant)} At any stage of the algorithm \code{BFS(s)} at step 4, the queue \(Q\) contains vertices in at most two adjacent levels \(l\) and \(l+1\). \begin{enumerate}
+    \item[] 1. All vertices in level \(< l\) are black
+    \item[] 2. All vertices in level \(l\) that are not gray are black
+    \item[] 3. All vertices in level \(l+1\) that are not gray are white
+    \item[] 4. All vertices in level \(> l+1\) are white
+    \item[] 5. In \(Q\), all vertices in level \(l\) are ahead of those in level \(l+1\)
+\end{enumerate}
+
+\subparagraph*{BFS Theorem 4:} When \code{BFS(s)} terminates, \(\forall v\), \code{dist[v]} \(= \delta_s(v)\).
+
+\subsection*{Djikstra:}
+\begin{lstlisting}
+Djikstra(G,s):
+    dist = [infinity]
+    pred = [null]
+    S = []
+    dist[s] = 0
+    Q = priority_queue(all vertices)
+    while !Q.is_empty():
+        u = Q.extract_min()
+        S.append(u)
+        for v in N(u):
+            Relax(u,v)
+            Q.decrease_key(v)
+        
+Relax(u,v):
+    if dist[v] > dist[u] + w(u,v):
+        dist[v] = dist[u] + w(u,v)
+        pred[v] = u
+\end{lstlisting}
+
+\subparagraph*{Running Time:} \(O((m + n) \log n)\)
+
+\subparagraph*{Theorem:} When Djikstra's algorithm terminates, \(\forall v\), \code{dist[v]} \(= \delta_s(v)\)
+
+\subsection*{Bellman-Ford:}
+
+\begin{lstlisting}
+Bellman-Ford(G, s):
+    dist = [infinity]
+    pred = [null]
+    dist[s] = 0
+    for u in G.V:
+        for v in N(u):
+            Relax(u,v)
+\end{lstlisting}
+
+\subparagraph*{Running time:} \(O(mn)\)
+
+\subsection*{DFS:}
+\begin{lstlisting}
+DFS(G):
+    color = [white]
+    pred = [null]
+    disc = [null]
+    finish = [null]
+    time = 0
+    for u in G.V:
+        DFS_Visit(u)
+
+DFS_Visit(u):
+    color[u] = gray
+    disc[u] = time
+    time += 1
+    for v in N(V):
+        if color[v] == white:
+            pred[v] = s
+            DFS_Visit(v)
+    color[u] = black
+    finish[u] = time
+    time += 1
+\end{lstlisting}
+
+\subparagraph*{Running Time:} \(O(m + n)\)
+
+\subparagraph*{Parentheses Theorem:} In any DFS forest, for vertices \(u, v\) either:
+\begin{enumerate}
+    \item[] 1. \([d[u],f[u]]\) is disjoint from \([d[v],f[v]]\) and neither is the descendant of the other or
+    \item[] 2. \([d[u],f[u]]\) contains \([d[v],f[v]]\) and \(v\) is a descendant of \(u\)
+\end{enumerate}
+
+\subparagraph*{White Path Theorem:} \(v\) is a descendant of \(u \iff\) there is a white path from \(u\) to \(v\) when \code{DFS\_Visit(u)} is called.
+
+\subsection*{Topological Sort:}
+\subparagraph*{Theorem:} Perform \code{DFS(G)}:
+\begin{enumerate}
+    \item[] (1) \(G\) is acyclic \(\iff\) there is no back edge
+    \item[] (2) If \(G\) is acyclic, then decreasing order of finish times is a topological order
+\end{enumerate}
+
 \subparagraph*{Other Stuff:}
 \begin{itemize}
     \item[] \(\sum\limits_{i=1}^{n}i = \frac{n(n+1)}{2},\sum\limits_{i=1}^{n}i^2 = \frac{n(n+1)(2n+1)}{6}, \sum\limits_{i=1}^{n} i^3 = \frac{n^2(n+1)^2}{4}\)
