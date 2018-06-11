@@ -31,6 +31,8 @@
             {\normalfont\small\bfseries}}
 \makeatother
 
+\newcommand{\code}[1]{\texttt{#1}}
+
 \pagestyle{empty}
 \ifthenelse{\lengthtest { \paperwidth = 11in}}
 { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
@@ -41,9 +43,11 @@
 \setlength{\parindent}{0em}
 \setlength{\parskip}{-0.25em}
 
+\graphicspath{ {./}}
+
 \begin{document}
 \footnotesize
-\begin{multicols}{2}
+\begin{multicols}{4}
 \setlength{\premulticols}{1pt}
 \setlength{\postmulticols}{1pt}
 \setlength{\multicolsep}{1pt}
@@ -57,6 +61,7 @@
     \item[] Throughput: Total work done per unit of time e.g. queries/sec
     \item[] Clock period: Duration of a clock cycle
     \item[] Clock frequency: cycles per second
+    \item[] Response time \(T = T_0 \frac{\rho}{1-\rho}\) with \(\rho = \) percentage of throughput
     \item[] \(\text{Execution Time} = \text{Cycles per Program} \cdot \text{Clock Cycle Time} = \frac{\text{Cycles Per Program}}{\text{Clock Rate}}\)
     \item[] \(\text{Clock Cycles} = \text{Instruction Count} \cdot \text{Cycles per Instruction}\)
     \item[] \(\text{CPU Time} = \text{Instruction Count} \cdot \text{CPI} \cdot \text{Clock Cycle Time} = \frac{IC \cdot CPI}{\text{Clock Rate}}\)
@@ -75,60 +80,36 @@
     \item[] Power/performance benchmark: Overall ssj\_ops per Watt = \(\frac{\Big(\sum \limits_{i=0}^{10}ssj\_ops_i\Big)}{\Big(\sum\limits_{i=0}^{10}Power_i\Big)}\)
     \item[] Perf metrics: 
     \begin{itemize}
-        \item[] \texttt{time <application>} measures execution time
-        \item[] \texttt{perf record} does low overhead sampling
-        \item[] \texttt{perf topdown} uses hardware performance counters
+        \item[] \code{time <application>} measures execution time
+        \item[] \code{perf record} does low overhead sampling
+        \item[] \code{perf topdown} uses hardware performance counters
     \end{itemize}
     \item[] Flip flop setup time: \(t_{ck} > t_{pd} + t_s + t_{skew}\)
 \end{itemize}
 
-\subsubsection*{CISC:}
-\begin{itemize}
-    \item[] Multi-cycle complex instructions
-    \item[] Load/store incorporated in instruction
-    \item[] Small code size
-    \item[] High CPI
-    \item[] Low clock frequency
-    \item[] Variable length instructions
-\end{itemize}
-\subsubsection*{RISC:}
-\begin{itemize}
-    \item[] Simple (single-clock) Instructions
-    \item[] Register-to-register separate load instructions
-    \item[] Large code size
-    \item[] Low CPI
-    \item[] High clock frequency
-    \item[] Same length instructions
-    \item[] Simple instruction decode
-    \item[] Instructions:
-    \begin{itemize}
-        \item[] R-type: \texttt{[funct7][rs2][rs1][funct3][rd][opcode]}
-        \item[] I-type: \texttt{[immediate[11:0]][rs1][funct3][rd][opcode]}
-        \item[] S/B-type: \texttt{[imm[11:5]][rs2][rs1][funct3][imm[4:0]][opcode]}
-        \item[] U/J-type: \texttt{[immediate[31:12]][rd][opcode]}
-    \end{itemize}
-\end{itemize}
+\subsubsection*{CISC:} Multi-cycle complex instructions; Load/store incorporated in instruction; Small code size; High CPI; Low clock frequency; Variable length instructions
 
+\subsubsection*{RISC:} Simple (single-clock) Instructions; Register-to-register separate load instructions; Large code size; Low CPI; High clock frequency; Same length instructions; Simple instruction decode; 
 \subsubsection*{Call and Return:}
 \begin{itemize}
     \item[] Caller:
     \begin{itemize}
         \item[] Save caller-saved registers as needed
         \item[] Load arguments
-        \item[] Execute \texttt{JAL}
+        \item[] Execute \code{JAL}
     \end{itemize}
     \item[] Callee setup:
     \begin{itemize}
-        \item[] Allocate memory for new frame (\texttt{xsp} = \texttt{xsp} - frame)
+        \item[] Allocate memory for new frame (\code{xsp} = \code{xsp} - frame)
         \item[] Save callee-saved registers as needed
-        \item[] Set frame pointer (\texttt{xfp} = \texttt{xsp} + frame size - 4)
+        \item[] Set frame pointer (\code{xfp} = \code{xsp} + frame size - 4)
     \end{itemize}
     \item[] Callee return:
     \begin{itemize}
-        \item[] Place return values in \texttt{x10} and \texttt{x11}
+        \item[] Place return values in \code{x10} and \code{x11}
         \item[] Restore any callee-saved registers
-        \item[] Pop stack (\texttt{xsp} = \texttt{xsp} + frame size)
-        \item[] Return by \texttt{jr xra}
+        \item[] Pop stack (\code{xsp} = \code{xsp} + frame size)
+        \item[] Return by \code{jr xra}
     \end{itemize}
     \item[] Caller:
     \begin{itemize}
@@ -137,11 +118,11 @@
 \end{itemize}
 \subsubsection*{Pipeline stages:}
 \begin{itemize}
-    \item[] IF: Instruction fetch
-    \item[] ID: Instruction decode, register read
-    \item[] EX: execute operation or calculate address
-    \item[] MEM: Access memory command
-    \item[] WB: Write result back to register
+    \item[] \code{IF}: Instruction fetch
+    \item[] \code{ID}: Instruction decode, register read
+    \item[] \code{EX}: execute operation or calculate address
+    \item[] \code{MEM}: Access memory command
+    \item[] \code{WB}: Write result back to register
 \end{itemize}
 \subsubsection*{Hazards:}
 \begin{itemize}
@@ -152,29 +133,14 @@
         \item[] Write after Write: Instruction \(j\) tries to write an operand before \(i\) writes its value
         \item[] Write after Read: Instruction \(j\) tries to write a destination before it is read by \(i\)
     \end{itemize}
-    \item[] Control hazards: Next PC depends on current instruction result
+    \item[] Control hazards: Next \code{PC} depends on current instruction result
 \end{itemize}
 \subsubsection*{Forwarding:}
 \begin{itemize}
-    \item[] Identify \textit{producers}: EX and MEM stages
-    \item[] All stages after first producer are sources of forwarding data: MEM and WB
-    \item[] Identify \textit{consumers}: EX and MEM
+    \item[] Identify \textit{producers}: \code{EX} and \code{MEM} stages
+    \item[] All stages after first producer are sources of forwarding data: \code{MEM} and \code{WB}
+    \item[] Identify \textit{consumers}: \code{EX} and \code{MEM}
     \item[] These are the destinations of forwarded data
-    \item[] Forwarding and Hazard Detection:
-    \begin{verbatim}
-if (MEM/WB.RegWrite && (MEM/WB.RegisterRd != 0) && 
-    !(EX/MEM.RegWrite && (EX/MEM.RegisterRd != 0) && 
-    (EX/MEM.RegisterRd = ID/EX.RegisterRs1)) && (MEM/WB.RegisterRd = ID/EX.RegisterRs1)) 
-        ForwardA = 01
-if (MEM/WB.RegWrite && (MEM/WB.RegisterRd != 0) && 
-    !(EX/MEM.RegWrite && 
-    (EX/MEM.RegisterRd != 0) && (EX/MEM.RegisterRd = ID/EX.RegisterRs2)) && 
-    (MEM/WB.RegisterRd = ID/EX.RegisterRs2)) 
-        ForwardB = 01
-if (ID/EX.MemRead && ((ID/EX.RegisterRd = IF/ID.RegisterRs1) || 
-    (ID/EX.RegisterRd = IF/ID.RegisterRs2))) 
-        stall the pipeline
-    \end{verbatim}
 \end{itemize}
 \subsubsection*{Branch Prediction:}
 \begin{itemize}
@@ -202,16 +168,8 @@ if (ID/EX.MemRead && ((ID/EX.RegisterRd = IF/ID.RegisterRs1) ||
 \end{itemize}
 \subsubsection*{Going past the 5-stage pipeline:}
 \begin{itemize}
-    \item[] Instruction-level Parallelism:
-    \begin{itemize}
-        \item[] Independence among instructions
-        \item[] Fetch multiple instructions per cycle
-        \item[] Evaluate which ones can go down the pipe together
-    \end{itemize}
-    \item[] Superscalar:
-    \begin{itemize}
-        \item[] Double up on hardware in order to execute multiple instructions simultaneously
-    \end{itemize}
+    \item[] Instruction-level Parallelism: Independence among instructions; Fetch multiple instructions per cycle; Evaluate which ones can go down the pipe together
+    \item[] Superscalar: Double up on hardware in order to execute multiple instructions simultaneously
     \item[] Deeper Pipelines: Increase the number of stages, decrease amount of logic. Higher clock freq.
     \item[] Register Renaming: Map architectural registers to physical registers in decode stage to get rid of false dependencies. Need more physical registers than architectural ones.
     \item[] Data flow graph:
@@ -223,12 +181,12 @@ if (ID/EX.MemRead && ((ID/EX.RegisterRd = IF/ID.RegisterRs1) ||
         \end{itemize}
         \item[] Dispatch in order: RD \(\leftarrow\) Fn(RS,RT)
         \begin{itemize}
-            \item[] If SB[RS] or SB[RT] is set \(\rightarrow\) RAW, stall
-            \item[] If SB[RD] is set \(\rightarrow\) WAW, stall
-            \item[] Else dispatch to functional unit, set SB[RD]
+            \item[] If \code{SB[RS]} or \code{SB[RT]} is set \(\rightarrow\) RAW, stall
+            \item[] If \code{SB[RD]} is set \(\rightarrow\) WAW, stall
+            \item[] Else dispatch to functional unit, set \code{SB[RD]}
         \end{itemize}
         \item[] Complete out-of-order
-        \item[] Update GPR[RD], clear SB[RD]
+        \item[] Update \code{GPR[RD]}, clear \code{SB[RD]}
     \end{itemize}
 \end{itemize}
 
@@ -302,6 +260,87 @@ if (ID/EX.MemRead && ((ID/EX.RegisterRd = IF/ID.RegisterRs1) ||
     \end{itemize}
 \end{itemize}
 
+\subsubsection*{DRAM:} SRAM is 6 transistors, static, doesn't need refresh, used for caches. DRAM is 1 transistor + 1 capacitor, needs refresh every ~10ms, much higher capacity. DRAM outputs data in bursts (I guess x8 at a time?). DRAM accesses:
+\begin{itemize}
+    \item[] \code{ACTIVATE} to open a row
+    \item[] \code{READ} to read a column
+    \item[] \code{WRITE} to write to a column
+    \item[] \code{PRECHARGE} to close a row
+    \item[] \code{REFRESH} on timed interval
+\end{itemize}
+In order to access a `closed' row, must first \code{PRECHARGE} the row that is open, then \code{ACTIVATE} the row to be read, then \code{READ/WRITE} to access row buffer. Modern DRAM has BANKS which operate independently of each other but use the same access hardware. Each bank can have a different row active. The \code{ACTIVATE} and \code{PRECHARGE} latencies can overlap. Physical constraints:
+\begin{itemize}
+    \item[] \code{tRCD} = Row to Column command delay (how long it takes row to get to sense amp)
+    \item[] \code{tCAS} = Time between column command and data out
+    \item[] \code{tCCD} = time between column commands (rate that these can be pipelined)
+    \item[] \code{tRP} = time to precharge DRAM array
+    \item[] \code{tRAS} = time between row activation and data restoration (minimum time row must be open)
+    \item[] \code{tRC = tRAS + tRP} = row `cycle' time
+\end{itemize}
+Timing constraints:
+\begin{itemize}
+    \item[] CPU \(\rightarrow\) memory controller transfer time
+    \item[] controller latency
+    \item[] DRAM bank latency:
+    \begin{itemize}
+        \item[] \code{tCAS} if row is open
+        \item[] \code{tRCD + tCAS} if array is precharged
+        \item[] \code{tRP + tRCD + tCAS} worst case
+    \end{itemize}
+    \item[] DRAM transfer time = BurstLen/(MT/s)
+    \item[] Memory controller \(\rightarrow\) CPU transfer time
+\end{itemize}
+
+\subsubsection*{Virtual Memory:} OS maps virtual addresses to physical memory using a page table. One page table per process. If a page isn't mapped it generates a page fault, which traps to OS, to map a new page. Translation Lookaside Buffer \code{TLB} is a hardware cache for page tables. Each \code{TLB} entry stores a page table entry \code{PTE}. \code{TLB} is like a cache and uses tag, valid, dirty bits. Page size depends on application, OS and kernel use large pages but user applications frequently use smaller. Page table size is \code{(num pages) * (page entry width)}. Hierarchical page tables: First level stores directory, second level stores actual page entries. Only top level needs to be resident in memory. Abbreviations:
+\begin{itemize}
+    \item[] \code{MMU}: Memory Management Unit controls \code{TLB}
+    \item[] Components of the virtual address \code{VA}:
+    \begin{itemize}
+        \item[] \code{TLBI}: TLB index
+        \item[] \code{TLBT}: TLB tag
+        \item[] \code{VPO}: Virtual page offset
+        \item[] \code{VPN}: virtual page number
+    \end{itemize}
+    \item[] Components of the physical address \code{PA}:
+    \begin{itemize}
+        \item[] \code{PPO}: phys. page offset
+        \item[] \code{PPN}: phys. page number
+        \item[] \code{CO}: byte offset within cache line
+        \item[] \code{CI}: cache index
+        \item[] \code{CT}: cache tag
+    \end{itemize}
+\end{itemize}
+\subsubsection*{VIPT:} \code{VIPT} uses virtual address bits for indexing and physical address bits for tag. The cache uses the physical address as the tag. The \code{TLB} uses the virtual address as the index and has the tag stored as its data. An access means indexing in the \code{TLB}, getting the \code{TLB} data, indexing in the cache, getting the cache tag, and comparing the two. Cache uses the page offset as index, \code{TLB} uses virtual page number as index.
+        \includegraphics[scale=0.25]{virtual_address_translation.png}
+
+\subsubsection*{I/O} I/O is measured by \code{throughput} (amount of data/time) and \code{latency} (response time to a single I/O operation). Common approach to I/O is use memory mapping. Devices separated into `block devices' and `stream devices'. Use \code{lseek(fp, offset, reference)}, \code{read(fp, buf, nbytes)}, \code{write(fp, buf, nbytes)}. Stream devices don't use addressing. Device drivers are low-level code to hide the interface. Hard drive accesses:
+\begin{itemize}
+    \item[] Queue delay if other requests pending
+    \item[] Seek: move the heads (time given)
+    \item[] Rotational latency (\(\tfrac{1}{2} / \) rotational speed)
+    \item[] Data transfer (given)
+    \item[] Controller overheads (given)
+\end{itemize}
+A bus is a shared communication link between devices with wires all connected in parallel. Can be synchronous (uses a clock) or not. Can increase transmission bandwidth using separate control/data lines, wider lines, block transfers. An initiator acquires the bus (may require arbiter), starts the transaction, specifies command, specifies address, specifies outbound data for write. Target responds to the action with data as necessary. Processory-memory bus (or processor-processor) is short, high-speed, designed to match memory system. I/O bus is usually long and slow.
+
+\subsubsection*{PCI} 
+\begin{itemize}
+    \item[] \code{CLK} clock cycle
+    \item[] \code{FRAME} is asserted by the device controlling the bus
+    \item[] \code{AD} is the address of the target device and then holds responding data
+    \item[] \code{C/BE} is the command, then the ID of the byte needed
+    \item[] \code{IRDY} says the initiator is ready to receive data
+    \item[] \code{TRDY} says the target is ready to transmit data
+    \item[] \code{DEVSEL} says the target is connected
+\end{itemize}
+
+\subsubsection*{DMA} Direct Memory Access is a custom engine for data interface. Uses custom registers \code{from}, \code{to}, and \code{length}. Also has registers for status and control. Typically notifies processor operation is complete via interrupt. DMA engine will typically chain multiple operations such that \(\leq 1\) page is loaded at a time. DMA will use a \code{TLB} with virtual addresses.
+
+\subsubsection*{Vectors} Implement data-level parallelism using vector instructions. Operate on vector registers. Perform single operations on multiple data elements. Amortizes instruction cost. Vector ALUs will be run in parallel in order to increase bandwidth. Domain specific hardware implements convolution engine to perform specific set of calculations really quickly. Uses a DMA to load/store data. 
+
+\subsubsection*{FPGA} Field-programmable Gate Array is a 2-dimensional array of reconfigurable logic elements which implements Look-up tables, flip-flops, adders, Block RAM, and DSP blocks. Uses switch programmable interconnect to connect between array elements. Has I/O interface at chip boundary. 
+
+\subsubsection*{Multicore:} Use shared memory accessed through loads/stores. Synchronization through atomic instructions \code{lr.w} and \code{st.w} which provide locking information. Multithreading executes more threads than cores. When 1 stalls, switch to another. Fine-grain MT switches threads each cycle. Coarse-grain MT switches threads on a long stall. Simultaneous MT uses multiple-issue dynamically scheduled pipeline hardware to exploit thread-level parallelism so it'll issue them as fast as it  can.
 
     \end{multicols}
 \end{document}

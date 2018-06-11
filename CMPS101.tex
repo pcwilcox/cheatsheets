@@ -20,7 +20,7 @@
     \newlength\myht{}
   \settoheight{\myht}{\(n-2\)} 
   \tikzset{%
-    MyStyle/.style={draw, text width=15pt, text height=10pt, text centered,minimum height=\myht+2*2*1mm},
+    MyStyle/.style={draw, text width=15pt, text height=10pt, text centered,minimum height=\myht+221mm},
     myarrow/.style={shape=single arrow, rotate=90, inner sep=5pt, outer sep=0pt, single arrow head extend=0pt, minimum height=0pt, text width=0pt, draw=blue!50, fill=blue!25}
   }
   
@@ -64,34 +64,17 @@
 
     \begin{document}
 
-
-
-
-\begin{python}
-def find_pairs(node, path):
-    count = 0
-    for i in range(len(path)):
-        ancestor = path[i][0]
-        direction = path[i][1]
-        if direction == 'right' and node.key < ancestor.key:
-            count++
-        if direction == 'left' and node.key > ancestor.key:
-            count++
-    return count + find_pairs(node.left, path.append([node, 'left'])) + 
-        find_pairs(node.right, path.append([node, 'right']))
-\end{python}
-
 \begin{lstlisting}[frame=single,basicstyle=\footnotesize\ttfamily]
 template <class KeyType, class ValueType>
 class Node { // variables could be public, or could add getters/setters
     int numberKeys;
     KeyType key[2]; // space for up to 2 keys
     ValueType value[2]; // space for the corresponding values
-    Node* subtree[3]; // pointers to the up to 3 subtrees
+    Node subtree[3]; // pointers to the up to 3 subtrees
 }
 \end{lstlisting}
 
-\subparagraph*{Inserting a new key:}
+\subparagraph{Inserting a new key:}
 \begin{itemize}[noitemsep]
     \item Search for the key. If found, deal with duplicates. Otherwise, we've found the leaf.
     \item Insert the key into the leaf. If the leaf had only one key, we're done.
@@ -105,7 +88,7 @@ class Node { // variables could be public, or could add getters/setters
     \end{enumerate}
 \end{itemize}
 
-\subparagraph*{Deleting a key: }
+\subparagraph{Deleting a key: }
 \begin{enumerate}[noitemsep]
     \item Search for the key (call this the \code{target}).
     \item If the \code{target} is in a leaf, move to step 5.
@@ -116,7 +99,7 @@ class Node { // variables could be public, or could add getters/setters
     \item If the leaf still has a key, \code{fix\_empty()} will do nothing. Otherwise it will propagate the changes needed to fix the tree.
 \end{enumerate}
 
-\subparagraph*{\code{fix\_empty()}:}
+\subparagraph{\code{fix\_empty()}:}
 \begin{enumerate}[noitemsep]
     \item If the node still has a key, do nothing.
     \item If the empty node has a sibling with two keys, perform a rotation in order to borrow a key from the sibling. \\
@@ -258,31 +241,10 @@ class Node { // variables could be public, or could add getters/setters
                 ]
             \end{forest}
         \end{center}
-
-
-
         \item In each case, only swap key values. Keep heights the same.
 \end{enumerate}
 
-
-
-\subsection*{K-sorting an array: }
-\begin{lstlisting}
-ksorted(A[], k):
-    B = new 23tree()
-    for i from 0 to k:
-        B.insert(A[i])
-    for i from 0 to n - k:
-        A[i] = B.extractMin()
-        B.insert(A[i+k])
-    for i from n-k to n-1:
-        A[i] = B.extractMin()
-    return A[]
-\end{lstlisting}
-
-\pagebreak{}
-
-\subsection*{Insertion Sort:}
+\subsection{Insertion Sort:}
 
 \begin{lstlisting}
 Insertion_Sort(A):
@@ -294,11 +256,11 @@ Insertion_Sort(A):
             i = i - 1
         A[i + 1] = key
 \end{lstlisting}
-\subparagraph*{Loop Invariant:} At the start of each iteration of the for loop of lines 1-8, the subarray \code{A[1..j-1]} consists of the elements originally in \code{A[1..j-1]}, but in sorted order.
+\subparagraph{Loop Invariant:} At the start of each iteration of the for loop of lines 1-8, the subarray \code{A[1..j-1]} consists of the elements originally in \code{A[1..j-1]}, but in sorted order.
 
-\subparagraph*{Running Time:} \(O(n^2)\)
+\subparagraph{Running Time:} \(O(n^2)\)
 
-\subsection*{MergeSort:}
+\subsection{MergeSort:}
 \begin{lstlisting}
 MergeSort(A):
     n = len(A)
@@ -326,7 +288,7 @@ Merge(A,B):
     return C
 \end{lstlisting}
 
-\subsection*{QuickSort:}
+\subsection{QuickSort:}
 \begin{lstlisting}
 QuickSort(A, p, r):
     if p < r:
@@ -345,7 +307,7 @@ Partition(A, p, r):
     return i + 1
 \end{lstlisting}
 
-\subsection*{Heaps:}
+\subsection{Heaps:}
 \begin{lstlisting}
 Build_Max_Heap(A):
     A.heap-size = A.length
@@ -369,10 +331,10 @@ Parent(i):
     return i/2
 
 Left(i):
-    return 2*i
+    return 2i
 
 Right(i):
-    return 2*i + 1
+    return 2i + 1
 
 Insert(A, k):
     A.heap-size += 1
@@ -393,7 +355,7 @@ Extract_Max(A):
     return max
 
 \end{lstlisting}
-\subsection*{BFS:}
+\subsection{BFS:}
 
 \begin{lstlisting}
 BFS(G,s):
@@ -415,11 +377,11 @@ BFS(G,s):
                 Q.enqueue(v)
 \end{lstlisting}
 
-\subparagraph*{BFS Theorem 1:} When \code{BFS(s)} terminates, \(\forall v \in V\) \code{dist[v]} is the shortest path distance from \(s\) to \(v\). Furthermore: \code{v, pred[v], pred[pred[v]],...,s} is such a shortest path in reverse.
+\subparagraph{BFS Theorem 1:} When \code{BFS(s)} terminates, \(\forall v \in V\) \code{dist[v]} is the shortest path distance from \(s\) to \(v\). Furthermore: \code{v, pred[v], pred[pred[v]],...,s} is such a shortest path in reverse.
 
-\subparagraph*{BFS Theorem 2:} If vertices \(s\) and \(t\) are connected, when \code{BFS(s)} terminates, the color of \(t\) is black. If \(s\) and \(t\) are not connected, when \code{BFS(s)} terminates, the color of \(t\) is white.
-
-\subparagraph*{BFS Theorem 3: (main loop invariant)} At any stage of the algorithm \code{BFS(s)} at step 4, the queue \(Q\) contains vertices in at most two adjacent levels \(l\) and \(l+1\). \begin{enumerate}
+\subparagraph{BFS Theorem 2:} If vertices \(s\) and \(t\) are connected, when \code{BFS(s)} terminates, the color of \(t\) is black. If \(s\) and \(t\) are not connected, when \code{BFS(s)} terminates, the color of \(t\) is white.
+    
+\subparagraph{BFS Theorem 3: (main loop invariant)} At any stage of the algorithm \code{BFS(s)} at step 4, the queue \(Q\) contains vertices in at most two adjacent levels \(l\) and \(l+1\). \begin{enumerate}
     \item[] 1. All vertices in level \(< l\) are black
     \item[] 2. All vertices in level \(l\) that are not gray are black
     \item[] 3. All vertices in level \(l+1\) that are not gray are white
@@ -427,9 +389,9 @@ BFS(G,s):
     \item[] 5. In \(Q\), all vertices in level \(l\) are ahead of those in level \(l+1\)
 \end{enumerate}
 
-\subparagraph*{BFS Theorem 4:} When \code{BFS(s)} terminates, \(\forall v\), \code{dist[v]} \(= \delta_s(v)\).
+\subparagraph{BFS Theorem 4:} When \code{BFS(s)} terminates, \(\forall v\), \code{dist[v]} \(= \delta_s(v)\).
 
-\subsection*{Djikstra:}
+\subsection{Djikstra:}
 \begin{lstlisting}
 Djikstra(G,s):
     dist = [infinity]
@@ -450,11 +412,11 @@ Relax(u,v):
         pred[v] = u
 \end{lstlisting}
 
-\subparagraph*{Running Time:} \(O((m + n) \log n)\)
+\subparagraph{Running Time:} \(O((m + n) \log n)\)
 
-\subparagraph*{Theorem:} When Djikstra's algorithm terminates, \(\forall v\), \code{dist[v]} \(= \delta_s(v)\)
+\subparagraph{Theorem:} When Djikstra's algorithm terminates, \(\forall v\), \code{dist[v]} \(= \delta_s(v)\)
 
-\subsection*{Bellman-Ford:}
+\subsection{Bellman-Ford:}
 
 \begin{lstlisting}
 Bellman-Ford(G, s):
@@ -466,9 +428,9 @@ Bellman-Ford(G, s):
             Relax(u,v)
 \end{lstlisting}
 
-\subparagraph*{Running time:} \(O(mn)\)
+\subparagraph{Running time:} \(O(mn)\)
 
-\subsection*{DFS:}
+\subsection{DFS:}
 \begin{lstlisting}
 DFS(G):
     color = [white]
@@ -492,24 +454,408 @@ DFS_Visit(u):
     time += 1
 \end{lstlisting}
 
-\subparagraph*{Running Time:} \(O(m + n)\)
+\subparagraph{Running Time:} \(O(m + n)\)
 
-\subparagraph*{Parentheses Theorem:} In any DFS forest, for vertices \(u, v\) either:
+\subparagraph{Parentheses Theorem:} In any DFS forest, for vertices \(u, v\) either:
 \begin{enumerate}
     \item[] 1. \([d[u],f[u]]\) is disjoint from \([d[v],f[v]]\) and neither is the descendant of the other or
     \item[] 2. \([d[u],f[u]]\) contains \([d[v],f[v]]\) and \(v\) is a descendant of \(u\)
 \end{enumerate}
 
-\subparagraph*{White Path Theorem:} \(v\) is a descendant of \(u \iff\) there is a white path from \(u\) to \(v\) when \code{DFS\_Visit(u)} is called.
+\subparagraph{White Path Theorem:} \(v\) is a descendant of \(u \iff\) there is a white path from \(u\) to \(v\) when \code{DFS\_Visit(u)} is called.
 
-\subsection*{Topological Sort:}
-\subparagraph*{Theorem:} Perform \code{DFS(G)}:
+\subsection{Topological Sort:}
+\subparagraph{Theorem:} Perform \code{DFS(G)}:
 \begin{enumerate}
     \item[] (1) \(G\) is acyclic \(\iff\) there is no back edge
     \item[] (2) If \(G\) is acyclic, then decreasing order of finish times is a topological order
 \end{enumerate}
 
-\subparagraph*{Other Stuff:}
+\section{Question Bank Stuff:}
+
+\paragraph{Question:} Given an integer \(x\) and an array of numbers, find if two numbers in the array sum up to \(x\). (Or, find the pair of numbers whose sum is closest to \(x\).)
+
+\begin{lstlisting}
+two_sum(A, x):
+    QuickSort(A)
+    i = 0
+    j = len(A) - 1
+    guess = A[i] + A[j]
+    dist = abs(x - guess)
+    while i < j and guess != x:
+        if guess < x:
+            i += 1
+        else:
+            j -= 1
+        new_guess = A[i] + A[j]
+        if dist > abs(x - new_guess)
+        guess = new_guess
+        dist = abs(x - guess)
+    return guess
+\end{lstlisting}
+
+\paragraph{Question:} Given two sorted arrays, find the median of the union of elements. - or - Given two sorted arrays, find the kth smallest element in the union of elements.
+
+\begin{lstlisting}
+find_kth_smallest(A, B, k):
+    n = len(A)
+    m = len(B)
+    if A[k] < B[0]:
+        return A[k]
+    if B[k] < A[0]:
+        return B[k]
+    if k < (n+m)/2:
+        if A[n/2] < B[m/2]:
+            return find_kth_smallest(A, B[0..m/2], k)
+        else:
+            return find_kth_smallest(A[0..n/2], B, k)
+    else:
+        if A[n/2] < B[m/2]:
+            return find_kth_smallest(A[(n/2)+1..n-1], B, k-(n/2)])
+        else:
+            return find_kth_smallest(A, B[(m/2)+1..m-1], k-(m/2))
+\end{lstlisting}
+
+\paragraph{Question:} You have an unsorted array of integers where every integer appears exactly twice, except one integer that appears once. Find it.
+
+\paragraph{Answer:} Option A is build a hash table, insert every number the first time, delete it the second time, at the end the only number remaining is the one that appears only once. Takes \(O(n)\) space and time. Option two is sort the list and iterate through it. \(O(1)\) space and \(O(n \log n)\) time.
+
+\paragraph{Question:} Given an array of integers, move all the zeroes to the right end. The order of the others doesn’t matter. Use \(O(1)\) extra storage.
+
+\paragraph{Answer:} Just use \code{Partition()} and modify it to sort zeros to the right.
+
+
+\begin{lstlisting}
+maintain_median():
+    big = min_heap()
+    small = max_heap()
+
+    while stream exists:
+        a = stream.get_int()
+        if big.heap_size < 1:
+            big.insert(a)
+        else:
+            if a < big.find_min():
+                small.insert(a)
+            else:
+                big.insert(a)
+            if big.heap_size + 1 > small.heap_size:
+                b = big.extract_min()
+                small.insert(b)
+
+return_median():
+    if big.heap_size > small.heap_size:
+        return big.find_min()
+    elif small.heap_size > big.heap_size:
+        return small.find_max()
+    else:
+        return (big.find_min() + small.find_max())/2
+\end{lstlisting}
+
+\paragraph{Question:} Given an array of integers containing all the elements from \(1, 2, \ldots , n\) except one of them. Find which one. Try doing it using \(O(1)\) memory. What if two elements were missing?
+
+\[\sum_0^n i = \frac{n(n-1)}{2}\]
+
+\begin{lstlisting}
+find_missing{A}:
+    k = 0
+    for num in A:
+        k += num
+    actual = (len(A) * (len(A) - 1))/2
+    return actual - k
+\end{lstlisting}
+
+If two elements are missing just sort the array and iterate through it.
+
+\paragraph{Question:} Given array of integers, determine if it contains a Pythagorean triple (integers \(a, b, c\) such that \(c^2 = a^2 + b^2)\).
+
+\paragraph{Answer:} Sort the array. Put a pointer at each end. Those point to \(a\) and \(c\) so just binary search for \(b\). Adjust pointers as necessary.
+
+\paragraph{Question:} The input is a sequence of ranges \([x1, y1], [x2, y2], \ldots \) (where each \(x_i \leq y_i\). Given two ranges that intersect, merge then into a single range by taking the union of ranges. Keep doing this until you finally get disjoint ranges. Design an algorithm that determines this output.
+
+\paragraph{Question:} Given three arrays in non-decreasing order, find the elements that are common to all of them. Try \(O(1)\) extra storage.
+
+\paragraph{Answer:} Use 3 pointers. They're in sorted order so just iterate all of them.
+
+\paragraph{Question:} Consider two sorted arrays that are identical, except one array has an extra element. Find that element and its index.
+
+\paragraph{Answer:} Stick a pointer on each array. Increment them both until they don't match. The smaller element is the missing one.
+
+\paragraph{Question:} Given a sorted array, find the closest element (in terms of absolute difference) to a given number.
+
+\paragraph{Answer:} Binary search.
+
+\paragraph{Question:} Given an array, a local maximum is an element \(A[i]\) such that is greater than or equal to the neighboring elements in the array. (There can be two neighboring elements, or just one if \(i = 0\) or \(i\) is the last index.) Find a local maximum.
+
+\paragraph{Answer:} Binary search. Go towards the higher number.
+
+\paragraph{Question:} Find if a singly linked list has a loop. Use \(O(1)\) extra memory.
+
+\paragraph{Answer:} Use a tortoise and a hare. If they ever cross there's a loop.
+
+\paragraph{Question:} Going beyond the problem above, find the first node on the loop (assume there is a single loop). Use \(O(1)\) extra memory.
+
+\paragraph{Answer:} Use the answer above. Then use an additional tortoise/hare pair. Alternate which pointer gets sent from where.
+
+\paragraph{Question:} Given a sorted array \(A\) of distinct integers, determine if there is an index \(i\) such that \(A[i] = i\).
+
+\paragraph{Answer:} Iterate through the array and return true if \(A[i] = i\) otherwise return false.
+
+\paragraph{Question:} There is an extremely large array \(A\) such that the first \(n\) entries are positive integers, and all remaining entries are \(0\). Find \(n\).
+
+\paragraph{Answer:} Use binary search. If the mid is a 0 then go left, if the mid is a number go right.
+
+\paragraph{Question:} Consider an \(n \chi n\) 2D array where all rows and columns are in sorted order. Equivalently, the following holds for any \(i, j\): for \(i_0 > i\), then \(A[i_0][j] > A[i][j]\), and for \(j_0 > j\), \(A[i][j_0] > A[i][j]\). Given an \(x\), find if \(x\) is in the array.
+
+\paragraph{Answer:} Binary search.
+
+\paragraph{Question:} Describe a stack based data structure that supports push, pop, and findmin in \(O(1)\) operations.
+
+\paragraph{Answer:} Use two stacks. The first is just the stack. The second is a stack of pointers to the min elements of the first.
+
+\paragraph{Question:} Given the pre-order traversal of a binary search tree, reconstruct the tree.
+
+\paragraph{Answer:} Just insert in order.
+
+\paragraph{Question:} A pair of nodes \(x, y\) in a (supposed) binary search tree violate the BST property if \(x\) is an ancestor of \(y\), and the corresponding values are “out of order”. Given a BST, find the number of pairs that violate the BST property.
+
+\begin{lstlisting}
+    def find_pairs(node, path):
+        count = 0
+        for i in range(len(path)):
+            ancestor = path[i][0]
+            direction = path[i][1]
+            if direction == 'right' and node.key < ancestor.key:
+                count++
+            if direction == 'left' and node.key > ancestor.key:
+                count++
+        return count + find_pairs(node.left, path.append([node, 'left'])) + 
+            find_pairs(node.right, path.append([node, 'right']))
+    \end{lstlisting}
+
+\paragraph{Question:} A cycle is a sequence of vertices \(v_1, v_2, \ldots , v_k\) such that for each \(i\), \((v_i , v_{i+1})\) is an edge, and \((v_k, v_0)\) is an edge. Determine if \(G\) has a cycle containing edge \(e\). Try using both BFS and DFS.
+
+\paragraph{Answer:} Run BFS but add a check such that when we are looking at \(v_0\), we ignore \(v_0\). When BFS exits, if \(dist[v_0] \neq \infty\) then \(e\) is contained in a cycle.
+
+\paragraph{Question:} Determine if \(G\) contains any cycle. (Clearly, you can use the solution for the previous problem, but there’s a more efficient method.)
+
+\paragraph{Answer:} Run DFS. If it ever hits a gray vertex, return true. If it finishes without hitting a gray node, return false.
+
+\paragraph{Question:} A directed graph is called a DAG if it contains no directed cycles. Determine if a graph is a DAG.
+
+\paragraph{Answer:} Run DFS on the whole graph. If it ever hits a gray vertex there is a a cycle so it is not a DAG.
+
+\paragraph{Question:} Prove that a graph \(G\) is bipartite iff it has no cycles of odd length. (Hint: follow the progress of BFS on \(G\)
+
+\paragraph{Answer:} Run BFS. The source is set to color A and its neighborhood is set to color B, then the colors switch. If BFS ever discovers a vertex \(u\) with an edge to a vertex \(v\) that has the same color then it has a cycle of odd length. If it does not, then the graph can be colored fully with only two colors, meaning it can be split into two subsets with no edges within the same subset, which is the definition of bipartite.
+
+\paragraph{Question:} A vertex \(v\) is a cut or articulation vertex if its removal disconnects two other vertices. Equivalently, all paths (in \(G\), before removal) from \(u\) to \(u_0\) pass through \(v\).  Determine if \(v\) is a cut vertex. If so, find some pair \((u, u_0)\) that got disconnected.
+
+\paragraph{Answer:} Color \(v\) black. Run \code{DFS\_Visit()} on any neighbor. When it finishes, if it has any white neighbors, it is a cut vertex by the white path theorem.
+
+\paragraph{Question:} The proof of Dijkstra’s algorithm fails when there are negative edges. Why?
+
+\paragraph{Answer:} Consider the graph \(G\) containing the source vertex \(s\) and vertices \(u, v\) such that \(v\) is dequeued before \(u\) is. If there exists an edge \(u,v\) with negative weight such that the actual shortest path from \(s\) to \(v\) goes through this edge, then the shortest path to anything that goes through \(v\) will not be adjusted properly, because \(v\)'s neighborhood is only relaxed when it is dequeued.
+
+\paragraph{Question:} We have three containers, whose sizes are 10 pints, 7 pints, and 4 pints. The 7-pint and 4-pint containers are full of water, while the 10-pint container is empty. We are only allowed one operation: pouring the contents on one container into another, stopping only when the source container is empty, or the destination container is empty. Determine if there is a sequence of pourings that leave exactly 2 pints in the 7- or 4- pint container. Model this as a graph problem. Trying solving the general version where there are three containers of integer capacities of a maximum of n. The starting configuration is provided, and we have some desired “end state”. Determine if the “end state” can be achieved. Work out the running time.
+
+\begin{enumerate}
+    \item[] Construct a list of \code{operations[]} for the set of possible operations (pouring from one bucket to another). 
+    \item[] Construct a function \code{valid()} to return whether, given a bucket state \(s\) and an operation \(op()\), \(op(s)\) results in a valid state. 
+    \item[] Build the graph as a hash table \(G\). 
+    \item[] Build the adjacency lists as hash tables.
+    \item[] Use a recursive function to explore the possible vertices of the graph. If it finds the desired end state, return true, otherwise return false.
+\end{enumerate}
+
+\begin{lstlisting}
+Find_State(start, end, operations):
+    G = hash_table()
+
+    found = Pour(start, end, operations, G):
+    return found
+
+Pour(start, end, operations, G):
+    for op in operations:
+        x = op(start)
+        found = false
+        if valid(x):
+            if x == end:
+                found = true
+            else:
+                G.insert(x)
+                G.find(start).insert(x)
+                G.find(x).insert(start)
+                found = Pour(x, end, operations, G)
+            if found == true:
+                return found
+        return found
+\end{lstlisting}     
+
+\paragraph{Question:} Given a directed (unweighted) graph \(G\), the reverse is obtained by simply reversing all edges. Assume \(G\) is represented as an adjacency list of out neighbors. Construct the reverse of \(G\).
+
+\begin{lstlisting}
+reverse(G):
+    reversed = []
+
+    for u in G.V:
+        for v in N(u):
+            reversed[v].push(u)
+    
+    return reversed
+\end{lstlisting}
+
+\paragraph{Question:} Consider a game of snakes and ladders. Determine the minimum number of throws required to win the game.
+
+\begin{lstlisting}
+snakes_and_ladders(G):
+    squares = []
+    for v in G.V:
+        if v has a chute or a ladder:
+            squares[v] = chute/ladder destination
+        else:
+            squares[v] = v
+    for u in G.V:
+        for v in range(u,min(u+6,n-1)):
+            N(u).push(squares[v])
+    
+    BFS(G,0)
+
+    min_throws=dist[n-1]
+    return min_throws
+\end{lstlisting}
+
+\paragraph{Question:} Biologists often construct a food network of species in an ecosystem. The vertices represent species, and a directed edge \((u, v)\) means species \(u\) eats species \(v\). An apex species is one that is not eaten by another species. Suppose you are give a list of all possible “eating” relationships (so a list of “\(u\) eats \(v\)”). Determine all apex species. 
+
+\begin{lstlisting}
+Find_Apex(G):
+    color = [white]
+    pred = [null]
+    for s in G.V:
+        DFS_Visit(s)
+    
+    apex = []
+    for s in G.V:
+        if pred[s] == null:
+            apex.append(s)
+    return apex
+
+DFS_Visit(u):
+    color[u] = gray
+    for v in N(u):
+        pred[v] = u
+        if color[u] == white:
+            DFS_Visit(v)
+    color[u] = black
+\end{lstlisting}
+
+\paragraph{Question:} In a food network (described above), determine the effect of the extinction of a species. If a species \(v\) goes extinct, and there is some other species \(u\) that only eats \(v\), then \(u\) will become extinct. This can cascade through the food network. Given a food network and a species \(v\), determine all other species that will become extinct if \(v\) goes extinct.
+
+\begin{lstlisting}
+Extinction(G, v):
+    color = [white]
+    pred = [null]
+    for u in G.V:
+        DFS_Visit(u)
+    extinct = Kill(v)
+
+DFS_Visit(u):
+    color[u] = gray
+    for v in N(u):
+        pred[v].insert(u)
+        if color[v] == white:
+            DFS_Visit(v)
+    color[u] = black
+
+Kill(v):
+    extinct = [v]
+    for u in pred[v]:
+        G.adj[u].delete(v)
+        if len(N(u)) < 1:
+            extinct.append(Kill(u))
+    return extinct
+\end{lstlisting}
+
+\paragraph{Question:} Given a weighted, directed graph \(G\), determine the length of the shortest (directed) cycle in \(G\). (Hint: you can find this using a number of calls to Djikstra, but can you do only \(O(n)\) calls?)
+
+\begin{lstlisting}
+Shortest_Cycle(G):
+    shortest = infinity
+    for s in G.V:
+        shortest = min(shortest, Djikstra(G, s))
+    return shortest
+
+Djikstra(G, s):
+    dist = [infinity]
+    pred = [null]
+    done = []
+    min_cycle = infinity
+    Q = pq(all v in V)
+    while !Q.is_empty():
+        u = Q.extract_min()
+        done.append(u)
+        for v in N(u):
+            if v == s:
+                if dist[u] + w(u,v) < min_cycle:
+                    min_cycle = dist[u] + w(u,v)
+            else:
+                Relax(u,v)
+                Q.decrease_key(v)
+    return min_cycle
+\end{lstlisting}
+
+\paragraph{Question:} Given a simple graph \(G\), determine a shortest cycle in \(G\). (Hint: it’s a little trickier than above if you want \(O(n)\) BFS calls. You need to dig into BFS.)
+
+\begin{lstlisting}
+find_cycle(G):
+    cycles = [infinity]
+    for s in G.V:
+        cycles = BFS(G,s)
+    return min(cycles)
+
+BFS(G,s):
+    min_cycle = infinity
+    Q = queue()
+    dist = [infinity]
+    pred = [null]
+    color = [white]
+    color[s] = gray
+    dist[s] = 0
+    Q.enqueue(s)
+    while !Q.is_empty():
+        u = Q.dequeue()
+        color[u] = black
+        for v in N(u):
+            if color[v] == white:
+                color[v] = gray
+                pred[v] = u
+                dist[v] = dist[u] + 1
+                Q.enqueue(v)
+            if v == s and pred[u] != s and dist[u] + 1 < min_cycle:
+                min_cycle = dist[u] + 1
+    return min_cycle
+\end{lstlisting}
+
+\paragraph{Question:} Consider a road network, where each vertex in a location, and each edge \((u, v)\) (directed, weighted) is the distance of getting from \(u\) to \(v\). You have to send supplies from vertex \(s\) to \(t\), obviously using the shortest path. That’s easy, just use Djikstra. The catch is that your truck actually doesn’t have the supplies and has to pick it up from a warehouse. There is a set of vertices \(W\) that correspond to the warehouses, and you truck can go to any (just one) of the warehouses. Find the shortest route for your truck, with this additional constraint. The input to your algorithms is \(G\), \(s\), \(t\), and \(W\).
+
+\paragraph{Answer:} Run Dijkstra's from the source and get the distance to the warehouses. Now reverse the graph and run Dijkstra's from the target to get the distance to the warehouses. Track the minimum distance. \(O((m+n)\log n)\)
+
+\paragraph{Question:} A directed graph \(G\) is semi-connected if for every pair \(u, v\) of vertices, there is either a path from \(u\) to \(v\) or from \(v\) to \(u\). Determine if \(G\) is semi-connected.
+
+\paragraph{Answer:} The only thing I can think of is brute force using DFS.
+
+\paragraph{Question:} You are given the dependency structure of coursework at a university. Think of the courses are vertices, and you can given a (directed) edge \((u, v)\) if you must finish course \(u\) before course \(v\). Assuming a student can take as many courses as she wishes in a quarter, determine the minimum number of quarters required to finish all courses.
+
+\paragraph{Answer:} Run DFS. Modify \code{DFS\_Visit()} to return \code{quarters} equal to the max of 1 or the largest value of the neighborhood. Do a linear scan through all vertices and return the largest value.
+
+\paragraph{Question:} At some point in the DFS algorithm, suppose all vertices become gray. What does that imply about the graph? Specifically, can you determine what the DFS forest will look like?
+
+\paragraph{Answer:} The forest is a linked list that may or may not have additional edges. There is one recursive stack containing all vertices.
+
+\paragraph{Question:} Determine arbitrage in a currency exchange network. Basically, for every pair of currencies \((u, v)\), you have the exchange rate: given 1 unit of \(u\), how many units of \(v\) you can buy with it. Arbitrage occurs when you start with one unit of \(u_1\), convert that to \(u_2\), convert that to \(u_3,\ldots,\) convert that to \(u_k\), and then back to \(u_1\), and end up with > 1 unit of \(u_1\).
+
+\paragraph{Answer:} Bellman-Ford. The distance calculation is multiplicative. Check if the distance to the source ever goes over 1.
+
+\subparagraph{Other Stuff:}
 \begin{itemize}
     \item[] \(\sum\limits_{i=1}^{n}i = \frac{n(n+1)}{2},\sum\limits_{i=1}^{n}i^2 = \frac{n(n+1)(2n+1)}{6}, \sum\limits_{i=1}^{n} i^3 = \frac{n^2(n+1)^2}{4}\)
     \item[] \(\sum\limits_{i=0}^{n}c^i = \frac{c^{n+1}-1}{c-1}, c \neq 1; \sum\limits_{i=0}^{\infty}c^i = \frac{1}{1-c}\)
