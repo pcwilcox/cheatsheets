@@ -1,0 +1,335 @@
+% LaTeX template adapted from: https://www.overleaf.com/latex/templates/simple-math-homework-template/tbszsswsndrz
+\documentclass[landscape,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+\usepackage[]{amssymb} %gives us the character \varnothing
+\usepackage{amsmath} %for equations
+\usepackage[]{listings} %for code blocks
+\usepackage{graphicx} %for diagrams
+\usepackage{fancyhdr} %for headers
+\usepackage[letterpaper, margin=0.5in]{geometry}
+\usepackage{tikz} % for drawings
+\usepackage{multicol}
+\usepackage{ifthen}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{color}
+\setlist{nolistsep}
+\setlist[itemize]{leftmargin=0.5pc,itemsep=0.25em}
+\usetikzlibrary{arrows.meta,shapes.arrows,chains,decorations.pathreplacing}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+            {-1ex plus -.5ex minus -.2ex}%
+            {0.5ex plus .2ex}%x
+            {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+            {-1explus -.5ex minus -.2ex}%
+            {0.5ex plus .2ex}%
+            {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+            {-1ex plus -.5ex minus -.2ex}%
+            {1ex plus .2ex}%
+            {\normalfont\small\bfseries}}
+\makeatother
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+
+\lstset{frame=single,
+  language=c,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=fixed,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\newcommand{\code}{\lstinline}
+\graphicspath{}
+\pagestyle{empty}
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{-0.25em}
+
+\begin{document}
+    \footnotesize
+    \begin{multicols}{3}
+    \setlength{\premulticols}{1pt}
+    \setlength{\postmulticols}{1pt}
+    \setlength{\multicolsep}{1pt}
+    \setlength{\columnsep}{2pt}
+
+    \subparagraph*{ACID:} atomicity, consistency, isolation, durability
+    \subparagraph*{Network Models:} Network, Hierarchical, Relational
+    \subparagraph*{Tuples and Relations:}
+    \begin{itemize}
+        \item \emph{Tuple:} a $k$\emph{-tuple} is an ordered sequence of $k$ values
+        \item If $D_1, D_2, \ldots, D_k$ are sets of elements then the cartesian product $D_1 \times
+        D_2 \times \ldots D_k$ is the set of all $k$-tuples $(d_1, d_2, \ldots, d_k)$ such that
+        $\forall 1 \leq i \leq k:\ d_i \in D_i$
+        \item \emph{Relation:}
+        \begin{itemize}
+            \item A $k$\emph{-ary relation} is a subset of $D_1 \times D_2 \times \ldots D_k$ where
+            each $D_i$ is a set of elements
+            \item $D_i$ is the \emph{domain (or datatype)} of the $i^{th}$ column of the relation
+            \item Domains may be enumerated $\{``AMS'', ``CMPS'', ``TIM''\}$ or may be of standard
+            types 
+        \end{itemize}
+        \item An \emph{attribute} is the name of a column in a relation
+        \item A \emph{relation schema} $R$ is a set $\{A_1, \ldots, A_k\}$ of attributes written
+        $R(A_1, \ldots, A_k)$, where $A_i$ is the name of the $i^{th}$ column. 
+        \item A \emph{relation database schema} or \emph{database schema} is a set of relation
+        schemas with disjoint relation names.
+    \end{itemize}
+    \subparagraph*{Declarative vs Procedural:} A \emph{declarative} language places constraints on
+    the output but not on \emph{how} that output is obtained. A \emph{procedural} language specifies
+    a sequence of operations to obtain the desired output. SQL is not fully declarative.
+    \subparagraph*{SQL DDL and SQL DML:} 
+        \begin{itemize}
+            \item \emph{Data Definition Language:} \code{CREATE TABLE}, \code{DROP TABLE}, \code{CREATE SCHEMA}, \code{DROP SCHEMA}
+            \item \emph{Data Manipulation Language:} \code{SELECT}, \code{INSERT}, \code{UPDATE}, \code{DELETE}
+        \end{itemize}
+    \subparagraph*{Primitives:}
+    \begin{itemize}
+        \item \code{CHAR(n)}: fixed-length string of up to $n$ characters (blank-padded with
+        trailing spaces)
+        \item \code{VARCHAR(n)}: also a string of up to $n$ characters
+        \item \code{BIT(n)}: padded on the right with \code{0}s.
+        \item \code{BIG VARYING(n)}: works like \code{VARCHAR}
+        \item \code{BOOLEAN}: true, false, unknown
+        \item \code{INT} or \code{INTEGER}: works like in C
+        \item \code{SHORTINT}: works like \code{short int}
+        \item \code{DECIMAL(n, d)}, \code{NUMERIC(n, d)}: total of $n$ digits, $d$ of them to the
+        right of the decimal point
+        \item \code{FLOAT(p)}, \code{FLOAT}, \code{REAL}
+        \item \code{DOUBLE PRECISION}: analagous to \code{double} in c
+        \item \code{DATE}, \code{TIME}, \code{TIMESTAMP}, \code{INTERVAL}: constants are character
+        strings of specific form e.g. \code{DATE `2017-09-13'}
+        \begin{itemize}
+            \item Subtracting one \code{TIME} from another results in an \code{INTERVAL}
+            \item Taking a \code{TIME} and adding an \code{INTERVAL} results in a \code{TIME}
+            \item Similarly for \code{TIMESTAMP} and \code{DATE}
+        \end{itemize}
+    \end{itemize}
+    \subparagraph*{Tables:} 
+    \begin{itemize}
+    \item A \emph{key constraint} or \emph{key} of a relation schema $R$ is a subset $K$ of the
+        attributes of $R$ such that:
+        \begin{enumerate}
+            \item For every instance $r$ of $R$, every two distinct tuples of $r$ must differ in
+            their values of $K \iff$ there can't be two different tuples that have the same value
+            for key $K$
+            \item No proper subset of $K$ has the above property
+        \end{enumerate}
+        \item A \emph{superkey} is a set of attributes of $R$ that includes a key of $R$
+        \item \code{CREATE TABLE R(A, B, C, PRIMARY KEY(A))}:
+        \begin{enumerate}
+        \item None of the tuples in \code{R} can have null \code{A} values
+        \item Rows are uniquely identified by their \code{A} values
+        \item There can be at most one primary key for a table
+        \end{enumerate}
+        \item \code{CREATE TABLE S(D, E, F, UNIQUE(D))}:
+        \begin{enumerate}
+            \item Rows in \code{S} can contain null \code{D} values
+            \item Rows with \emph{non-null} \code{D} values are uniquely identified by their \code{D} values
+            \item There can be multiple unique constraints in addition to a primary key
+        \end{enumerate}
+        \item \code{CREATE TABLE T(G NOT NULL, H DEFAULT `foo')}:
+        \begin{enumerate}
+            \item If no default value is specified and no value is entered then the value will be \code{NULL}
+            \item \code{NOT NULL} prevents a column from having null values
+            \item If a default value is specified and no value is entered then the value will be the
+            default
+        \end{enumerate}
+    \end{itemize}
+    \subparagraph*{Queries:}
+    \begin{itemize}
+        \item Basic form: \\
+\code{SELECT [DISTINCT] c1, c2, ..., cm} \\
+\code{FROM R1, R2, ..., Rn} \\
+\code{[WHERE condition]}
+    \item \code{SELECT}:
+    \begin{itemize}
+        \item Projection: \code{SELECT title, year} - only a subset of attributes from the
+        relation(s) in the \code{FROM} clause is selected
+        \item \code{DISTINCT}: Removes duplicate tuples from result
+        \item Aliasing: \code{SELECT title AS name} - rename the attributes in the result
+        \item Expressions are allowed in the \code{SELECT} clause. Ex: \code{SELECT title AS name, length * 60 AS durationInSeconds}
+        \item Constants can also be included: \code{SELECT title AS name, length * 60 AS durationInSeconds, `seconds' AS inSeconds}
+    \end{itemize}
+        \item \code{WHERE}:
+        \begin{itemize}
+            \item Comparison operators: \code{=}, \code{<>}, \code{<}, \code{>}, \code{<=}, \code{>=}
+            \item Logical connectives: \code{AND}, \code{OR}, \code{NOT}
+            \item Arithmetic expressions: \code{+}, \code{-}, \code{*}, \code{/}, etc
+            \item In general the \code{WHERE} clause is a boolean expression where each condition is
+            of the form \emph{expression op expression}
+        \end{itemize}
+        \item Pattern matching with the \code{LIKE} operator:
+        \begin{itemize}
+            \item $s$ \code{LIKE} $p$, $s$ \code{NOT LIKE} $p$
+            \item $s$ is a string, $p$ is a pattern
+            \item `\code{\%}' stands for \code{0} or more arbitrary characters
+            \item `\code{_}' stands for exactly one arbitrary character
+            \item Matching quotes: \code{WHERE x LIKE ''''} matches one quote symbol
+            \item Matching quotes: \code{WHERE x LIKE ''''''} matches two quote symbols
+            \item Matching \code{\%} or \code{_}: \code{WHERE x LIKE `!\%\%!' ESCAPE '!'} where
+            \code{!} can be any character
+        \end{itemize}
+        \item \code{DATE} and \code{TIME} and \code{TIMESTAMP}
+        \begin{itemize}
+            \item Separate data types
+            \item Constants are character strings of the form: \\
+\code{DATE '2015-01-13'} \\
+\code{TIME '16:45:33'} \\
+\code{TIMESTAMP '2015-01-13 16:45:33'} \\
+            \item \code{DATE}, \code{TIME}, \code{TIMESTAMP} can be compared using ordinary
+            comparison operators e.g. \code{WHERE ReleaseDate <= DATE '1990-06-19'}
+\end{itemize}
+    \begin{table*}[]
+        \begin{tabular}{|l|l|l|l|l|}
+            \hline
+        p & q & p OR q & p AND q & p = q \\ \hline
+        T & T & T & T & T \\ \hline
+        T & F & T & F & F \\ \hline
+        T & U & T & U & U \\ \hline
+        F & T & T & F & F \\ \hline
+        F & F & F & F & T \\ \hline
+        F & U & U & F & U \\ \hline
+        U & T & T & U & U \\ \hline
+        U & F & U & F & U \\ \hline
+        U & U & U & U & U \\\hline
+        \end{tabular}
+        \end{table*}
+
+        \item If \code{Salary} is \code{NULL} then the following will be \code{UNKNOWN}:
+        \begin{itemize}
+            \item \code{Salary = 10}
+            \item \code{Salary <> 10}
+            \item \code{90 > Salary OR 90 <= Salary}
+            \item \code{Salary = NULL}
+            \item \code{Salary <> NULL}
+            \end{itemize}
+            \item Use of \code{IS NULL} and \code{IS NOT NULL}:
+            \begin{itemize}
+                \item \code{Salary IS NULL} will be true if \code{SALARY} \emph{is} \code{NULL},
+                false otherwise
+                \item \code{Salary IS NOT NULL} will be true if \code{SALARY} \emph{is not}
+                \code{NULL}, false otherwise
+            \end{itemize}
+        \item Ordering the result:
+        \begin{itemize}
+            \item \code{ORDER BY} presents the result in a sorted order
+            \item By default the result will be ordered in ascending order \code{ASC}
+            \item For descending order on an attribute you write \code{DESC} in the list of attributes
+        \end{itemize}
+        \item Multiple relations in \code{FROM} clause: for every tuple $t_1 \in R_1, t_2 \in R_2,
+        \ldots, t_n from R_n$ if $t_1, \ldots, t_n$ satisfy \emph{condition} then add the resulting
+        tuple that consists of $c_1, c_2, \ldots, c_m$ components of $t$ into the result
+    \end{itemize}
+    \subparagraph*{JOINS}: With relations \code{R(A,B,C)} and \code{S(C,D,E)}
+    \begin{itemize}
+        \item \code{R JOIN S ON R.B=S.D AND R.A=S.E}:
+        \begin{itemize}
+            \item Selects only tuples from \code{R} and \code{S} where \code{R.B=S.D} and \code{R.A=S.E}
+            \item Schema of the resulting relation: \code{(R.A, R.B, R.C, S.C, S.D, S.E)}
+            \item Equivalent to: \\
+            \code{SELECT *} \\
+            \code{FROM R, S} \\
+            \code{WHERE R.B=S.D AND R.A=S.E;}
+        \end{itemize}
+        \item \code{R CROSS JOIN S}:
+        \begin{itemize}
+            \item Product of the two relations \code{R} and \code{S}
+            \item Schema of the resulting relation: \code{(R.A, R.B, R.C, S.C, S.D, S.E)}
+            \item Equivalent to: \\
+            \code{SELECT *} \\
+            \code{FROM R, S;}
+        \end{itemize}
+        \item \code{R NATURAL JOIN S}:
+        \begin{itemize}
+            \item Schema of the resulting relation: \code{(A, B, C, D, E)}
+            \item Equivalent to: \\
+            \code{SELECT R.A, R.B, R.C, S.D, S.E} \\
+            \code{FROM R, S} \\
+            \code{WHERE R.C = S.C}
+        \end{itemize}
+    \end{itemize}
+    \subparagraph*{Set and Bag Operations:} \code{R(A,B,C), S(A,B,C)}
+    \begin{itemize}
+        \item \code{UNION}: Set union
+        \begin{itemize}
+            \item Input to union must be \emph{union-compatible}: \code{R} and \code{S} must have
+            attributes of the same type, in the same order
+            \item Output of the union has the same schema as \code{R} or \code{S}
+            \item Meaning: Output consists of the \emph{set} of all tuples from \code{R} and from \code{S}
+            \item Could (should?) have been called \code{UNION DISTINCT} \\
+            \code{(SELECT *} \\
+            \code{(FROM R)} \\
+            \code{UNION} \\
+            \code{(SELECT *} \\
+            \code{FROM S)} \\
+        \end{itemize}
+        \item \code{UNION ALL}: Bag union
+        \begin{itemize}
+            \item Input must be \emph{union-compatible}
+            \item Output has the same schema as \code{R} or \code{S}
+            \item Output consists of the collection of all tuples from \code{R} and from \code{S} \emph{including duplicates}.
+            \item Attributes/column names may be different - \code{R}'s are used
+        \end{itemize}
+        \item \code{INTERSECT}, \code{INTERSECT ALL}: set intersection, bag intersection
+        \begin{itemize}
+            \item Input must be union-compatible.
+            \item $Query_1$ \code{INTERSECT} $Query_2$ 
+            \item $Query_1$ \code{INTERSECT ALL} $Query_2$
+            \item Find all tuples that are in the results of both $Query_1$ and $Query_2$.
+            \item \code{INTERSECT} is distinct. \code{INTERSECT ALL} reports duplicates.
+        \end{itemize}
+        \item \code{EXCEPT}, \code{EXCEPT ALL}: set difference, bag difference
+        \begin{itemize}
+            \item Must be union-compatible
+            \item $Query_1$ \code{EXCEPT} $Query_2$
+            \item $Query_1$ \code{EXCEPT ALL} $Query_2$
+            \item Find all tuples that are in the result of $Query_1$ and not in the result of $Query_2$
+            \item \code{EXCEPT} is distinct, \code{EXCEPT ALL} is not
+        \end{itemize}
+        \item Order of operations: \code{INTERSECT} has higher precedence than \code{UNION} and \code{EXCEPT}.
+    \end{itemize}
+    \subparagraph*{Subqueries:}
+    \begin{itemize}
+        \item A query embedded in another query
+        \item Can be used as a boolean or can return a constant or can return a relation
+        \item \code{IN}, \code{NOT IN}: used to select from subquery that returns relation
+        \item \code{WHERE} $A$ \code{< ANY}: checks that attribute $A$ is less than at least one of
+        the answers returned by the subquery.
+        \item \code{EXISTS}: Checks that subquery returns non-empty result. Also: \code{NOT EXISTS}
+    \end{itemize}
+    \end{multicols}
+
+\end{document}
+
