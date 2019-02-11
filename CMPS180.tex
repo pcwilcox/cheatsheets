@@ -15,6 +15,8 @@
 \usepackage{enumitem}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{wrapfig}
+\usepackage{booktabs}
 \setlist{nolistsep}
 \setlist[itemize]{leftmargin=0.5pc,itemsep=0.25em}
 \usetikzlibrary{arrows.meta,shapes.arrows,chains,decorations.pathreplacing}
@@ -83,9 +85,9 @@
     \setlength{\postmulticols}{1pt}
     \setlength{\multicolsep}{1pt}
     \setlength{\columnsep}{2pt}
+    Pete Wilcox\\
+    CruzID: pcwilcox
 
-    \subparagraph*{ACID:} atomicity, consistency, isolation, durability
-    \subparagraph*{Network Models:} Network, Hierarchical, Relational
     \subparagraph*{Tuples and Relations:}
     \begin{itemize}
         \item \emph{Tuple:} a $k$\emph{-tuple} is an ordered sequence of $k$ values
@@ -106,15 +108,7 @@
         \item A \emph{relation database schema} or \emph{database schema} is a set of relation
         schemas with disjoint relation names.
     \end{itemize}
-    \subparagraph*{Declarative vs Procedural:} A \emph{declarative} language places constraints on
-    the output but not on \emph{how} that output is obtained. A \emph{procedural} language specifies
-    a sequence of operations to obtain the desired output. SQL is not fully declarative.
-    \subparagraph*{SQL DDL and SQL DML:} 
-        \begin{itemize}
-            \item \emph{Data Definition Language:} \code{CREATE TABLE}, \code{DROP TABLE}, \code{CREATE SCHEMA}, \code{DROP SCHEMA}
-            \item \emph{Data Manipulation Language:} \code{SELECT}, \code{INSERT}, \code{UPDATE}, \code{DELETE}
-        \end{itemize}
-    \subparagraph*{Primitives:}
+    \subparagraph*{SQL Primitives:}
     \begin{itemize}
         \item \code{CHAR(n)}: fixed-length string of up to $n$ characters (blank-padded with
         trailing spaces)
@@ -196,8 +190,8 @@
             \item $s$ is a string, $p$ is a pattern
             \item `\code{\%}' stands for \code{0} or more arbitrary characters
             \item `\code{_}' stands for exactly one arbitrary character
-            \item Matching quotes: \code{WHERE x LIKE ''''} matches one quote symbol
-            \item Matching quotes: \code{WHERE x LIKE ''''''} matches two quote symbols
+            \item Matching quotes: \code{WHERE x LIKE ''''} matches one 
+            \item Matching quotes: \code{WHERE x LIKE ''''''} matches two 
             \item Matching \code{\%} or \code{_}: \code{WHERE x LIKE `!\%\%!' ESCAPE '!'} where
             \code{!} can be any character
         \end{itemize}
@@ -211,22 +205,6 @@
             \item \code{DATE}, \code{TIME}, \code{TIMESTAMP} can be compared using ordinary
             comparison operators e.g. \code{WHERE ReleaseDate <= DATE '1990-06-19'}
 \end{itemize}
-    \begin{table*}[]
-        \begin{tabular}{|l|l|l|l|l|}
-            \hline
-        p & q & p OR q & p AND q & p = q \\ \hline
-        T & T & T & T & T \\ \hline
-        T & F & T & F & F \\ \hline
-        T & U & T & U & U \\ \hline
-        F & T & T & F & F \\ \hline
-        F & F & F & F & T \\ \hline
-        F & U & U & F & U \\ \hline
-        U & T & T & U & U \\ \hline
-        U & F & U & F & U \\ \hline
-        U & U & U & U & U \\\hline
-        \end{tabular}
-        \end{table*}
-
         \item If \code{Salary} is \code{NULL} then the following will be \code{UNKNOWN}:
         \begin{itemize}
             \item \code{Salary = 10}
@@ -252,7 +230,7 @@
         \ldots, t_n from R_n$ if $t_1, \ldots, t_n$ satisfy \emph{condition} then add the resulting
         tuple that consists of $c_1, c_2, \ldots, c_m$ components of $t$ into the result
     \end{itemize}
-    \subparagraph*{JOINS}: With relations \code{R(A,B,C)} and \code{S(C,D,E)}
+    \subparagraph*{Joins:} With relations \code{R(A,B,C)} and \code{S(C,D,E)}
     \begin{itemize}
         \item \code{R JOIN S ON R.B=S.D AND R.A=S.E}:
         \begin{itemize}
@@ -289,11 +267,9 @@
             \item Output of the union has the same schema as \code{R} or \code{S}
             \item Meaning: Output consists of the \emph{set} of all tuples from \code{R} and from \code{S}
             \item Could (should?) have been called \code{UNION DISTINCT} \\
-            \code{(SELECT *} \\
-            \code{(FROM R)} \\
+            \code{(SELECT * FROM R)} \\
             \code{UNION} \\
-            \code{(SELECT *} \\
-            \code{FROM S)} \\
+            \code{(SELECT * FROM S)} \\
         \end{itemize}
         \item \code{UNION ALL}: Bag union
         \begin{itemize}
@@ -302,7 +278,7 @@
             \item Output consists of the collection of all tuples from \code{R} and from \code{S} \emph{including duplicates}.
             \item Attributes/column names may be different - \code{R}'s are used
         \end{itemize}
-        \item \code{INTERSECT}, \code{INTERSECT ALL}: set intersection, bag intersection
+        \item \code{INTERSECT}, \code{INTERSECT ALL}: set/bag intersection
         \begin{itemize}
             \item Input must be union-compatible.
             \item $Query_1$ \code{INTERSECT} $Query_2$ 
@@ -329,6 +305,84 @@
         the answers returned by the subquery.
         \item \code{EXISTS}: Checks that subquery returns non-empty result. Also: \code{NOT EXISTS}
     \end{itemize}
+    \subparagraph*{Aggregates and Grouping:}
+    \begin{itemize}
+    \item Basic SQL has 5 aggregation operators: \code{SUM}, \code{AVG}, \code{MIN}, \code{MAX}, \code{COUNT}
+    \item Aggregation operators work on scalar values, except for \code{COUNT(*)} which counts the
+    number of tuples
+    \item \code{GROUP BY} clause follows the \code{WHERE} clause
+    \begin{itemize}
+        \item Let Result begin as an empty multiset of tuples
+        \item For every tuple $t_1$ from $R_1$, $t_2$ from $R_2, \ldots, t_n$ from $R_n$: if $t_1,
+        \ldots, t_n$ satisfy \emph{condition} then add the resulting tuple that consist of $c_1,
+        c_2, \ldots, c_m$ of the $t_i$ into Result
+        \item Group the tuples according to the grouping attributes - if \code{GROUP BY} is omitted,
+        the entire table is one group
+    \end{itemize}
+    \item \code{NULL}s are ignored in any aggregation
+    \begin{itemize}
+        \item They do not contribute to the \code{SUM}, \code{AVG}, \code{COUNT}, \code{MIN},
+        \code{MAX} of an attribute
+        \item \code{COUNT(*)} = the number of tuples in a relation even if some columns are \code{NULL}
+        \item \code{COUNT(A)} is the number of tuples with \emph{non-}\code{NULL} values for $A$
+        \item \code{SUM}, \code{AVG}, \code{MIN}, \code{MAX} on an empty result (no tuples) is \code{NULL}
+        \item \code{COUNT} of an empty result is \code{0}
+        \item \code{GROUP BY} does \emph{not} ignore \code{NULL}
+    \end{itemize}
+    \item \code{HAVING} clause:
+    \begin{itemize}
+        \item Choose groups based on some aggregate property of the group itself
+        \item Same attributes and aggregates that can appear in the \code{SELECT} can appear in the
+        \code{HAVING} clause condition
+        \item Can use \code{EVERY} to constrain \code{HAVING} to all tuples in the group e.g. \code{HAVING COUNT(*) > 1 AND EVERY (S.age <= 40)}
+    \end{itemize}
+\end{itemize}
+\subparagraph*{Database Modification Statements:}
+\begin{itemize}
+    \item \code{INSERT INTO R(A1, ..., An) VALUES (v1, ..., vn)}: a tuple $(v_1, \ldots, v_n)$ is
+    inserted into $R$ such that $A_i = v_i \forall i$ and default values (perhaps \code{NULL}) are
+    entered for any missing attributes.
+    \item \code{DELETE FROM R WHERE <condition>}: Deletes \emph{all} tuples such that the condition
+    evaluates as true - if there is no \code{WHERE} clause it will delete all tuples in $R$
+    \item \code{UPDATE R SET <new-value-assignments> WHERE <condition>}: Change the given attribute
+    to the new value in every tuple in $R$ where the condition is true
+    \item Semantics: database modifications are completely evaluated on the old state of the
+    database producing a new state of the database
+\end{itemize}
+\subparagraph*{Transaction:}
+\begin{itemize}
+    \item Transactions provide ACID properties: atomicity, consistency, isolation, durability
+    \item \code{START TRANSACTION} or \code{BEGIN TRANSACTION}: marks the beginning of a
+    transaction, followed by one or more SQL statements
+    \item \code{COMMIT}: Ends the transaction. All changes are durably written to the backing store
+    and become visible to other transactions.
+    \item \code{ROLLBACK}: Causes the transaction to abort or terminate. None of the changes are committed.
+    \item \code{SET TRANSACTION READ ONLY}: 
+    \begin{itemize}
+        \item set \emph{before} the transaction begins, tells the SQL system that the next
+        transaction is read-only
+        \item SQL uses this to parallelize many read-only transactions
+    \end{itemize}
+    \item \code{SET TRANSACTION READ WRITE}:
+    \begin{itemize}
+        \item Tells SQL that the next transaction may write data in addition to read
+        \item Default option if not specified, often not specified
+    \end{itemize}
+    \item Dirty Reads: \emph{Dirty data} refers to data that is written by a transaction but has not
+    yet been committed by the transaction
+    \item Isolation levels:
+    \begin{itemize}
+        \item \code{SET TRANSACTION READ WRITE ISOLATION LEVEL READ UNCOMMITTED}
+        \item Default isolation level depends on system, most run with \code{READ COMMITTED} or \code{SNAPSHOT ISOLATION}
+        \item \code{READ COMMITTED}: only clean(committed) reads but you might read data committed
+        by other transactions
+        \item \code{REPEATABLE READ}: repeated queries of a tuple during a transaction will retrieve
+        the same value. Also, a second scan may return `phantoms' which are tuples newly inserted
+        while the transaction is running.
+        \item \code{SERIALIZABLE}: Can be replayed one by one.
+    \end{itemize}
+    
+\end{itemize}
     \end{multicols}
 
 \end{document}
