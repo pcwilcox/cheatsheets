@@ -20,7 +20,7 @@
 \usepackage{wrapfig}
 \usepackage{booktabs}
 \setlist{nolistsep}
-\setlist[itemize]{leftmargin=0.5pc,itemsep=0em}
+\setlist[itemize]{leftmargin=0.25pc,itemsep=0em}
 \usetikzlibrary{arrows.meta,shapes.arrows,chains,decorations.pathreplacing}
 \makeatletter
 \renewcommand{\section}{\@startsection{section}{1}{0mm}%
@@ -110,7 +110,7 @@
         \item An \emph{attribute} is the name of a column in a relation
         \item A \emph{relation schema} $R$ is a set $\{A_1, \ldots, A_k\}$ of attributes written
         $R(A_1, \ldots, A_k)$, where $A_i$ is the name of the $i^{th}$ column. 
-        \item A \emph{relation database schema} or \emph{database schema} is a set of relation
+        \item A \emph{relation database schema} or \emph{database schema} is a set of 
         schemas with disjoint relation names.
     \end{itemize}
     \item \code{SQL Primitives:}
@@ -130,40 +130,36 @@
         \item \code{DATE}, \code{TIME}, \code{TIMESTAMP}, \code{INTERVAL}: constants are character
         strings of specific form e.g. \code{DATE `2017-09-13'}
         \begin{itemize}
-            \item Subtracting one \code{TIME} from another results in an \code{INTERVAL}
-            \item Taking a \code{TIME} and adding an \code{INTERVAL} results in a \code{TIME}
+            \item \code{TIME A - TIME B} results in an \code{INTERVAL}
+            \item \code{TIME A + INTERVAL B} results in a \code{TIME}
             \item Similarly for \code{TIMESTAMP} and \code{DATE}
         \end{itemize}
     \end{itemize}
     \item \code{Tables:} 
     \begin{itemize}
     \item A \emph{key} of a relation schema $R$ is a subset $K$ of the attributes of $R$ such that:
-        \begin{enumerate}
-            \item For every instance $r$ of $R$, every two distinct tuples of $r$ must differ in
-            their values of $K \iff$ there can't be two different tuples that have the same value
-            for key $K$
+        \begin{itemize}
+            \item $\forall Y \in R: K \rightarrow Y$
             \item No proper subset of $K$ has the above property
-        \end{enumerate}
-        \item A \emph{superkey} is a set of attributes of $R$ that includes a key of $R$
+        \end{itemize}
+        \item A \emph{superkey} is a set of attributes that includes a key
         \item \code{CREATE TABLE R(A, B, C, PRIMARY KEY(A))}:
-        \begin{enumerate}
+        \begin{itemize}
         \item None of the tuples in \code{R} can have null \code{A} values
         \item Rows are uniquely identified by their \code{A} values
-        \item There can be at most one primary key for a table
-        \end{enumerate}
+        \item There can be $\leq 1$ primary key for a table
+        \end{itemize}
         \item \code{CREATE TABLE S(D, E, F, UNIQUE(D))}:
-        \begin{enumerate}
+        \begin{itemize}
             \item Rows in \code{S} can contain null \code{D} values
             \item Rows with \emph{non-null} \code{D} values are uniquely identified by their \code{D} values
             \item There can be multiple unique constraints in addition to a primary key
-        \end{enumerate}
+        \end{itemize}
         \item \code{CREATE TABLE T(G NOT NULL, H DEFAULT `foo')}:
-        \begin{enumerate}
+        \begin{itemize}
             \item If no default value is specified and no value is entered then the value will be \code{NULL}
-            \item \code{NOT NULL} prevents a column from having null values
-            \item If a default value is specified and no value is entered then the value will be the
-            default
-        \end{enumerate}
+            \item \code{NOT NULL} prevents null values
+        \end{itemize}
     \end{itemize}
     \item \code{Queries:}
     \begin{itemize}
@@ -173,10 +169,9 @@
 \code{[WHERE condition]}
     \item \code{SELECT}:
     \begin{itemize}
-        \item Projection: \code{SELECT title, year} - only a subset of attributes from the
-        relation(s) in the \code{FROM} clause is selected
+        \item Projection: \code{SELECT title, year}
         \item \code{DISTINCT}: Removes duplicate tuples from result
-        \item Aliasing: \code{SELECT title AS name} - rename the attributes in the result
+        \item Aliasing: \code{SELECT title AS name}
         \item Expressions are allowed in the \code{SELECT} clause. Ex: \code{SELECT title AS name, length * 60 AS durationInSeconds}
         \item Constants can also be included: \code{SELECT title AS name, length * 60 AS durationInSeconds, `seconds' AS inSeconds}
     \end{itemize}
@@ -194,9 +189,9 @@
             \item $s$ is a string, $p$ is a pattern
             \item `\code{\%}' stands for \code{0} or more arbitrary characters
             \item `\code{_}' stands for exactly one arbitrary character
-            \item Matching quotes: \code{WHERE x LIKE ''''} matches one 
-            \item Matching quotes: \code{WHERE x LIKE ''''''} matches two 
-            \item Matching \code{\%} or \code{_}: \code{WHERE x LIKE `!\%\%!' ESCAPE '!'} where
+            \item quotes: \code{WHERE x LIKE ''''} matches one 
+            \item quotes: \code{WHERE x LIKE ''''''} matches two 
+            \item  \code{\%} or \code{_}: \code{WHERE x LIKE `!\%\%!' ESCAPE '!'} where
             \code{!} can be any character
         \end{itemize}
         \item \code{DATE} and \code{TIME} and \code{TIMESTAMP}
@@ -713,6 +708,16 @@
     \code{LEFT OUTER JOIN} of that with the fact table, will give you entries for every combination of dimensions
     (not just those that have entries in the fact table)
     \item \code{COALESCE(x, 0)} has value $x$ if $x$ isn't \code{NULL}, otherwise \code{0}.
+    \end{itemize}
+    \item \code{ACID}
+    \begin{itemize}
+        \item \code{ATOMICITY}: An atomic transaction happens as one unit, either the whole thing
+        commits or none of it does.
+        \item \code{CONSISTENCY}: A consistent transaction brings the DB from one valid state to
+        another valid state with respect to any constraints.
+        \item \code{ISOLATION}: Concurrent isolated transactions would have the same result if run sequentially.
+        \item \code{DURABILITY}: A committed transaction will remain committed even in the event of
+        a hardware failure.
     \end{itemize}
 \end{itemize}
     \end{multicols}
