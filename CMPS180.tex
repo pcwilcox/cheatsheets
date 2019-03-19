@@ -20,7 +20,7 @@
 \usepackage{wrapfig}
 \usepackage{booktabs}
 \setlist{nolistsep}
-\setlist[itemize]{leftmargin=0.5pc,itemsep=0.25em}
+\setlist[itemize]{leftmargin=0.5pc,itemsep=0em}
 \usetikzlibrary{arrows.meta,shapes.arrows,chains,decorations.pathreplacing}
 \makeatletter
 \renewcommand{\section}{\@startsection{section}{1}{0mm}%
@@ -205,7 +205,7 @@
             \item Constants are character strings of the form: \\
 \code{DATE '2015-01-13'} \\
 \code{TIME '16:45:33'} \\
-\code{TIMESTAMP '2015-01-13 16:45:33'} \\
+\code{TIMESTAMP '2015-01-13 16:45:33'} 
             \item \code{DATE}, \code{TIME}, \code{TIMESTAMP} can be compared using ordinary
             comparison operators e.g. \code{WHERE ReleaseDate <= DATE '1990-06-19'}
 \end{itemize}
@@ -216,13 +216,6 @@
             \item \code{90 > Salary OR 90 <= Salary}
             \item \code{Salary = NULL}
             \item \code{Salary <> NULL}
-            \end{itemize}
-            \item Use of \code{IS NULL} and \code{IS NOT NULL}:
-            \begin{itemize}
-                \item \code{Salary IS NULL} will be true if \code{SALARY} \emph{is} \code{NULL},
-                false otherwise
-                \item \code{Salary IS NOT NULL} will be true if \code{SALARY} \emph{is not}
-                \code{NULL}, false otherwise
             \end{itemize}
         \item Ordering the result:
         \begin{itemize}
@@ -270,10 +263,10 @@
             attributes of the same type, in the same order
             \item Output of the union has the same schema as \code{R} or \code{S}
             \item Meaning: Output consists of the \emph{set} of all tuples from \code{R} and from \code{S}
-            \item Could (should?) have been called \code{UNION DISTINCT} \\
+            \item Could have been called \code{UNION DISTINCT} \\
             \code{(SELECT * FROM R)} \\
             \code{UNION} \\
-            \code{(SELECT * FROM S)} \\
+            \code{(SELECT * FROM S)} 
         \end{itemize}
         \item \code{UNION ALL}: Bag union
         \begin{itemize}
@@ -398,14 +391,12 @@
         \code{FOREIGN KEY (beer)}\\
         \code{  REFERENCES Beers(name)}
         \end{itemize}
-        \item \code{Value-based} constraint: \code{CHECK(<condition>)}. Checked only when a value
-        for that attribute is inserted or updated.
+        \item \code{Value-based} constraint: \code{CHECK(<condition>)}. Checked on insert or update.
         \item Enforcing constraints:
         \begin{itemize}
             \item \emph{Default:} Reject the modification
-            \item \emph{Cascade:} Make changes necessary to maintain consistency - on update, change
-            values; on delete, delete tuples
-            \item \emph{Set NULL:} Change dependent tuple values to \code{NULL}
+            \item \emph{Cascade:} Make changes to maintain consistency
+            \item \emph{Set NULL:} Change dependent values to \code{NULL}
             \item Selected independently with \code{ON [UPDATE, DELETE] [SET NULL, CASCADE]}
         \end{itemize}
         \item \code{Assertions:} database-schema elements, like relations or views. Defined by:\\
@@ -434,8 +425,8 @@
         \begin{itemize}
             \item Triggers are `row-level' or `statement-level'
             \item \code{FOR EACH ROW} means row-level, absence means statement-level
-            \item \emph{Row level triggers} execute once for each modified tuple
-            \item \emph{Statement-level triggers} execute once for a SQL statement
+            \item \emph{Row level triggers} execute once for each tuple
+            \item \emph{Statement-level} execute once for a SQL statement
         \end{itemize}
         \item \code{REFERENCING}
         \begin{itemize}
@@ -461,36 +452,36 @@
         \begin{itemize}
             \item \emph{Input:} Relation with schema $R(A_1, \dots, A_n)$
             \item \emph{Output:} Relation with attributes $A_1, \dots, A_n$
-            \item \emph{Meaning:} Extracts only rows which satisfy condition
+            \item \emph{Meaning:} Extracts rows which satisfy condition
         \end{itemize}
         \item Projection: $\pi_{<attribute\ list>}(R)$
         \begin{itemize}
             \item \emph{Input:} Relation with schema $R(A_1, \dots, A_n)$
-            \item \emph{Output:} Relation with attributes in the attribute list
+            \item \emph{Output:} Relation with listed attributes
             \item \emph{Meaning:} Extracts all rows from $R$ and outputs only those attributes listed
         \end{itemize}
             \item Union: $R \cup S$
             \begin{itemize}
-                \item \emph{Input:} Two relations $R$ and $S$ which are union-compatible
-                \item \emph{Output:} Relation that has the same type of $R$ (or $S$)
+                \item \emph{Input:} Union-compatible relations $R,S$
+                \item \emph{Output:} Relation with the same type of $R$ (or $S$)
                 \item \emph{Meaning:} The output is the set of all tuples in either $R$ or $S$ or
                 both
                 \item Both \emph{commutative} and \emph{associative}
             \end{itemize}
             \item Set difference: $R - S$
             \begin{itemize}
-                \item \emph{Input:} Two relations $R$ and $S$ which are union-compatible
-                \item \emph{Output:} Relation that has the same type of $R$ (or $S$)
-                \item \emph{Meaning:} The output is the set of all tuples in $R$ but not in $S$
+                \item \emph{Input:} Union-compatible relations $R,S$
+                \item \emph{Output:} Relation with the same type of $R$ (or $S$)
+                \item \emph{Meaning:} $\{x\ | x \in R,\ x \notin S\}$
             \end{itemize}
             \item Cross-product: $R \times S$
             \begin{itemize}
-                \item \emph{Input:} Two relations $R(A_1, \dots, A_n)$ and $S(B_1, \dots, B_m)$
-                \item \emph{Output:} Relation $T(A_1, \dots, A_n, B_1, \dots, B_m)$
-                \item \emph{Meaning:} $R \times S = \{(a_1, \dots, a_n, b_1, \dots, b_m) | (a_1,
+                \item \emph{Input:} $R(A_1, \dots, A_n), S(B_1, \dots, B_m)$
+                \item \emph{Output:} $T(A_1, \dots, A_n, B_1, \dots, B_m)$
+                \item \emph{Meaning:} $R \times S =$ $ \{(a_1, \dots, a_n, b_1, \dots, b_m) $ $| (a_1,
                 \dots, a_m) \in R,\ (b_1, \dots, b_m) \in S) \}$
             \end{itemize}
-            \item Intersection: $R \cap S$ is a \emph{derived operator} in relational algebra.\\
+            \item Intersection: $R \cap S$ is a \emph{derived operator} \\
             $R \cap S = R - (R - S) = S - (S - R)$
         \item Renaming: $\rho_{S(A_1, \dots, A_n)}(R)$
         \begin{itemize}
@@ -604,6 +595,124 @@
 \code{Connection myCon = DriverManager.getConnection(...);}
         \item \code{createStatement()} takes a string of a SQL statement
         \item \code{prepareStatement()} is configurable
+        \item Use \code{executeQuery} or \code{executeUpdate} as appropriate
+        \item Both return \code{ResultSet} which uses something like a cursor, \code{rs.next()} gets
+        the next one
+        \item When a resultSet returns a tuple we get the components with \code{getX(i)} where
+        \code{X} is a type and \code{i} is the component number
+    \end{itemize}
+    \item \code{FUNCTIONAL DEPENDENCIES}
+    \begin{itemize}
+        \item Let $R$ be a relation schema. An FD is an integrity constraint $X \rightarrow Y$ where
+        $X$ and $Y$ are non-empty subsets of the attributes of $R$
+        \item A relation instance $r$ of $R$ \emph{satisfies} the FD $X \rightarrow Y$ iff for every
+        pair of tuples $t, t^\prime \in r: t[X] = t^\prime[X] \implies t[Y] = t^\prime[Y]$
+        \item A set $\mathcal{F}$ of FDs implies an FD $F$ if for every instance $r$ that satisfies
+        $\mathcal{F}$, it must be true that $r$ satisfies $F$: $\mathcal{F} \models F$
+        \item \code{ARMSTRONG'S AXIOMS}
+        \begin{itemize}
+            \item \emph{Reflexivity:} $Y \subseteq X \implies X \rightarrow Y$ (trivial)
+            \item \emph{Augmentation:} $X \rightarrow Y \implies \forall Z:\ XZ \rightarrow YZ$
+            \item \emph{Transitivity:} $X \rightarrow Y,\ Y \rightarrow Z \implies X \rightarrow Z$
+        \end{itemize}
+        \item $\mathcal{F} \vdash F$ means $F$ can be derived from $\mathcal{F}$ using Armstrong's
+        Axoms ($\mathcal{F}$ generates $F$)
+        \item Closure: $\mathcal{F}^+$ means the set of all FDs implied by $\mathcal{F}$
+        \item $\mathcal{F} \vdash X \rightarrow A \iff A \in X^+$
+    \end{itemize}
+    \item \code{NORMAL FORMS}
+    \begin{itemize}
+        \item \emph{First Normal Form (1NF):} Very basic requirement of the data model. Type of
+        every attribute must be atomic.
+        \item \emph{Boyce-Codd Normal Form (BCNF):} Let $R$ be a relation schema, $\mathcal{F}$ a
+        set of FDs that holds for $R$, $A$ an attribute in $R$, and $X$ a subset of attributes in
+        $R$. $R$ is in $BCNF$ iff for every FD $X \rightarrow A$: $A \in X$, or $X$ is a superkey.
+        \item \emph{Third Normal Form (3NF):} Like $BCNF$ except $A$ can be a part of a key of $R$.
+    \end{itemize}
+    \item \code{DECOMPOSITION}
+    \begin{itemize}
+        \item Given a relation $R$, a decomposition is a set of attributes $X_1, \dots, X_k$ (not
+        necessarily disjoint) such that each $X_i \subseteq attr(R)$ and $X_1 \cup \dots \cup X_k =
+        attr(R)$
+        \item $\pi_{X_i}(R) = R_i$ with instances of $R$ written $r$ and instances of $R_i$ written $r_i$
+        \item Used to eliminate anomalies
+        \item \emph{Lossless Join Decomposition} if it allows recreation of $R$ by using $r_1
+        \bowtie \dots \bowtie r_k$
+        \item Lossless decomposition of $R$ into $R_1(X_1), R_2(X_2)$ requires $\mathcal{F}^+$ has
+        either $X_1 \cap X_2 \rightarrow X_1$ or $X_1 \cap X_2 \rightarrow X_2$.
+        \item The FDs on $R_i$ are the FDs in $\mathcal{F}^+$ that mention only $attr(R)$
+        \item The decomposition is \emph{dependency-preserving} if, when the $R_i$'s are rejoined,
+        the FDs that were on the $R_i$s imply all of the original FDs in $\mathcal{F}$
+        \item Given a schema and set of FDs, it's always possible to decompose into a set of 
+        \begin{itemize}
+            \item $BCNF$ relations which eliminate anomalies and is a lossless join decomposition
+            but might not be dependency-preserving
+            \item $3NF$ relations which is a lossless join decomposition and is
+            dependency-preserving but might not always eliminate anomalies
+        \end{itemize}
+    \end{itemize}
+    \item \code{SEMI-STRUCTURED DATA}
+    \begin{itemize}
+        \item \code{XML}
+        \begin{itemize}
+            \item \emph{Tags} come in pairs \code{<data>...</date>}
+            \item Must be properly nested
+            \item Start the doc with \code{<?xml ... ?>}
+            \item Normal declaration is \code{<?xml version = "1.0" standalone = "yes" ?>}
+            \item An attribute is anything surrounded by a tag
+            \item A list is multiple tags used repeatedly
+            \item A tag attribute goes inside the tag e.g. \code{<word lang="en">}
+            \item Can use \code{id="foo"} attribute to specify an element and then reference it with
+            \code{idrefs="foo"}
+            \item DTD specifies syntax for a document. DTD structure:\\
+\code{<!DOCTYPE <root tag> [}\\
+\code{  <!ELEMENT <name>(<components>)>}\\
+\code{]>}
+            \item Uses regex \code{?*()|+,}
+            \item \code{(#PCDATA)} means \emph{parsed character data} e.g. text
+            \item \code{#IMPLIED} means optional, otherwise \code{#REQUIRED}
+            \item Use \code{ID} and \code{IDREF(S)} in DTD to enforce constraints
+            \item Use \code{SYSTEM "foo"} in doctype tag to specify source for dtd
+        \end{itemize}
+        \item \code{JSON}
+        \begin{itemize}
+            \item Unordered sets of name/value pairs
+            \item Normal: \lstinline|{a:b, c:d}|
+            \item Arrays are ordered: \code{[a,b,c,]}
+            \item Strings wrapped in double quotes support backslash escapes
+            \item Numbers: integer, real, scientific
+        \end{itemize}
+    \end{itemize}
+    \item \code{STAR SCHEMA}
+    \begin{itemize}
+        \item Common organization for OLAP data in a warehouse
+        \item \code{DIMENSION TABLE}
+        \begin{itemize}
+            \item Smaller, largely static info describing the data that's in the Fact
+            \item 
+        \end{itemize}
+        \item \code{FACT TABLE}
+        \begin{itemize}
+            \item Large accumulation of facts such as sales
+            \item The key consists of values from dimension tables (foreign keys)
+            \item Facts usually `insert mostly' with rare updates
+            \item \emph{Dimension Attributes:} The key of a dimension table, references Dimenson Tables
+            \item \emph{Dependent Attributes:} A fact value determined by the dimension attributes
+        \end{itemize}
+        \item \emph{Roll-up} means aggregate along one or more dimensions
+        \item \emph{Drill-Down} means `dis-aggregate' or break an aggregate into its constituent parts
+    \item \code{R [LEFT, RIGHT, FULL] OUTER JOIN S [ON <condition>]}: 
+    \begin{itemize}
+        \item Used to join $R$ and $S$ where there exists some tuple in $R$ which has no match in
+        $S$
+        \item Fills in missing attributes wiht \code{NULL}
+        \item \code{LEFT} means pad dangling tuples of $R$ only (and vice versa)
+        \item \code{FULL} means pad both, default
+    \end{itemize}
+    \item Taking the cartesian product of the dimension table keys, then taking 
+    \code{LEFT OUTER JOIN} of that with the fact table, will give you entries for every combination of dimensions
+    (not just those that have entries in the fact table)
+    \item \code{COALESCE(x, 0)} has value $x$ if $x$ isn't \code{NULL}, otherwise \code{0}.
     \end{itemize}
 \end{itemize}
     \end{multicols}
