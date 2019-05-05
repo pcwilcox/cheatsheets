@@ -277,6 +277,34 @@
                                       \item Merge can propagate to root, decreasing height of the tree
                                   \end{itemize}
                         \end{itemize}
+                        \item \code{Hash-Based Indexes:}
+                        \begin{itemize}
+                            \item Good for equality selections
+                            \item Index is a collection of \emph{buckets}. Each bucket = \emph{primary page} plus zero or more \emph{overflow pages} (called \emph{static} hashing). Buckets contain data entries.
+                            \item \emph{Hashing function} $h$: $h(r) = $ bucket in which (data entry for) record $r$ belongs. $h$ looks at the \emph{search key} fields of $r$.
+                        \end{itemize}
+                        \item Alternatives for Data Entry $k^*$ in index:
+                        \begin{itemize}
+                            \item In a data entry $k^*$ we can store: an actual data record, or \code{<k, RID>}, or \code{<k, list of RIDs>}
+                            \item Choice of alternative for entries is orthogonal to the indexing technique
+                        \end{itemize}
+                        \item Alternative 1: data records live in index
+                        \begin{itemize}
+                            \item Index structure is actually a file organization for the data records
+                            \item At most one index on a given collection of data can use this Alternative
+                            \item If data records are very large, \# of leaf pages containing data entries is high.
+                        \end{itemize}
+                        \item Alternatives 2 and 3: Key/RID or Key/RIDlist:
+                        \begin{itemize}
+                            \item Data entries are typically much smaller than data records
+                            \item Alternative 3 is more compact but leads to variable-sized data entries, even if the search keys are of fixed length
+                        \end{itemize}
+                        \item Index classification:
+                        \begin{itemize}
+                            \item \emph{Primary vs Secondary:} if search key contains the primary key, index is called the primary index
+                            \item \emph{Clustered vs Unclustered:} If order of data records is the same as (or close to) the order of stored data records then index is called a clustered index.
+                        \end{itemize}
+                        \item
               \end{itemize}
     \end{itemize}
     \begin{center}
