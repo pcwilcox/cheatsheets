@@ -277,66 +277,79 @@
                                       \item Merge can propagate to root, decreasing height of the tree
                                   \end{itemize}
                         \end{itemize}
-                        \item \code{Hash-Based Indexes:}
+                  \item \code{Hash-Based Indexes:}
                         \begin{itemize}
                             \item Good for equality selections
                             \item Index is a collection of \emph{buckets}. Each bucket = \emph{primary page} plus zero or more \emph{overflow pages} (called \emph{static} hashing). Buckets contain data entries.
                             \item \emph{Hashing function} $h$: $h(r) = $ bucket in which (data entry for) record $r$ belongs. $h$ looks at the \emph{search key} fields of $r$.
                         \end{itemize}
-                        \item Alternatives for Data Entry $k^*$ in index:
+                  \item Alternatives for Data Entry $k^*$ in index:
                         \begin{itemize}
                             \item In a data entry $k^*$ we can store: an actual data record, or \code{<k, RID>}, or \code{<k, list of RIDs>}
                             \item Choice of alternative for entries is orthogonal to the indexing technique
                         \end{itemize}
-                        \item Alternative 1: data records live in index
+                  \item Alternative 1: data records live in index
                         \begin{itemize}
                             \item Index structure is actually a file organization for the data records
                             \item At most one index on a given collection of data can use this Alternative
                             \item If data records are very large, \# of leaf pages containing data entries is high.
                         \end{itemize}
-                        \item Alternatives 2 and 3: Key/RID or Key/RIDlist:
+                  \item Alternatives 2 and 3: Key/RID or Key/RIDlist:
                         \begin{itemize}
                             \item Data entries are typically much smaller than data records
                             \item Alternative 3 is more compact but leads to variable-sized data entries, even if the search keys are of fixed length
                         \end{itemize}
-                        \item Index classification:
+                  \item Index classification:
                         \begin{itemize}
                             \item \emph{Primary vs Secondary:} if search key contains the primary key, index is called the primary index
                             \item \emph{Clustered vs Unclustered:} If order of data records is the same as (or close to) the order of stored data records then index is called a clustered index.
                         \end{itemize}
-                        \item
+                  \item A back of the envelope cost model:
+                        \begin{itemize}
+                            \item $B$: the number of data pages
+                            \item $R$: number of records per page
+                            \item $D$: average time to read or write a disk page
+                            \item $F$: average fanout for a non-leaf page
+                        \end{itemize}
+                  \item Indexes with composite search keys:
+                        \begin{itemize}
+                            \item Composite search keys: search on a combination of fields
+                            \item Equality query: every field value is equal to a constant value
+                            \item Range query: some field value doesn't have equality test
+                            \item Data entries in index sorted by search key to support range queries
+                        \end{itemize}
+                  \item \code{ISAM:} Index-Sequential Access Method
+                        \begin{itemize}
+                            \item Index file has first key on each page, can binary search index then scan the page.
+                            \item \emph{Static} structure, inserts and deletes only affect leaf or overflow pages.
+                            \item If index is very large, recursively create a second layer (and so on).
+                            \item \emph{File Creation:} Leaf pages first allocated sequentially, sorted by search key; then index pages allocated, and then overflow pages.
+                            \item \emph{Index entries:} \code{<key value, page id>}; they `direct' searches for \emph{data entries} which are in leaf pages
+                            \item \emph{Search:} Start at root; use key comparisons to go to leaf. I/O cost $\propto \log_F N$ where $F = $ \# entries/index pg, $N = $ \# leaf pgs
+                            \item \emph{Insert:} Find leaf where data entry belongs and put it there, using overflow page if necessary.
+                            \item \emph{Delete:} Finda nd remove from leaf; if empty overflow page, deallocate
+                        \end{itemize}
+                  \item \code{B-Tree Prefix Key Compression:} Increase fan-out by reducing the size of search keys on interior nodes. key values only direct traffic so we only need the minimum length for that
+                  \item \code{Bulk Loading of a B+ Tree}
+                        \begin{itemize}
+                            \item Creating a new B+ tree by inserting one at a time is very slow, bulk loading is better
+                            \item \emph{Initialization:} Sort all data entries, insert pointer to first (leaf) page in a new (root) page
+                            \item Index entries for leaf pages always entered into right-most index page just above leaf level. When this fills up it splits.
+                        \end{itemize}
+                  \item \code{Log-Structured Merge Tree:} Sequential trees of exponentially larger size. Inserts go to smallest smallest tree, deletes insert tombstone records, spill to next-deeper level on overflow
+                  \item \code{R-Tree:} Tree of rectangles, search for intersections between them
+
               \end{itemize}
     \end{itemize}
     \begin{center}
-        \begin{tabular}{ | c | c | c | c | c | } \hline
-            $p$ & $q$ & $p$ OR $q$ & $p$ AND $q$ & $p = q$ \\ \hline
-            T   & T   & T          & T           & T       \\ \hline
-            T   & F   & T          & F           & F       \\ \hline
-            T   & U   & T          & U           & U       \\ \hline
-            F   & T   & T          & F           & F       \\ \hline
-            F   & F   & F          & F           & T       \\ \hline
-            F   & U   & U          & F           & U       \\ \hline
-            U   & T   & T          & U           & U       \\ \hline
-            U   & F   & U          & F           & U       \\ \hline
-            U   & U   & U          & U           & U       \\ \hline
-        \end{tabular}
-    \end{center}
-    \begin{center}
-        \begin{tabular}{| c | c |} \hline
-            $p$ & NOT $p$ \\ \hline
-            T   & F       \\ \hline
-            F   & T       \\ \hline
-            U   & U       \\ \hline
-        \end{tabular}
-    \end{center}
-    \begin{center}
         \begin{adjustbox}{angle=270}
-            \begin{tabular}{| c | c | c | c |} \hline
-                Isolation Level  & dirty reads & non-repeatable reads & phantoms \\ \hline
-                READ UNCOMMITTED & Y           & Y                    & Y        \\ \hline
-                READ COMMITTED   & N           & Y                    & Y        \\ \hline
-                REPEATABLE READ  & N           & N                    & Y        \\ \hline
-                SERIALIZABLE     & N           & N                    & N        \\ \hline
+            \begin{tabular}{ | c | c | c | c | c | c | } \hline
+                ()            & Scan          & Equality              & Range                                    & Insert        & Delete        \\ \hline
+                Heap          & $BD$          & $0.5 BD$              & $BD$                                     & $2D$          & Search + $D$  \\ \hline
+                Sorted        & $BD$          & $D \log_2 B$          & $D(\log_2 B +$ \# matching pages$)$      & Search + $BD$ & Search + $BD$ \\ \hline
+                Clustered     & $1.5 BD$      & $D \log_F 1.5 B$      & $D(\log_F 1.5B + $ \# matching pages$)$  & Search + $D$  & Search + $D$  \\ \hline
+                Unclust. Tree & $BD(R+0.15)$  & $D(1 + \log_F 0.15B)$ & $D(\log_F 0.15B + $ \# matching pages$)$ & Search + $2D$ & Search + $2D$ \\ \hline
+                Unclust. Hash & $BD(R+0.125)$ & $2D$                  & $BD$                                     & Search + $2D$ & Search + $2D$ \\ \hline
             \end{tabular}
         \end{adjustbox}
     \end{center}
