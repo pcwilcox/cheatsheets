@@ -1,0 +1,317 @@
+% LaTeX template adapted from: https://www.overleaf.com/latex/templates/simple-math-homework-template/tbszsswsndrz
+\documentclass[landscape,8pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{extsizes}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+\usepackage[]{amssymb} %gives us the character \varnothing
+\usepackage{amsmath} %for equations
+\usepackage[]{listings} %for code blocks
+\usepackage{graphicx} %for diagrams
+\usepackage{fancyhdr} %for headers
+\usepackage[letterpaper, margin=0.25in, headheight=10pt, headsep=0pt]{geometry}
+\usepackage{tikz} % for drawings
+\usepackage{multicol}
+\usepackage{ifthen}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{adjustbox}
+
+\usepackage{wrapfig}
+\usepackage{booktabs}
+\setlist{nolistsep}
+\setlist[itemize]{leftmargin=0.25pc,itemsep=0em}
+\usetikzlibrary{arrows.meta,shapes.arrows,chains,decorations.pathreplacing}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+            {-1ex plus -.5ex minus -.2ex}%
+            {0.5ex plus .2ex}%x
+            {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+            {-1explus -.5ex minus -.2ex}%
+            {0.5ex plus .2ex}%
+            {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+            {-1ex plus -.5ex minus -.2ex}%
+            {1ex plus .2ex}%
+            {\normalfont\small\bfseries}}
+\makeatother
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+
+\lstset{frame=single,
+  language=c,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=fixed,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\newcommand{\code}{\lstinline}
+\graphicspath{}
+\pagestyle{empty}
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+{ \geometry{top=.3in,left=.25in,right=.25in,bottom=.25in} }
+{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{-0.25em}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\rhead{Pete Wilcox | CruzID: pcwilcox | Student ID: 1593715}
+
+\begin{document}
+\footnotesize
+\begin{multicols}{4}
+    \setlength{\premulticols}{1pt}
+    \setlength{\postmulticols}{1pt}
+    \setlength{\multicolsep}{1pt}
+    \setlength{\columnsep}{2pt}
+    \begin{itemize}
+        \item \code{ACID}
+              \begin{itemize}
+                  \item \code{ATOMICITY}: An atomic transaction happens as one unit, either the whole thing
+                        commits or none of it does.
+                  \item \code{CONSISTENCY}: A consistent transaction brings the DB from one valid state to
+                        another valid state with respect to any constraints.
+                  \item \code{ISOLATION}: Concurrent isolated transactions would have the same result if run sequentially.
+                  \item \code{DURABILITY}: A committed transaction will remain committed even in the event of
+                        a hardware failure.
+              \end{itemize}
+        \item \code{RAID Levels}
+              \begin{itemize}
+                  \item Level 0: No redundancy (just stripin)
+                  \item Level 1: Mirrored (two identical copies)
+                        \begin{itemize}
+                            \item Each disk has an exact mirror image
+                            \item Parallel reads; writes involve two disks
+                            \item Maximum transfer rate = transfer rate of one disk
+                        \end{itemize}
+                  \item Level 0+1 (Level 10): Striping and Mirroring
+                        \begin{itemize}
+                            \item Parallel reads; writes involve two disks
+                            \item Maximum transfer rate = aggregate bandwidth
+                        \end{itemize}
+                  \item Level 3: Bit-interleaved parity
+                        \begin{itemize}
+                            \item Striping Unit: one bit (or byte) (one check disk)
+                            \item Each read and write request involves all disks; disk array can process one request at a time
+                        \end{itemize}
+                  \item Level 4: Block-interleaved parity
+                        \begin{itemize}
+                            \item Striping unit: one disk block (one check disk)
+                            \item Parallel reads possible for small requests, large requests can utilize full bandwidth
+                            \item Writes involve modified block \emph{and} check disk
+                        \end{itemize}
+                  \item Level 5: Block-interleaved distributed parity
+                        \begin{itemize}
+                            \item Similar to RAID level 4 but parity blocks are distributed over all disks
+                        \end{itemize}
+              \end{itemize}
+        \item \code{Buffer Management in a DBMS}
+              \begin{itemize}
+                  \item DBMS maintains buffer pool of frames, each frame holds a page, info is in \code{<frame#, pageid>} table
+                  \item Choice of frame replacement dictated by replacement policy such as LRU
+                  \item When a page is requested:
+                        \begin{itemize}
+                            \item If requested page is not in pool:
+                                  \begin{itemize}
+                                      \item Choose a frame for replacement
+                                      \item If that frame is dirty, write it to disk
+                                      \item Read requested page into chosen frame
+                                  \end{itemize}
+                            \item Pin the page and return its address
+                            \item When done the requestor must indicate whether the page has been modified (dirty bit) and unpin
+                            \item Page in pool may be requested many times
+                                  \begin{itemize}
+                                      \item A pin count is used and a page is a candidate for replacement iff \code{pin_count = 0}
+                                      \item Pinning increments pin count and unpinning decrements
+                                  \end{itemize}
+                            \item Concurrency control and recovery may entail additional I/O when a frame is chosen for replacement (write-ahead log protocol)
+                            \item Frame is chosen for replacement using LRU, clock, MRU, etc
+                            \item Sequential flooding: Caused by using LRU when the number of buffer frames is less than the number of pages in the file
+                        \end{itemize}
+              \end{itemize}
+        \item \code{Files of Records}
+              \begin{itemize}
+                  \item Page or block is ok when doing I/O but higher levels of DBMS operate on \emph{records} and thus want \emph{files of records}
+                  \item \code{FILE:} A collection of pages each containing a collection of records. Must support
+                        \begin{itemize}
+                            \item Insert (append)/delete/modify record
+                            \item Read a particular record specified using \emph{record id}
+                            \item Scan all records possibly with some conditions on the records to be retrieved
+                        \end{itemize}
+                  \item \code{Unordered ``Heap'' Files:}
+                        \begin{itemize}
+                            \item Simplest file structure that contains records in no particular (logical) order
+                            \item As file grows and shrinks, disk pages are allocated and de-allocated
+                            \item To support record-level operations we must:
+                                  \begin{itemize}
+                                      \item Keep track of the \emph{pages} in a file: \code{page id (pid)}
+                                      \item Keep track of the \emph{free space} on a page
+                                      \item Keep track of the \emph{records} on a page: \code{record id (rid)}
+                                      \item Keep track of \emph{fields} within records
+                                  \end{itemize}
+                            \item Operations: create/destroy file, insert/delete record, fetch record with specific \code{rid}, scan all records
+                        \end{itemize}
+                  \item Record formats: \code{Fixed Length}
+                        \begin{itemize}
+                            \item Information about field types is the same for all records in file; it is stored in \emph{system catalogs}
+                            \item Finding the $i^{th}$ field of a record does not require scanning the record
+                        \end{itemize}
+                  \item Record formats: \code{Variable length}
+                        \begin{itemize}
+                            \item Several alternative formats (\# of fields is fixed)
+                            \item Fields delimited by special symbols (e.g. \$ between fields)
+                            \item Fields preceded by lengths
+                        \end{itemize}
+                  \item  Record formats: \code{Variable length with directory}
+                        \begin{itemize}
+                            \item Use array of offsets at start of record
+                        \end{itemize}
+                  \item \code{Heap file implemented as a list}
+                        \begin{itemize}
+                            \item The header page id and heap file name must be stored someplace
+                            \item Each page contains two extra pointers in this case
+                            \item Refinement: use several lists for different degrees of free space
+                        \end{itemize}
+                  \item Page formats:
+                        \begin{itemize}
+                            \item File -> collection of pages
+                            \item Page -> collection of tuples/records
+                            \item Query operators deal with tuples
+                            \item Slotted page format:
+                                  \begin{itemize}
+                                      \item Each page has a collection of \emph{slots}
+                                      \item Each slot contains a record
+                                  \end{itemize}
+                            \item RID: \code{<page id, slot number>}
+                        \end{itemize}
+                  \item \code{Heap file using a page directory}
+                        \begin{itemize}
+                            \item Page entries can include the number of free bytes on each page
+                            \item Directory is a collection of pages; linked list is one possible implementation
+                        \end{itemize}
+                  \item \code{System catalogs:}
+                        \begin{itemize}
+                            \item For each relation:
+                                  \begin{itemize}
+                                      \item name, file, file structure
+                                      \item name, type, length (if fixed) for each attribute
+                                      \item Index name, target, and kind for each index
+                                      \item also integrity constraints, defaults, nullability, etc
+                                  \end{itemize}
+                            \item For each index: structure (e.g. B+ tree) and search key fields
+                            \item For each view: view name and definition (including query)
+                            \item Plus statistics, authorization, buffer pool size, etc
+                        \end{itemize}
+                  \item \code{Column Stores:}
+                        \begin{itemize}
+                            \item Store data ``vertically''
+                            \item Contrast with a ``row-store'' that stores all the attributes of a tuple/record contiguously
+                            \item Each column can be stored as a separate file and compressed
+                            \item SAP HANA:
+                                  \begin{itemize}
+                                      \item Dictionary compression per column
+                                      \item Column main: read-optimized store for immutable data. Uses high data compression and heuristic algoriths to order data to maximize secondary compression
+                                      \item Column delta: write-optimized store for inserts, updates, deletes. Uses less compression, appends updates to the end, and merges with main periodically.
+                                  \end{itemize}
+                            \item Additional types: prefix coding, run length coding, cluster coding, sparse coding, indirect coding
+                        \end{itemize}
+                  \item \code{Indexes:}
+                        \begin{itemize}
+                            \item Speeds up selections on the search key fields for the index
+                            \item Contains a collection of data entries and supports efficient retrieval of all data entires $k^*$ with a given key value $k$
+                        \end{itemize}
+                  \item \code{B+ Tree Indexes}
+                        \begin{itemize}
+                            \item Leaf pages contain \emph{data entries} and are chained (prev \& next)
+                            \item Non-leaf pages have \emph{index entries}, used to direct searches
+                            \item Insert/delete at $\log_F N$, keep tree \emph{height-balanced} ($F = $ fanout, $N = $ \# leaf pages)
+                            \item Minimum 50\% occupancy (in all nodes except root). Each node contains $d \leq m \leq 2d$ entries; $d = $ the \emph{order} of the tree.
+                            \item Typical order $d = 100$
+                            \item Percentage of node that is full is more useful, typical fill-factor 67\%
+                            \item Average \emph{fanout} for non-leaves $F = 133$
+                            \item Inserting a data entry:
+                                  \begin{itemize}
+                                      \item Find correct leaf $L$
+                                      \item Put data entry onto $L$
+                                      \item If $L$ has enough space, done
+                                      \item Otherwise, must split $L$. Redistribute entries evenly, copy up the middle key (key must still exist in leaf). Insert index entry pointing to $L_2$ into parent of $L$.
+                                      \item This can happen recursively: if parent of $L$ grows, need to push up middle key.
+                                      \item Splits ``grow'' the tree; root split increases height.
+                                  \end{itemize}
+                            \item Deleting a data entry:
+                                  \begin{itemize}
+                                      \item Start at root, find leaf $L$ where entry belongs
+                                      \item Remove the entry
+                                      \item If $L$ is at least half full, done
+                                      \item Otherwise, if $L$ has only $d-1$ entries, try to redistribute, borrowing from sibling (adjacent node with same parent)
+                                      \item If redistribution fails, merge $L$ and sibling
+                                      \item If merge occurred, must delete entry from parent (pointing to merged node)
+                                      \item Merge can propagate to root, decreasing height of the tree
+                                  \end{itemize}
+                        \end{itemize}
+              \end{itemize}
+    \end{itemize}
+    \begin{center}
+        \begin{tabular}{ | c | c | c | c | c | } \hline
+            $p$ & $q$ & $p$ OR $q$ & $p$ AND $q$ & $p = q$ \\ \hline
+            T   & T   & T          & T           & T       \\ \hline
+            T   & F   & T          & F           & F       \\ \hline
+            T   & U   & T          & U           & U       \\ \hline
+            F   & T   & T          & F           & F       \\ \hline
+            F   & F   & F          & F           & T       \\ \hline
+            F   & U   & U          & F           & U       \\ \hline
+            U   & T   & T          & U           & U       \\ \hline
+            U   & F   & U          & F           & U       \\ \hline
+            U   & U   & U          & U           & U       \\ \hline
+        \end{tabular}
+    \end{center}
+    \begin{center}
+        \begin{tabular}{| c | c |} \hline
+            $p$ & NOT $p$ \\ \hline
+            T   & F       \\ \hline
+            F   & T       \\ \hline
+            U   & U       \\ \hline
+        \end{tabular}
+    \end{center}
+    \begin{center}
+        \begin{adjustbox}{angle=270}
+            \begin{tabular}{| c | c | c | c |} \hline
+                Isolation Level  & dirty reads & non-repeatable reads & phantoms \\ \hline
+                READ UNCOMMITTED & Y           & Y                    & Y        \\ \hline
+                READ COMMITTED   & N           & Y                    & Y        \\ \hline
+                REPEATABLE READ  & N           & N                    & Y        \\ \hline
+                SERIALIZABLE     & N           & N                    & N        \\ \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{multicols}
+
+\end{document}
