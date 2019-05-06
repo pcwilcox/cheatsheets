@@ -22,11 +22,6 @@
 \usepackage{booktabs}
 
 
-\usepackage{fontspec}
-\setmonofont[
-  Contextuals={Alternate}
-]{Fira Code}
-
 \setlist{nolistsep}
 \setlist[itemize]{leftmargin=0.25pc,itemsep=0em}
 \usetikzlibrary{arrows.meta,shapes.arrows,chains,decorations.pathreplacing}
@@ -104,15 +99,29 @@ e ::= x
         \begin{itemize}
             \item Programs are \emph{expressions} or $\lambda$-terms
             \item \emph{Variable:} \code{x}, \code{y}, \code{z}
+            \item \emph{Abstraction:} (aka nameless function definition) \code{\x -> e} means ``for any \code{x}, compute \code{e}''; \code{x} is the \emph{formal parameter}, \code{e} is the \emph{body}
+            \item \emph{Application:} (aka function call) \code{e1 e2} means ``apply \code{e1} to \code{e2}''; \code{e1} is the \emph{function} and \code{e2} is the \code{argument}
+        \end{itemize}
+        \item \emph{Syntactic Sugar:} convenient notation used as a shorthand for valid syntax
+        \begin{lstlisting}
+-- instead of:              we write:
+\x -> (\y -> (\z -> e))     \x -> \y -> \z -> e
+\x -> \y -> \z -> e         \x y z -> e
+(((e1 e2) e3) e4)           e1 e2 e3 e4
+        \end{lstlisting}
+        \item \emph{Scope of a variable} The part of a program where a \emph{variable is visible}
+        \item In the expression \code{\x -> e}
+        \begin{itemize}
+            \item \code{x} is the newly-introduced variable
+            \item \code{e} is the \emph{scope} of \code{x}
+            \item Any occurrence of \code{x} in \code{\x -> e} is \emph{bound} (by the \emph{binder} \code{\x})
+        \end{itemize}
+        \item \emph{Rewrite rules:}
+        \begin{itemize}
+            \item $\alpha$-step: renaming formals
+            \item $\beta$-step: aka function call
         \end{itemize}
     \end{itemize}
-    \begin{lstlisting}
-sepConcat :: String -> [String] -> String
-sepConcat _ []          = ""
-sepConcat sep (x:xs)    = foldLeft f x xs
-    where
-        f a b           = a ++ (sep ++ b)
-    \end{lstlisting}
     \begin{center}
         \begin{tabular}{ | c | c | } \toprule
             Var     & Desc                                      \\ \midrule
