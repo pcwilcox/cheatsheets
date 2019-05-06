@@ -461,6 +461,33 @@
                 \item Estimate \emph{Cost} of each operation in plan-tree: depends on input cardinalities
                 \item Estimate \emph{Size} of result for each operation in the tree; for seelctions and joins assume independence of predicates
             \end{itemize}
+            \item \emph{Size estimation and reduction factors}
+            \begin{itemize}
+                \item Maximum \# of tuples in result is the product of cardinalities in the \code{FROM} clause
+                \item Reduction Factor $RF$ associated with each \emph{term} reflects the impact of \emph{term} in reducing result size
+            \end{itemize}
+            \item \emph{Grace Hash-Join}
+            \begin{itemize}
+                \item Like a two-phase index nested loop join
+                \item \emph{Build phase:} Partition both relations using hash function $h$: $R$ tuples in partition $i$ will only match $S$ tuples in partition $i$.
+                \item \emph{Match phase:} Read in a partition of $R$, hash it using $h_2 (<>h)$. Scan matching partition of $S$ searching for its $R$ matches.
+                \item \# partitions $k \leq B-1$ and Pages$_R /k$ (size of largest partition to be held in memory) $< B-1$.
+                \item Assuming uniformy-sized partitions and maximizing $k$: $k = B-1$ and Pages$_R /k < B-1$ so $(B-1)^2 > $Pages$_R \implies B > \sqrt{\text{Pages}_R}$
+                \item Can hash-join \emph{recursively} to reduce the amount of memory needed
+                \item In build phase: Read + write both relations: $2*($Pages$_R + $Pages$_S)$
+                \item In match phase: Read both relations; Pages$_R + $Pages$_S$ I/Os
+            \end{itemize}
+            \item Sort-Merge Join vs Hash Join:
+            \begin{itemize}
+                \item Given a a reasonable amount of memory $(B > \sqrt{\text{Pages}_R})$, both have cost $3*(\text{Pages}_R + \text{Pages}_s)$ I/Os
+                \item Hash join is superior is relation sizes differ greatly because it needs less memory, and is also highly parallelizable
+                \item Sort-Merge is less sensitive to data skew and its result is sorted
+            \end{itemize}
+            \item \emph{More general join conditions:}
+            \begin{itemize}
+                \item Equalities over several attributes: for INL, build index on composite key. For sort-merge and hash join, sort/hash-partition on the combination of the join columns
+                \item Inequality conditions: for INL, need (clustered!) B+ tree index; hash-join not usable; merge-join possible; block NL the best
+            \end{itemize}
         \end{itemize}
     \end{itemize}
     \begin{center}
