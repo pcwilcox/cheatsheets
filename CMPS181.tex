@@ -202,7 +202,7 @@
                         \end{itemize}
                   \item Page formats:
                         \begin{itemize}
-                            \item File -> collection of pages
+                            \item File $\rightarrow$ collection of pages
                             \item Page -> collection of tuples/records
                             \item Query operators deal with tuples
                             \item Slotted page format:
@@ -243,103 +243,200 @@
                                   \end{itemize}
                             \item Additional types: prefix coding, run length coding, cluster coding, sparse coding, indirect coding
                         \end{itemize}
-                  \item \code{Indexes:}
-                        \begin{itemize}
-                            \item Speeds up selections on the search key fields for the index
-                            \item Contains a collection of data entries and supports efficient retrieval of all data entires $k^*$ with a given key value $k$
-                        \end{itemize}
-                  \item \code{B+ Tree Indexes}
-                        \begin{itemize}
-                            \item Leaf pages contain \emph{data entries} and are chained (prev \& next)
-                            \item Non-leaf pages have \emph{index entries}, used to direct searches
-                            \item Insert/delete at $\log_F N$, keep tree \emph{height-balanced} ($F = $ fanout, $N = $ \# leaf pages)
-                            \item Minimum 50\% occupancy (in all nodes except root). Each node contains $d \leq m \leq 2d$ entries; $d = $ the \emph{order} of the tree.
-                            \item Typical order $d = 100$
-                            \item Percentage of node that is full is more useful, typical fill-factor 67\%
-                            \item Average \emph{fanout} for non-leaves $F = 133$
-                            \item Inserting a data entry:
-                                  \begin{itemize}
-                                      \item Find correct leaf $L$
-                                      \item Put data entry onto $L$
-                                      \item If $L$ has enough space, done
-                                      \item Otherwise, must split $L$. Redistribute entries evenly, copy up the middle key (key must still exist in leaf). Insert index entry pointing to $L_2$ into parent of $L$.
-                                      \item This can happen recursively: if parent of $L$ grows, need to push up middle key.
-                                      \item Splits ``grow'' the tree; root split increases height.
-                                  \end{itemize}
-                            \item Deleting a data entry:
-                                  \begin{itemize}
-                                      \item Start at root, find leaf $L$ where entry belongs
-                                      \item Remove the entry
-                                      \item If $L$ is at least half full, done
-                                      \item Otherwise, if $L$ has only $d-1$ entries, try to redistribute, borrowing from sibling (adjacent node with same parent)
-                                      \item If redistribution fails, merge $L$ and sibling
-                                      \item If merge occurred, must delete entry from parent (pointing to merged node)
-                                      \item Merge can propagate to root, decreasing height of the tree
-                                  \end{itemize}
-                        \end{itemize}
-                  \item \code{Hash-Based Indexes:}
-                        \begin{itemize}
-                            \item Good for equality selections
-                            \item Index is a collection of \emph{buckets}. Each bucket = \emph{primary page} plus zero or more \emph{overflow pages} (called \emph{static} hashing). Buckets contain data entries.
-                            \item \emph{Hashing function} $h$: $h(r) = $ bucket in which (data entry for) record $r$ belongs. $h$ looks at the \emph{search key} fields of $r$.
-                        \end{itemize}
-                  \item Alternatives for Data Entry $k^*$ in index:
-                        \begin{itemize}
-                            \item In a data entry $k^*$ we can store: an actual data record, or \code{<k, RID>}, or \code{<k, list of RIDs>}
-                            \item Choice of alternative for entries is orthogonal to the indexing technique
-                        \end{itemize}
-                  \item Alternative 1: data records live in index
-                        \begin{itemize}
-                            \item Index structure is actually a file organization for the data records
-                            \item At most one index on a given collection of data can use this Alternative
-                            \item If data records are very large, \# of leaf pages containing data entries is high.
-                        \end{itemize}
-                  \item Alternatives 2 and 3: Key/RID or Key/RIDlist:
-                        \begin{itemize}
-                            \item Data entries are typically much smaller than data records
-                            \item Alternative 3 is more compact but leads to variable-sized data entries, even if the search keys are of fixed length
-                        \end{itemize}
-                  \item Index classification:
-                        \begin{itemize}
-                            \item \emph{Primary vs Secondary:} if search key contains the primary key, index is called the primary index
-                            \item \emph{Clustered vs Unclustered:} If order of data records is the same as (or close to) the order of stored data records then index is called a clustered index.
-                        \end{itemize}
-                  \item A back of the envelope cost model:
-                        \begin{itemize}
-                            \item $B$: the number of data pages
-                            \item $R$: number of records per page
-                            \item $D$: average time to read or write a disk page
-                            \item $F$: average fanout for a non-leaf page
-                        \end{itemize}
-                  \item Indexes with composite search keys:
-                        \begin{itemize}
-                            \item Composite search keys: search on a combination of fields
-                            \item Equality query: every field value is equal to a constant value
-                            \item Range query: some field value doesn't have equality test
-                            \item Data entries in index sorted by search key to support range queries
-                        \end{itemize}
-                  \item \code{ISAM:} Index-Sequential Access Method
-                        \begin{itemize}
-                            \item Index file has first key on each page, can binary search index then scan the page.
-                            \item \emph{Static} structure, inserts and deletes only affect leaf or overflow pages.
-                            \item If index is very large, recursively create a second layer (and so on).
-                            \item \emph{File Creation:} Leaf pages first allocated sequentially, sorted by search key; then index pages allocated, and then overflow pages.
-                            \item \emph{Index entries:} \code{<key value, page id>}; they `direct' searches for \emph{data entries} which are in leaf pages
-                            \item \emph{Search:} Start at root; use key comparisons to go to leaf. I/O cost $\propto \log_F N$ where $F = $ \# entries/index pg, $N = $ \# leaf pgs
-                            \item \emph{Insert:} Find leaf where data entry belongs and put it there, using overflow page if necessary.
-                            \item \emph{Delete:} Finda nd remove from leaf; if empty overflow page, deallocate
-                        \end{itemize}
-                  \item \code{B-Tree Prefix Key Compression:} Increase fan-out by reducing the size of search keys on interior nodes. key values only direct traffic so we only need the minimum length for that
-                  \item \code{Bulk Loading of a B+ Tree}
-                        \begin{itemize}
-                            \item Creating a new B+ tree by inserting one at a time is very slow, bulk loading is better
-                            \item \emph{Initialization:} Sort all data entries, insert pointer to first (leaf) page in a new (root) page
-                            \item Index entries for leaf pages always entered into right-most index page just above leaf level. When this fills up it splits.
-                        \end{itemize}
-                  \item \code{Log-Structured Merge Tree:} Sequential trees of exponentially larger size. Inserts go to smallest smallest tree, deletes insert tombstone records, spill to next-deeper level on overflow
-                  \item \code{R-Tree:} Tree of rectangles, search for intersections between them
-
               \end{itemize}
+        \item \code{Indexes:}
+              \begin{itemize}
+                  \item Speeds up selections on the search key fields for the index
+                  \item Contains a collection of data entries and supports efficient retrieval of all data entires $k^*$ with a given key value $k$
+              \end{itemize}
+        \item \code{B+ Tree Indexes}
+              \begin{itemize}
+                  \item Leaf pages contain \emph{data entries} and are chained (prev \& next)
+                  \item Non-leaf pages have \emph{index entries}, used to direct searches
+                  \item Insert/delete at $\log_F N$, keep tree \emph{height-balanced} ($F = $ fanout, $N = $ \# leaf pages)
+                  \item Minimum 50\% occupancy (in all nodes except root). Each node contains $d \leq m \leq 2d$ entries; $d = $ the \emph{order} of the tree.
+                  \item Typical order $d = 100$
+                  \item Percentage of node that is full is more useful, typical fill-factor 67\%
+                  \item Average \emph{fanout} for non-leaves $F = 133$
+                  \item Inserting a data entry:
+                        \begin{itemize}
+                            \item Find correct leaf $L$
+                            \item Put data entry onto $L$
+                            \item If $L$ has enough space, done
+                            \item Otherwise, must split $L$. Redistribute entries evenly, copy up the middle key (key must still exist in leaf). Insert index entry pointing to $L_2$ into parent of $L$.
+                            \item This can happen recursively: if parent of $L$ grows, need to push up middle key.
+                            \item Splits ``grow'' the tree; root split increases height.
+                        \end{itemize}
+                  \item Deleting a data entry:
+                        \begin{itemize}
+                            \item Start at root, find leaf $L$ where entry belongs
+                            \item Remove the entry
+                            \item If $L$ is at least half full, done
+                            \item Otherwise, if $L$ has only $d-1$ entries, try to redistribute, borrowing from sibling (adjacent node with same parent)
+                            \item If redistribution fails, merge $L$ and sibling
+                            \item If merge occurred, must delete entry from parent (pointing to merged node)
+                            \item Merge can propagate to root, decreasing height of the tree
+                        \end{itemize}
+              \end{itemize}
+        \item \code{Hash-Based Indexes:}
+              \begin{itemize}
+                  \item Good for equality selections
+                  \item Index is a collection of \emph{buckets}. Each bucket = \emph{primary page} plus zero or more \emph{overflow pages} (called \emph{static} hashing). Buckets contain data entries.
+                  \item \emph{Hashing function} $h$: $h(r) = $ bucket in which (data entry for) record $r$ belongs. $h$ looks at the \emph{search key} fields of $r$.
+              \end{itemize}
+        \item Alternatives for Data Entry $k^*$ in index:
+              \begin{itemize}
+                  \item In a data entry $k^*$ we can store: an actual data record, or \code{<k, RID>}, or \code{<k, list of RIDs>}
+                  \item Choice of alternative for entries is orthogonal to the indexing technique
+              \end{itemize}
+        \item Alternative 1: data records live in index
+              \begin{itemize}
+                  \item Index structure is actually a file organization for the data records
+                  \item At most one index on a given collection of data can use this Alternative
+                  \item If data records are very large, \# of leaf pages containing data entries is high.
+              \end{itemize}
+        \item Alternatives 2 and 3: Key/RID or Key/RIDlist:
+              \begin{itemize}
+                  \item Data entries are typically much smaller than data records
+                  \item Alternative 3 is more compact but leads to variable-sized data entries, even if the search keys are of fixed length
+              \end{itemize}
+        \item Index classification:
+              \begin{itemize}
+                  \item \emph{Primary vs Secondary:} if search key contains the primary key, index is called the primary index
+                  \item \emph{Clustered vs Unclustered:} If order of data records is the same as (or close to) the order of stored data records then index is called a clustered index.
+              \end{itemize}
+        \item A back of the envelope cost model:
+              \begin{itemize}
+                  \item $B$: the number of data pages
+                  \item $R$: number of records per page
+                  \item $D$: average time to read or write a disk page
+                  \item $F$: average fanout for a non-leaf page
+              \end{itemize}
+        \item Indexes with composite search keys:
+              \begin{itemize}
+                  \item Composite search keys: search on a combination of fields
+                  \item Equality query: every field value is equal to a constant value
+                  \item Range query: some field value doesn't have equality test
+                  \item Data entries in index sorted by search key to support range queries
+              \end{itemize}
+        \item \code{ISAM:} Index-Sequential Access Method
+              \begin{itemize}
+                  \item Index file has first key on each page, can binary search index then scan the page.
+                  \item \emph{Static} structure, inserts and deletes only affect leaf or overflow pages.
+                  \item If index is very large, recursively create a second layer (and so on).
+                  \item \emph{File Creation:} Leaf pages first allocated sequentially, sorted by search key; then index pages allocated, and then overflow pages.
+                  \item \emph{Index entries:} \code{<key value, page id>}; they `direct' searches for \emph{data entries} which are in leaf pages
+                  \item \emph{Search:} Start at root; use key comparisons to go to leaf. I/O cost $\propto \log_F N$ where $F = $ \# entries/index pg, $N = $ \# leaf pgs
+                  \item \emph{Insert:} Find leaf where data entry belongs and put it there, using overflow page if necessary.
+                  \item \emph{Delete:} Finda nd remove from leaf; if empty overflow page, deallocate
+              \end{itemize}
+        \item \code{B-Tree Prefix Key Compression:} Increase fan-out by reducing the size of search keys on interior nodes. key values only direct traffic so we only need the minimum length for that
+        \item \code{Bulk Loading of a B+ Tree}
+              \begin{itemize}
+                  \item Creating a new B+ tree by inserting one at a time is very slow, bulk loading is better
+                  \item \emph{Initialization:} Sort all data entries, insert pointer to first (leaf) page in a new (root) page
+                  \item Index entries for leaf pages always entered into right-most index page just above leaf level. When this fills up it splits.
+              \end{itemize}
+        \item \code{Log-Structured Merge Tree:} Sequential trees of exponentially larger size. Inserts go to smallest smallest tree, deletes insert tombstone records, spill to next-deeper level on overflow
+        \item \code{R-Tree:} Tree of rectangles, search for intersections between them
+        \item \code{Static Hash-based Indexes:}
+              \begin{itemize}
+                  \item \# primary pages is fixed, allocated sequentially, never de-allocated; overflow pages if needed
+                  \item $h(k) \mod M = $ bucket(page) to which data entry with key $k$ belongs ($M = $ \# buckets)
+                  \item Buckets contain data entries
+                  \item Hash function works on \emph{search key field} of record $r$. Must distribute over range $0 \dots M-1$
+                  \item $h(key) = (a * key + b)$ usually works well; $a$ and $b$ are constants to tune $h$
+                  \item \emph{Long overflow chains} can develop and degrade performance.
+              \end{itemize}
+        \item \code{Extendible Hashing:}
+              \begin{itemize}
+                  \item Situation: bucket (primary page) becomes full. Solved by doubling number of buckets instead of using an overflow page
+                  \item Use directory wich pointers to buckets. Double the number of buckets by doubling the directory and splitting buckets as needed
+                  \item Only one bucket at a time splits. No overflow pages
+                  \item \emph{Global Depth} is the last $d$ bits after hashing and indexes into the directory to determine which bucket is used
+                  \item \emph{Local Depth} is used for each bucket. If the $LD == GD$ and the bucket splits, the directory must double.
+              \end{itemize}
+        \item \code{Bitmap Indexes:}
+              \begin{itemize}
+                  \item Index which allows for fast equality checks. Order the records in some $O(1)$ way and maintain one or more bit vectors storing their values for particular fields.
+                  \item One bitmap for each distinct domain value, and one bitmap for \code{NULL} if the column can be null.
+                  \item Can use \code{XOR} operation to reduce number of maps needed by one.
+              \end{itemize}
+        \item \code{External Sorting:}
+        \begin{itemize}
+            \item Goal: Need to sort more data than will fit in memory, efficiently.
+            \item \code{2-Way Sort:} Requires 3 buffers
+            \begin{itemize}
+                \item Pass 0: read a page, sort it, write it out (only one buffer page used)
+                \item Pass 1, 2, 3, ...: Read and merge pairs of runs. (Three buffer pages are used)
+            \end{itemize}
+            \item Sorting $N=2^k Pages of Data$:
+            \begin{itemize}
+                \item Pass 0: read, sort, write $\rightarrow 2^k$ 1-page runs
+                \item Pass 1: Read + merge 1-page pairs, write $\rightarrow 2^{k-1}$ 2-page runs
+                \item Pass 2: Read + merge 2-page pairs, write $\rightarrow 2^{k-2}$ 4-page runs
+                \item Pass $k-1$: Read + merge $2^{k-2}$-page pairs, write $\rightarrow 2 2^{k-1}$-page runs
+                \item Pass $k$: Read + merge $2^{k-1}$-page pairs, write $\rightarrow 1 2^k$-page result
+            \end{itemize}
+            \item 2-Way External merge sort: $N$ pages in file $\implies \lceil \log_2 N \rceil + 1$ passes, total I/O cost $= 2 N \left ( \lceil \log_2 N \rceil + 1 \right )$
+            \item \emph{General} external merge sort:
+            \begin{itemize}
+                \item Sorting a file with $N$ pages using $B$ buffer pages.
+                \item Pass 0: use $B$ buffer pages. Produce $\lceil N / B \rceil$ sorted runs of $B$ pages each.
+                \item Pass 2, ... etc: merge $b - 1$ runs
+                \item Number of passes: $1 + \left \lceil \log_{B-1} \lceil N / B \rceil \right \rceil $
+                \item Cost $= 2N * ($\# of passes $)$
+            \end{itemize}
+            \item \emph{Double Buffering}
+            \begin{itemize}
+                \item To reduce wait time for I/O request to complete, can \emph{prefetch} into \code{shadow block}
+                \item Potentially more passes; in practice, most files still sorted in 2-3 passes.
+            \end{itemize}
+            \item \emph{B+ Tree as ``Sorted Access Path''}
+            \begin{itemize}
+                \item Scenario: table to be retrieved in some order has a B+ tree index on the ordering columns
+                \item Idea: retrieve records in order by traversing the B+ tree's leaf pages
+                \item Very good idea if the tree is clustered, otherwise probably a bad idea
+            \end{itemize}
+        \end{itemize}
+        \item \code{Query Processing}
+        \begin{itemize}
+            \item \emph{Access Paths:}
+            \begin{itemize}
+                \item An access path is a method of retrieving tuples: file scan or index that matches a selection in the query
+                \item A tree index \emph{matches} (a conjunction of) terms that involve only attributes in a \emph{prefix} of the search key.
+                \item A hash index \emph{matches} (a conjunction of) terms that has a term \emph{attribute = value} for every attribute in the search key of the index.
+            \end{itemize}
+            \item Selection conditions often first converted to be in CNF (\code{AND}ing of \code{OR}s)
+            \item One approach to selections:
+            \begin{itemize}
+                \item Find the \emph{most selective access path}, retrieve tuples using it, then apply any remaining terms which don't match the index
+                \item Most selective access path: an index or file scan that we estimate will require the fewest page I/Os
+                \item Terms that match this index reduce the number of tuples retrieved; other terms used to filter the retrieved tuples on the fly, but don't prevent retrieval of the tuples/pages
+            \end{itemize}
+            \item Using an index for selections: cost depends on \# qualifying tuples and clustering
+            \begin{itemize}
+                \item Cost of finding qualifying data entries (typically small) plus cost of retrieving the actual records themselves (can be large without clustering)
+            \end{itemize}
+            \item \emph{Duplicate Elimination}
+            \begin{itemize}
+                \item Relational algebra projection removes duplicates: SQL systems don't remove duplicates unless the keyword \code{DISTINCT} is specified
+                \item Sorting approach: sort on \code{<sid, bid>} and remove duplicates. Can optimize by dropping unwanted columns while sorting.
+                \item Hashing approach: hash on \code{<sid, bid>} to create \emph{partitions}. Load partitions into memory one at a time, build an in-memory hash structure, and eliminate duplicates within it.
+            \end{itemize}
+            \item Notation:
+            \begin{itemize}
+                \item Pages in a heap relation $R$: Pages$_R$
+                \item Tuples per page for a relation $R$: TPP$_R$
+                \item Number of tuples in $R$: Card$_R$
+                \item Card$_R = $ Pages$_R * $ TPP$_R$
+            \end{itemize}
+            \item \emph{Simple Nested Loops Join}: foreach tuple in $R$, for each tuple in $S$, if $r_i == s_j$ then add \code{<r,s>} to result.
+            \begin{itemize}
+                \item For each tuple in the \emph{outer} relation $R$ we scan the entire \emph{inner} relation $S$. Cost: Pages$_R$ + Card$_R * $ Pages$_S$
+                \item Page-oriented nested loops join: for each \emph{page} of $R$ get each \emph{page} of $S$ and write out matching pairs of tuples
+            \end{itemize}
+        \end{itemize}
     \end{itemize}
     \begin{center}
         \begin{adjustbox}{angle=270}
