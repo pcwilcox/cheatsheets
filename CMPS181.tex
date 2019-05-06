@@ -436,8 +436,42 @@
                 \item For each tuple in the \emph{outer} relation $R$ we scan the entire \emph{inner} relation $S$. Cost: Pages$_R$ + Card$_R * $ Pages$_S$
                 \item Page-oriented nested loops join: for each \emph{page} of $R$ get each \emph{page} of $S$ and write out matching pairs of tuples
             \end{itemize}
+            \item \emph{Index Nested Loops}
+            \begin{itemize}
+                \item If there is an index on the join column of one relation, can make it the inner and exploit the index. Cost: Pages$_R$ + Card$_R$ * cost of finding matching $S$ tuples
+                \item For each $R$ tuple, cost of probing $S$ index is about 1.2 for hash index, 2-4 for B+ tree. Cost of then finding $S$ tuples (assuming alt. 2 or 3) depends on clustering. Clustered typically 1 I/O, unclustered up to 1 I/O per matching $S$ tuple.
+            \end{itemize}
+            \item \emph{Block Nexted Loops Join}
+            \begin{itemize}
+                \item Use one page as an input buffer for scanning the inner $S$, one pas as the output buffer, and use \emph{all} remaining pages to hold ``block'' of pages of outer $R$.
+                \item For each block of $R$, hash each data entry to a hash table. Then compare all entries in $S$.
+            \end{itemize}
+            \item \emph{Join: Sort-Merge } $\left (R \bowtie_{i=j} S \right)$
+            \begin{itemize}
+                \item Sort $R$ and $S$ on the join column, then scan them to do a `merge' (on join column) and then output result tupls.
+                \item $R$ is scanned once; each $S$ group is scanned once per matching $R$ tuple.
+            \end{itemize}
+            \item \emph{Statistics and Catalogs}
+            \begin{itemize}
+                \item Catalogs typically contain at least: \emph{\# tuples} and \emph{\# pages} in each relation; \emph{\# distinct key values} and \emph{\# pages} for each index; \emph{index height}, \emph{low/high key values} for each tree index
+                \item Catalogs updated periodically: updating each time data changes is too expensive and approximation is fine
+            \end{itemize}
+            \item \emph{Cost estimation:} For each plan must estimate cost
+            \begin{itemize}
+                \item Estimate \emph{Cost} of each operation in plan-tree: depends on input cardinalities
+                \item Estimate \emph{Size} of result for each operation in the tree; for seelctions and joins assume independence of predicates
+            \end{itemize}
         \end{itemize}
     \end{itemize}
+    \begin{center}
+        \begin{tabular}{ | c | c | } \hline
+            Var     & Desc                                      \\ \hline
+            $B$     & the number of data pages                  \\ \hline
+            $R$     & number of records per page                \\ \hline
+            $D$     & average time to read or write a disk page \\ \hline
+            $F$     & average fanout for a non-leaf page        \\ \hline
+        \end{tabular}
+    \end{center}
     \begin{center}
         \begin{adjustbox}{angle=270}
             \begin{tabular}{ | c | c | c | c | c | c | } \hline
