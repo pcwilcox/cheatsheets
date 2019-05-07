@@ -91,19 +91,19 @@
     \setlength{\columnsep}{2pt}
     \begin{itemize}
         \item \emph{Syntax}
-        \begin{lstlisting}
+              \begin{lstlisting}
 e ::= x
     | \x -> e
     | e1 e2
         \end{lstlisting}
-        \begin{itemize}
-            \item Programs are \emph{expressions} or $\lambda$-terms
-            \item \emph{Variable:} \code{x}, \code{y}, \code{z}
-            \item \emph{Abstraction:} (aka nameless function definition) \code{\x -> e} means ``for any \code{x}, compute \code{e}''; \code{x} is the \emph{formal parameter}, \code{e} is the \emph{body}
-            \item \emph{Application:} (aka function call) \code{e1 e2} means ``apply \code{e1} to \code{e2}''; \code{e1} is the \emph{function} and \code{e2} is the \code{argument}
-        \end{itemize}
+              \begin{itemize}
+                  \item Programs are \emph{expressions} or $\lambda$-terms
+                  \item \emph{Variable:} \code{x}, \code{y}, \code{z}
+                  \item \emph{Abstraction:} (aka nameless function definition) \code{\x -> e} means ``for any \code{x}, compute \code{e}''; \code{x} is the \emph{formal parameter}, \code{e} is the \emph{body}
+                  \item \emph{Application:} (aka function call) \code{e1 e2} means ``apply \code{e1} to \code{e2}''; \code{e1} is the \emph{function} and \code{e2} is the \code{argument}
+              \end{itemize}
         \item \emph{Syntactic Sugar:} convenient notation used as a shorthand for valid syntax
-        \begin{lstlisting}
+              \begin{lstlisting}
 -- instead of:              we write:
 \x -> (\y -> (\z -> e))     \x -> \y -> \z -> e
 \x -> \y -> \z -> e         \x y z -> e
@@ -111,48 +111,48 @@ e ::= x
         \end{lstlisting}
         \item \emph{Scope of a variable} The part of a program where a \emph{variable is visible}
         \item In the expression \code{\x -> e}
-        \begin{itemize}
-            \item \code{x} is the newly-introduced variable
-            \item \code{e} is the \emph{scope} of \code{x}
-            \item Any occurrence of \code{x} in \code{\x -> e} is \emph{bound} (by the \emph{binder} \code{\x})
-            \item An occurrence of \code{x} in \code{e} is \emph{free} if it is \code{not bound} by an enclosing abstraction
-        \end{itemize}
+              \begin{itemize}
+                  \item \code{x} is the newly-introduced variable
+                  \item \code{e} is the \emph{scope} of \code{x}
+                  \item Any occurrence of \code{x} in \code{\x -> e} is \emph{bound} (by the \emph{binder} \code{\x})
+                  \item An occurrence of \code{x} in \code{e} is \emph{free} if it is \code{not bound} by an enclosing abstraction
+              \end{itemize}
         \item \emph{Free Variables:} A variable \code{x} is \emph{free} if there exists a free occurrence of \code{x} in \code{e} (not bound as a formal)
-            \item \emph{Closed Expressions:} if \code{e} has no free variables it is \emph{closed}
-            \item $\alpha$-step (renaming formals): we can rename a formal parameter and replace all its occurrences in the body
-            \item $\beta$-step (aka function call)
-            \begin{itemize}
-                \item \code{(\x -> e1) e2 =b> e1[x := e2]}
-                \item \code{e1[x := e2]} means ``\code{e1} with all free occurrences of \code{x} replaced with \code{e2}''
-                \item Computation is \code{search and replace}: if you see an \emph{abstraction} applied to an argument, take the \emph{body} of the abstraction and replace all free occurrences of the \code{formal} by that argument
-            \end{itemize}
-            \item \emph{Normal Forms:}
-            \begin{itemize}
-                \item A \emph{redex} is a $\lambda$-term of the form \code{(\x -> e1) e2}
-                \item A $\lambda$-term is in \emph{normal form} if it contains no redexes
-            \end{itemize}
-            \item \emph{Evaluation:}
-            \begin{itemize}
-                \item A $\lambda$-term \code{e} evaluates to \code{e'} if there is a sequence of steps
-                \begin{lstlisting}
+        \item \emph{Closed Expressions:} if \code{e} has no free variables it is \emph{closed}
+        \item $\alpha$-step (renaming formals): we can rename a formal parameter and replace all its occurrences in the body
+        \item $\beta$-step (aka function call)
+              \begin{itemize}
+                  \item \code{(\x -> e1) e2 =b> e1[x := e2]}
+                  \item \code{e1[x := e2]} means ``\code{e1} with all free occurrences of \code{x} replaced with \code{e2}''
+                  \item Computation is \code{search and replace}: if you see an \emph{abstraction} applied to an argument, take the \emph{body} of the abstraction and replace all free occurrences of the \code{formal} by that argument
+              \end{itemize}
+        \item \emph{Normal Forms:}
+              \begin{itemize}
+                  \item A \emph{redex} is a $\lambda$-term of the form \code{(\x -> e1) e2}
+                  \item A $\lambda$-term is in \emph{normal form} if it contains no redexes
+              \end{itemize}
+        \item \emph{Evaluation:}
+              \begin{itemize}
+                  \item A $\lambda$-term \code{e} evaluates to \code{e'} if there is a sequence of steps
+                        \begin{lstlisting}
 e =?> e_1 =?> ... =?> e_N =?> e'
                 \end{lstlisting}
-                \item each \code{=?>} is either \code{=a>} or \code{=b>} and \code{N >= 0}
-                \item \code{e'} is in normal form
-                \item \code{e1 =*> e2}: \code{e1} \emph{reduces} to \code{e2} in 0 or more steps
-                \item \code{e1 =~> e2}: \code{e1} \emph{evaluates} to \code{e2}
-           \end{itemize}
-           \item $\Omega$: \code{(\x -> x x) (\x -> x x)}
-           \item \emph{Recursion:} Fixpoint Combinator
-           \begin{lstlisting}
+                  \item each \code{=?>} is either \code{=a>} or \code{=b>} and \code{N >= 0}
+                  \item \code{e'} is in normal form
+                  \item \code{e1 =*> e2}: \code{e1} \emph{reduces} to \code{e2} in 0 or more steps
+                  \item \code{e1 =~> e2}: \code{e1} \emph{evaluates} to \code{e2}
+              \end{itemize}
+        \item $\Omega$: \code{(\x -> x x) (\x -> x x)}
+        \item \emph{Recursion:} Fixpoint Combinator
+              \begin{lstlisting}
 FIX STEP
 =*> STEP (FIX STEP)
            \end{lstlisting}
-           \begin{itemize}
-               \item \code{FIX = \stp -> (\x -> stp (x x)) (\x -> stp (x x))}
-           \end{itemize}
-           \item \emph{Quicksort in Haskell}
-           \begin{lstlisting}
+              \begin{itemize}
+                  \item \code{FIX = \stp -> (\x -> stp (x x))(\x -> stp (x x))}
+              \end{itemize}
+        \item \emph{Quicksort in Haskell}
+              \begin{lstlisting}
 sort :: [a] -> [a]
 sort []     = []
 sort (x:xs) = sort ls ++ [x] ++ sort rs
@@ -160,69 +160,69 @@ sort (x:xs) = sort ls ++ [x] ++ sort rs
         ls  = [ l | l <- xs, l <= x ]
         rs  = [ r | r <- xs, x < r   ]
            \end{lstlisting}
-           \item \emph{Functions in Haskell}
-           \begin{itemize}
-               \item Functions are \emph{first-class values}
-               \item can be \emph{passes as arguments} to other functions
-               \item can be \emph{returned as results} from other functions
-               \item can be \emph{partially applied} (arguments passed \emph{one at a time})
-           \end{itemize}
-           \item \emph{Top-level bindings:}
-           \begin{itemize}
-               \item Things can be defined globally
-               \item Their names are called \emph{top-level variables}
-               \item Their definitions are called \emph{top-level bindings}
-           \end{itemize}
-           \item \emph{Equations and Patterns}
-\begin{lstlisting}
+        \item \emph{Functions in Haskell}
+              \begin{itemize}
+                  \item Functions are \emph{first-class values}
+                  \item can be \emph{passes as arguments} to other functions
+                  \item can be \emph{returned as results} from other functions
+                  \item can be \emph{partially applied} (arguments passed \emph{one at a time})
+              \end{itemize}
+        \item \emph{Top-level bindings:}
+              \begin{itemize}
+                  \item Things can be defined globally
+                  \item Their names are called \emph{top-level variables}
+                  \item Their definitions are called \emph{top-level bindings}
+              \end{itemize}
+        \item \emph{Equations and Patterns}
+              \begin{lstlisting}
 pair x y b  = if b then x else y
 fst p       = p True
 snd p       = p False
 \end{lstlisting}
-           \begin{itemize}
-               \item A single function binding can have multiple equations with different \emph{patterns} of parameters
-               \item The first equation whose pattern matches the actual arguments is chosen
-           \end{itemize}
-           \item \emph{Referential Transparency} means that a variable can be defined \emph{once per scope} and \emph{no mutation is allowed}; the same function always evaluates to the same value
-           \item \emph{Local variables} can be defined using a \code{let} expression
-           \begin{lstlisting}
+              \begin{itemize}
+                  \item A single function binding can have multiple equations with different \emph{patterns} of parameters
+                  \item The first equation whose pattern matches the actual arguments is chosen
+              \end{itemize}
+        \item \emph{Referential Transparency} means that a variable can be defined \emph{once per scope} and \emph{no mutation is allowed}; the same function always evaluates to the same value
+        \item \emph{Local variables} can be defined using a \code{let} expression
+              \begin{lstlisting}
 sum 0 = 0
 sum n = let n' = n - 1
         in n + sum n'
            \end{lstlisting}
-           \item Syntactic sugar for nested \code{let} expressions:
-           \begin{lstlisting}
+        \item Syntactic sugar for nested \code{let} expressions:
+              \begin{lstlisting}
 sum 0 = 0
 sum n = let
             n'      = n - 1
             sum'    = sum n'
         in n + sum'
            \end{lstlisting}
-           \item If you need a variable whose scope is an equation, use the \code{where} clause instead:
-           \begin{lstlisting}
+        \item If you need a variable whose scope is an equation, use the \code{where} clause instead:
+              \begin{lstlisting}
 cmpSquare x y   | x > z     = "bigger :)"
                 | x == z    = "same :|"
                 | x < z     = "smaller :("
     where z = y * y
            \end{lstlisting}
-           \item \emph{Types:}
-           \begin{itemize}
-               \item In Haskell every expression either \emph{has a type} or is \emph{ill-typed} and rejected at compile-time
-               \item Types can be annotated using \code{::}
-               \begin{lstlisting}
+        \item \emph{Types:}
+              \begin{itemize}
+                  \item In Haskell every expression either \emph{has a type} or is \emph{ill-typed} and rejected at compile-time
+                  \item Types can be annotated using \code{::}
+                        \begin{lstlisting}
 haskellIsAwesome :: Bool
 haskellIsAwesome = True
                \end{lstlisting}
-               \item Functions have \emph{arrow types}
-               \item \code{\x -> e} has type \code{A -> B}
-               \item If \code{e} has type \code{B} assuming \code{x} has type \code{A}
-           \end{itemize}
-           \item A \emph{Combinator} is a function with \emph{no free variables}
-           \item \emph{Lists:}
-           \begin{itemize}
-               \item A list is either an \emph{empty list}: \code{[ ]}
-               \item Or a \emph{head element} attached to a \emph{tail list}: \code{x:xs}
-               \begin{lstlisting}
+                  \item Functions have \emph{arrow types}
+                  \item \code{\x -> e} has type \code{A -> B}
+                  \item If \code{e} has type \code{B} assuming \code{x} has type \code{A}
+              \end{itemize}
+        \item A \emph{Combinator} is a function with \emph{no free variables}
+        \item \emph{Lists:}
+              \begin{itemize}
+                  \item A list is either an \emph{empty list}: \code{[ ]}
+                  \item Or a \emph{head element} attached to a \emph{tail list}: \code{x:xs}
+                        \begin{lstlisting}
 []                  -- A list with zero elements
 1:[]                -- A list with one element
 (:) 1 []            -- A list with one element
@@ -230,22 +230,136 @@ haskellIsAwesome = True
 1:2:3:4:[]          -- Same thing
 [1,2,3,4]           -- Syntactic sugar
                \end{lstlisting}
-               \item \code{[]} and \code{:} are called the list \emph{constructors}
-               \item A list has type \code{[A]} if each one of its elements has type \code{A}
-            \end{itemize}
-               \item \emph{Pairs:} the constructor is \code{(,)}
-               \begin{lstlisting}
+                  \item \code{[]} and \code{:} are called the list \emph{constructors}
+                  \item A list has type \code{[A]} if each one of its elements has type \code{A}
+              \end{itemize}
+        \item \emph{Pairs:} the constructor is \code{(,)}
+              \begin{lstlisting}
 myPair :: (String, Int)
 myPair = ("apple", 3)
                \end{lstlisting}
-           \end{itemize}
+        \item \emph{Record Syntax:}
+              \begin{itemize}
+                  \item Instead of:
+                        \begin{lstlisting}
+data Date = Date Int Int Int
+               \end{lstlisting}
+                  \item You can write:
+                        \begin{lstlisting}
+data Date = Date {
+    month   :: Int,
+    day     :: Int,
+    year    :: Int
+}
+               \end{lstlisting}
+                  \item Use the field name as a function to access part of the data:
+                        \begin{lstlisting}
+deadlineDate = Date 1 10 2019
+deadlineMonth = month deadlineDate
+               \end{lstlisting}
+              \end{itemize}
+        \item Building data types:
+              \begin{itemize}
+                  \item \emph{Product} types (each-of): a value of \code{T} contains a value of \code{T1} \emph{and} a value of \code{T2}
+                  \item \emph{Sum} types (one-of): a value of \code{T} contains a value of \code{T1} \emph{or} a value of \code{T2}
+                  \item \emph{Recursive} types: a value of \code{T} contains a \emph{sub-value} of the same type \code{T}
+              \end{itemize}
+        \item \emph{Pattern Matching:}
+              \begin{lstlisting}
+html :: Paragraph -> String
+html (Text str)         = ...
+html (Heading lvl str)  = ...
+html (List ord items)   = ...
+\end{lstlisting}
+              \begin{itemize}
+                  \item Match for arbitrary data types
+                  \item Dangers: \emph{missing} or \emph{overlapped} patterns
+                  \item Pattern matching expression
+                        \begin{lstlisting}
+html :: Paragraph -> String
+html p =
+    case p of
+        Text str        -> ...
+        Heading lvl str -> ...
+        List ord items  -> ...
+\end{lstlisting}
+                  \item The \code{case} expression has type \code{T} if every output expression has type \code{T} and the input is a valid pattern for the type; the input expression is called the \emph{match scrutinee}
+              \end{itemize}
+        \item \emph{Tail Recursion:} The recursive call is the \emph{top-most} sub-expression in the function body; no computations allowed on recursively-returned body; the value returned by the recursive call is the value returned by the function
+        \item Tail-recursive factorial:
+              \begin{lstlisting}
+loop acc n
+    | n <= 1    = acc
+    | otherwise = loop (acc * n) (n - 1)
+              \end{lstlisting}
+        \item Tail recursive calls compile to fast loops automatically
+        \item The \emph{Filter} pattern:
+              \begin{lstlisting}
+filter :: (a -> Bool) -> [a] -> [a]
+filter f []     = []
+filter f (x:xs)
+    | f x       = x : filter f xs
+    | otherwise =     filter f xs
+              \end{lstlisting}
+              \begin{itemize}
+                  \item Higher-order function which takes function \code{f} and a list as arg
+                  \item For each element \code{x} in the list, if \code{f x == True} then \code{x} will be in the output list
+              \end{itemize}
+        \item The \emph{Map} pattern:
+              \begin{lstlisting}
+map :: (a -> b) -> [a] -> [b]
+map f []        = []
+map f (x:xs)    = f x : map f xs
+              \end{lstlisting}
+              \begin{itemize}
+                  \item Higher order function which takes a function \code{f} and a list as arg
+                  \item For each element \code{x} in the input list, \code{f x} will be in the output list
+              \end{itemize}
+        \item The \emph{Fold-Right} pattern:
+              \begin{lstlisting}
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr f b []        = b
+foldr f b (x:xs)    = f x (foldr f b xs)
+            \end{lstlisting}
+            \begin{itemize}
+                \item Higher order function which recurses on the tail
+                \item Combines result with the head in some binary operation
+                \item \code{len = foldr (\x n -> 1 + n) 0}
+                \item \code{sum = foldr (\x n -> x + n) 0}
+                \item \code{cat = foldr (\x n -> x ++ n) ""}
+            \end{itemize}
+            \item The \emph{Fold-Left} pattern:
+            \begin{lstlisting}
+foldl :: (a -> b -> a) -> a -> [b] -> a
+foldl f b xs                = helper b xs
+    where
+        helper acc []       = acc
+        helper acc (x:xs)   = helper (f acc x) xs
+            \end{lstlisting}
+            \begin{itemize}
+                \item Higher order function uses a helper function with an extra accumulator argument
+                \item To compute the new accumulator, combine the urrent accumulator with the head using some binary operation
+            \end{itemize}
+            \item Useful HOFs:
+            \begin{itemize}
+                \item \code{Flip:} flips the order of the input args
+                \begin{lstlisting}
+flip :: (a -> b -> c) -> b -> a -> c
+                \end{lstlisting}
+                \item \code{Compose:} compose functions
+                \begin{lstlisting}
+(.) :: (b -> c) -> (a -> b) -> a -> c
+                \end{lstlisting}
+            \end{itemize}
+            \item Libraries will implement \code{map}, \code{fold}, \code{filter}, etc on its collections
+    \end{itemize}
     \begin{center}
         \begin{tabular}{ | c | c | } \toprule
-            Var     & Desc                                      \\ \midrule
-            $B$     & the number of data pages                  \\ \midrule
-            $R$     & number of records per page                \\ \midrule
-            $D$     & average time to read or write a disk page \\ \midrule
-            $F$     & average fanout for a non-leaf page        \\ \bottomrule
+            Var & Desc                                      \\ \midrule
+            $B$ & the number of data pages                  \\ \midrule
+            $R$ & number of records per page                \\ \midrule
+            $D$ & average time to read or write a disk page \\ \midrule
+            $F$ & average fanout for a non-leaf page        \\ \bottomrule
         \end{tabular}
     \end{center}
     \begin{center}
