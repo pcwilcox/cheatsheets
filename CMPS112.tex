@@ -57,11 +57,11 @@
   tabsize=2,
   emphstyle={\bf},
   commentstyle=\it,
-  stringstyle=\mdseries\rmfamily,
+  stringstyle=\mdseries\ttfamily,
   showspaces=false,
-  keywordstyle=\bfseries\rmfamily,
+  keywordstyle=\bfseries\ttfamily,
   columns=flexible,
-  basicstyle=\small\sffamily,
+  basicstyle=\small\ttfamily,
   showstringspaces=false,
   morecomment=[l]\%,
 }
@@ -183,7 +183,7 @@ snd p       = p False
                \item A single function binding can have multiple equations with different \emph{patterns} of parameters
                \item The first equation whose pattern matches the actual arguments is chosen
            \end{itemize}
-           \item \emph{Referential Transparency} means that a variable can be defined \emph{once per scope} and \emph{no mutation is allowed}
+           \item \emph{Referential Transparency} means that a variable can be defined \emph{once per scope} and \emph{no mutation is allowed}; the same function always evaluates to the same value
            \item \emph{Local variables} can be defined using a \code{let} expression
            \begin{lstlisting}
 sum 0 = 0
@@ -198,8 +198,47 @@ sum n = let
             sum'    = sum n'
         in n + sum'
            \end{lstlisting}
-           \item
-        \end{itemize}
+           \item If you need a variable whose scope is an equation, use the \code{where} clause instead:
+           \begin{lstlisting}
+cmpSquare x y   | x > z     = "bigger :)"
+                | x == z    = "same :|"
+                | x < z     = "smaller :("
+    where z = y * y
+           \end{lstlisting}
+           \item \emph{Types:}
+           \begin{itemize}
+               \item In Haskell every expression either \emph{has a type} or is \emph{ill-typed} and rejected at compile-time
+               \item Types can be annotated using \code{::}
+               \begin{lstlisting}
+haskellIsAwesome :: Bool
+haskellIsAwesome = True
+               \end{lstlisting}
+               \item Functions have \emph{arrow types}
+               \item \code{\x -> e} has type \code{A -> B}
+               \item If \code{e} has type \code{B} assuming \code{x} has type \code{A}
+           \end{itemize}
+           \item A \emph{Combinator} is a function with \emph{no free variables}
+           \item \emph{Lists:}
+           \begin{itemize}
+               \item A list is either an \emph{empty list}: \code{[ ]}
+               \item Or a \emph{head element} attached to a \emph{tail list}: \code{x:xs}
+               \begin{lstlisting}
+[]                  -- A list with zero elements
+1:[]                -- A list with one element
+(:) 1 []            -- A list with one element
+1:(2:(3:(4:[])))    -- A list with four elements
+1:2:3:4:[]          -- Same thing
+[1,2,3,4]           -- Syntactic sugar
+               \end{lstlisting}
+               \item \code{[]} and \code{:} are called the list \emph{constructors}
+               \item A list has type \code{[A]} if each one of its elements has type \code{A}
+            \end{itemize}
+               \item \emph{Pairs:} the constructor is \code{(,)}
+               \begin{lstlisting}
+myPair :: (String, Int)
+myPair = ("apple", 3)
+               \end{lstlisting}
+           \end{itemize}
     \begin{center}
         \begin{tabular}{ | c | c | } \toprule
             Var     & Desc                                      \\ \midrule
