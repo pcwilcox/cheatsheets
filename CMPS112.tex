@@ -115,13 +115,91 @@ e ::= x
             \item \code{x} is the newly-introduced variable
             \item \code{e} is the \emph{scope} of \code{x}
             \item Any occurrence of \code{x} in \code{\x -> e} is \emph{bound} (by the \emph{binder} \code{\x})
+            \item An occurrence of \code{x} in \code{e} is \emph{free} if it is \code{not bound} by an enclosing abstraction
         \end{itemize}
-        \item \emph{Rewrite rules:}
-        \begin{itemize}
-            \item $\alpha$-step: renaming formals
-            \item $\beta$-step: aka function call
+        \item \emph{Free Variables:} A variable \code{x} is \emph{free} if there exists a free occurrence of \code{x} in \code{e} (not bound as a formal)
+            \item \emph{Closed Expressions:} if \code{e} has no free variables it is \emph{closed}
+            \item $\alpha$-step (renaming formals): we can rename a formal parameter and replace all its occurrences in the body
+            \item $\beta$-step (aka function call)
+            \begin{itemize}
+                \item \code{(\x -> e1) e2 =b> e1[x := e2]}
+                \item \code{e1[x := e2]} means ``\code{e1} with all free occurrences of \code{x} replaced with \code{e2}''
+                \item Computation is \code{search and replace}: if you see an \emph{abstraction} applied to an argument, take the \emph{body} of the abstraction and replace all free occurrences of the \code{formal} by that argument
+            \end{itemize}
+            \item \emph{Normal Forms:}
+            \begin{itemize}
+                \item A \emph{redex} is a $\lambda$-term of the form \code{(\x -> e1) e2}
+                \item A $\lambda$-term is in \emph{normal form} if it contains no redexes
+            \end{itemize}
+            \item \emph{Evaluation:}
+            \begin{itemize}
+                \item A $\lambda$-term \code{e} evaluates to \code{e'} if there is a sequence of steps
+                \begin{lstlisting}
+e =?> e_1 =?> ... =?> e_N =?> e'
+                \end{lstlisting}
+                \item each \code{=?>} is either \code{=a>} or \code{=b>} and \code{N >= 0}
+                \item \code{e'} is in normal form
+                \item \code{e1 =*> e2}: \code{e1} \emph{reduces} to \code{e2} in 0 or more steps
+                \item \code{e1 =~> e2}: \code{e1} \emph{evaluates} to \code{e2}
+           \end{itemize}
+           \item $\Omega$: \code{(\x -> x x) (\x -> x x)}
+           \item \emph{Recursion:} Fixpoint Combinator
+           \begin{lstlisting}
+FIX STEP
+=*> STEP (FIX STEP)
+           \end{lstlisting}
+           \begin{itemize}
+               \item \code{FIX = \stp -> (\x -> stp (x x)) (\x -> stp (x x))}
+           \end{itemize}
+           \item \emph{Quicksort in Haskell}
+           \begin{lstlisting}
+sort :: [a] -> [a]
+sort []     = []
+sort (x:xs) = sort ls ++ [x] ++ sort rs
+    where
+        ls  = [ l | l <- xs, l <= x ]
+        rs  = [ r | r <- xs, x < r   ]
+           \end{lstlisting}
+           \item \emph{Functions in Haskell}
+           \begin{itemize}
+               \item Functions are \emph{first-class values}
+               \item can be \emph{passes as arguments} to other functions
+               \item can be \emph{returned as results} from other functions
+               \item can be \emph{partially applied} (arguments passed \emph{one at a time})
+           \end{itemize}
+           \item \emph{Top-level bindings:}
+           \begin{itemize}
+               \item Things can be defined globally
+               \item Their names are called \emph{top-level variables}
+               \item Their definitions are called \emph{top-level bindings}
+           \end{itemize}
+           \item \emph{Equations and Patterns}
+\begin{lstlisting}
+pair x y b  = if b then x else y
+fst p       = p True
+snd p       = p False
+\end{lstlisting}
+           \begin{itemize}
+               \item A single function binding can have multiple equations with different \emph{patterns} of parameters
+               \item The first equation whose pattern matches the actual arguments is chosen
+           \end{itemize}
+           \item \emph{Referential Transparency} means that a variable can be defined \emph{once per scope} and \emph{no mutation is allowed}
+           \item \emph{Local variables} can be defined using a \code{let} expression
+           \begin{lstlisting}
+sum 0 = 0
+sum n = let n' = n - 1
+        in n + sum n'
+           \end{lstlisting}
+           \item Syntactic sugar for nested \code{let} expressions:
+           \begin{lstlisting}
+sum 0 = 0
+sum n = let
+            n'      = n - 1
+            sum'    = sum n'
+        in n + sum'
+           \end{lstlisting}
+           \item
         \end{itemize}
-    \end{itemize}
     \begin{center}
         \begin{tabular}{ | c | c | } \toprule
             Var     & Desc                                      \\ \midrule
