@@ -45,7 +45,7 @@
 
 \lstset{
   frame=none,
-  xleftmargin=2pt,
+  xleftmargin=1pt,
   stepnumber=1,
   numbers=none,
   numbersep=5pt,
@@ -55,6 +55,8 @@
   escapeinside={*'}{'*},
   language=haskell,
   tabsize=2,
+  aboveskip=2mm,
+  belowskip=2mm,
   emphstyle={\bf},
   commentstyle=\it,
   stringstyle=\mdseries\ttfamily,
@@ -84,7 +86,7 @@
 
 \begin{document}
 \footnotesize
-\begin{multicols}{4}
+\begin{multicols}{3}
     \setlength{\premulticols}{1pt}
     \setlength{\postmulticols}{1pt}
     \setlength{\multicolsep}{1pt}
@@ -321,56 +323,105 @@ foldr :: (a -> b -> b) -> b -> [a] -> b
 foldr f b []        = b
 foldr f b (x:xs)    = f x (foldr f b xs)
             \end{lstlisting}
-            \begin{itemize}
-                \item Higher order function which recurses on the tail
-                \item Combines result with the head in some binary operation
-                \item \code{len = foldr (\x n -> 1 + n) 0}
-                \item \code{sum = foldr (\x n -> x + n) 0}
-                \item \code{cat = foldr (\x n -> x ++ n) ""}
-            \end{itemize}
-            \item The \emph{Fold-Left} pattern:
-            \begin{lstlisting}
+              \begin{itemize}
+                  \item Higher order function which recurses on the tail
+                  \item Combines result with the head in some binary operation
+                  \item \code{len = foldr (\x n -> 1 + n) 0}
+                  \item \code{sum = foldr (\x n -> x + n) 0}
+                  \item \code{cat = foldr (\x n -> x ++ n) ""}
+              \end{itemize}
+        \item The \emph{Fold-Left} pattern:
+              \begin{lstlisting}
 foldl :: (a -> b -> a) -> a -> [b] -> a
 foldl f b xs                = helper b xs
     where
         helper acc []       = acc
         helper acc (x:xs)   = helper (f acc x) xs
             \end{lstlisting}
-            \begin{itemize}
-                \item Higher order function uses a helper function with an extra accumulator argument
-                \item To compute the new accumulator, combine the urrent accumulator with the head using some binary operation
-            \end{itemize}
-            \item Useful HOFs:
-            \begin{itemize}
-                \item \code{Flip:} flips the order of the input args
-                \begin{lstlisting}
+              \begin{itemize}
+                  \item Higher order function uses a helper function with an extra accumulator argument
+                  \item To compute the new accumulator, combine the urrent accumulator with the head using some binary operation
+              \end{itemize}
+        \item Useful HOFs:
+              \begin{itemize}
+                  \item \code{Flip:} flips the order of the input args
+                        \begin{lstlisting}
 flip :: (a -> b -> c) -> b -> a -> c
                 \end{lstlisting}
-                \item \code{Compose:} compose functions
-                \begin{lstlisting}
+                  \item \code{Compose:} compose functions
+                        \begin{lstlisting}
 (.) :: (b -> c) -> (a -> b) -> a -> c
                 \end{lstlisting}
-            \end{itemize}
-            \item Libraries will implement \code{map}, \code{fold}, \code{filter}, etc on its collections
+              \end{itemize}
+        \item Libraries will implement \code{map}, \code{fold}, \code{filter}, etc on its collections
+        \item \emph{List Comprehensions:} List comprehensions construct a new list from an old list
+              \begin{lstlisting}
+-- examples
+map f xs    = [f x | x <- xs]
+filter p xs = [x | x <- xs, p x]
+concat xss  = [x | xs <- xss, x <- xs]
+
+-- rules
+[e |True]           = [e]
+[e | q]             = [e | q, True]
+[e | b, Q]          = if b then [e | Q] else []
+[e | p <- xs, Q]    = let ok p = [e | Q]
+                          ok _ = []
+                      in concat (map ok xs)
+            \end{lstlisting}
+            \item \emph{Functions from Homework:}
+\begin{lstlisting}
+sumList :: [Int] -> Int
+sumList []      = 0
+sumList (x:xs)  = x + sumList xs
+\end{lstlisting}
+
+\begin{lstlisting}
+digitsOfInt :: Int -> [Int]
+digitsOfInt n
+    | n < 0     = []
+    | n < 10    = [n]
+    | otherwise = digitsOfInt (div n 10) ++ [mod n 10]
+
+digits :: Int -> [Int]
+digits n = digitsOfInt (abs n)
+\end{lstlisting}
+\begin{lstlisting}
+additivePersistence :: Int -> Int
+additivePersistence n~
+    | n < 10    = 0
+    | otherwise = 1 + additivePersistence (sumList (digitsOfInt n))
+\end{lstlisting}
+\begin{lstlisting}
+digitalRoot :: Int -> Int
+digitalRoot n
+    | n < 10    = n
+    | otherwise = digitalRoot (sumList (digitsOfInt n))
+\end{lstlisting}
+\begin{lstlisting}
+listReverse :: [a] -> [a]
+listReverse []      = []
+listReverse (x:xs)  = listReverse xs ++ [x]
+\end{lstlisting}
     \end{itemize}
-    \pagebreak
     \begin{center}
         \begin{adjustbox}{angle=270}
-            \begin{lstlisting}
+            \begin{lstlisting}[caption="Lambda Calculus Functions" label=""]
 let ZERO    = \f x -> x
 let ONE     = \f x -> f x
 let TWO     = \f x -> f (f x)
-let THREE   = \f x -> f (f (f x))
-let FOUR    = \f x -> f (f (f (f x)))
-let FIVE    = \f x -> f (f (f (f (f x))))
-let SIX     = \f x -> f (f (f (f (f (f x)))))
-let TEN     = \f x -> f ( f ( f ( f ( f ( f ( f ( f ( f ( f x)))))))))
+let SUCC    = \n f x -> f (n f x)
+let EXP     = \n m -> n (MULT m) ONE
 
 let TRUE    = \x y -> x
 let FALSE   = \x y -> y
 let ITE     = \b x y -> b x y
 let AND     = \b1 b2 -> ITE b1 b2 FALSE
 let OR      = \b1 b2 -> ITE b1 TRUE b2
+let NOT     = \b1 -> b1 FALSE TRUE
+let NOR     = \b1 b2 -> NOT (OR b1 b2)
+let NAND    = \b1 b2 -> NOT (AND b1 b2)
+let XOR     = \b1 b2 -> AND (NAND b1 b2) (OR b1 b2)
 
 let INCR    = \n f x -> f (n f x)
 
@@ -378,11 +429,12 @@ let PAIR    = \x y b -> b x y
 let FST     = \p     -> p TRUE
 let SND     = \p     -> p FALSE
 
-let SKIP1   = \j k -> (\b -> b TRUE ((AND TRUE (k(TRUE))) (j(k(FALSE))) (k(FALSE))))     -- (a)
-let DECR    =  \n -> (n (SKIP1 INCR) (PAIR FALSE ZERO)) FALSE -- (b)
-let SUB     = \m n -> (n DECR) m       -- (c)
-let ISZ     =  \n -> n(\a -> FALSE) TRUE      -- (d)
-let EQL     = \n m -> AND (ISZ (SUB m n)) (ISZ (SUB n m))     -- (e)let SUC   = \n f x -> f (n f x)
+let SKIP1   = \j k -> (\b -> b TRUE ((AND TRUE (k(TRUE))) (j(k(FALSE))) (k(FALSE))))
+let DECR    =  \n -> (n (SKIP1 INCR) (PAIR FALSE ZERO)) FALSE
+let SUB     = \m n -> (n DECR) m
+let ISZ     =  \n -> n(\a -> FALSE) TRUE
+let EQL     = \n m -> AND (ISZ (SUB m n)) (ISZ (SUB n m))
+let SUC   = \n f x -> f (n f x)
 let ADD     = \n m -> n SUC m
 let MUL     = \n m -> n (ADD m) ZERO
 let REPEAT  = \n m -> n (PAIR m) FALSE
@@ -396,6 +448,8 @@ let MOD     = FIX (\rec n m -> ITE (EQL n m) ZERO (ITE (ISZ (SUB n m) ) n (rec (
 let INSERT  = \n m -> (PAIR n m)
 let APPEND' = FIX (\rec n m -> ITE (EMPTY n) m (INSERT (FST n) (rec (SND n) m)))
             \end{lstlisting}
+
+
         \end{adjustbox}
     \end{center}
 \end{multicols}
