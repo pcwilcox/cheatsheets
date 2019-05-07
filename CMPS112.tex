@@ -353,25 +353,49 @@ flip :: (a -> b -> c) -> b -> a -> c
             \end{itemize}
             \item Libraries will implement \code{map}, \code{fold}, \code{filter}, etc on its collections
     \end{itemize}
-    \begin{center}
-        \begin{tabular}{ | c | c | } \toprule
-            Var & Desc                                      \\ \midrule
-            $B$ & the number of data pages                  \\ \midrule
-            $R$ & number of records per page                \\ \midrule
-            $D$ & average time to read or write a disk page \\ \midrule
-            $F$ & average fanout for a non-leaf page        \\ \bottomrule
-        \end{tabular}
-    \end{center}
+    \pagebreak
     \begin{center}
         \begin{adjustbox}{angle=270}
-            \begin{tabular}{ | c | c | c | c | c | c | } \toprule
-                ()            & Scan          & Equality              & Range                                    & Insert        & Delete        \\ \midrule
-                Heap          & $BD$          & $0.5 BD$              & $BD$                                     & $2D$          & Search + $D$  \\ \midrule
-                Sorted        & $BD$          & $D \log_2 B$          & $D(\log_2 B +$ \# matching pages$)$      & Search + $BD$ & Search + $BD$ \\ \midrule
-                Clustered     & $1.5 BD$      & $D \log_F 1.5 B$      & $D(\log_F 1.5B + $ \# matching pages$)$  & Search + $D$  & Search + $D$  \\ \midrule
-                Unclust. Tree & $BD(R+0.15)$  & $D(1 + \log_F 0.15B)$ & $D(\log_F 0.15B + $ \# matching pages$)$ & Search + $2D$ & Search + $2D$ \\ \midrule
-                Unclust. Hash & $BD(R+0.125)$ & $2D$                  & $BD$                                     & Search + $2D$ & Search + $2D$ \\ \bottomrule
-            \end{tabular}
+            \begin{lstlisting}
+let ZERO    = \f x -> x
+let ONE     = \f x -> f x
+let TWO     = \f x -> f (f x)
+let THREE   = \f x -> f (f (f x))
+let FOUR    = \f x -> f (f (f (f x)))
+let FIVE    = \f x -> f (f (f (f (f x))))
+let SIX     = \f x -> f (f (f (f (f (f x)))))
+let TEN     = \f x -> f ( f ( f ( f ( f ( f ( f ( f ( f ( f x)))))))))
+
+let TRUE    = \x y -> x
+let FALSE   = \x y -> y
+let ITE     = \b x y -> b x y
+let AND     = \b1 b2 -> ITE b1 b2 FALSE
+let OR      = \b1 b2 -> ITE b1 TRUE b2
+
+let INCR    = \n f x -> f (n f x)
+
+let PAIR    = \x y b -> b x y
+let FST     = \p     -> p TRUE
+let SND     = \p     -> p FALSE
+
+let SKIP1   = \j k -> (\b -> b TRUE ((AND TRUE (k(TRUE))) (j(k(FALSE))) (k(FALSE))))     -- (a)
+let DECR    =  \n -> (n (SKIP1 INCR) (PAIR FALSE ZERO)) FALSE -- (b)
+let SUB     = \m n -> (n DECR) m       -- (c)
+let ISZ     =  \n -> n(\a -> FALSE) TRUE      -- (d)
+let EQL     = \n m -> AND (ISZ (SUB m n)) (ISZ (SUB n m))     -- (e)let SUC   = \n f x -> f (n f x)
+let ADD     = \n m -> n SUC m
+let MUL     = \n m -> n (ADD m) ZERO
+let REPEAT  = \n m -> n (PAIR m) FALSE
+let EMPTY   = \p -> p (\x y z -> FALSE) TRUE
+let FIX     = \stp -> (\x -> stp (x x)) (\x -> stp (x x))
+let LEN     = FIX (\rec n -> (EMPTY n) ZERO (INCR (rec (SND n))))
+let STEP    = \rec n -> ITE (ISZ n) ZERO (ADD n (rec (DECR n)))
+let SUM     = FIX STEP
+let DIV     = FIX (\rec n m -> ITE (EQL n m) ONE (ITE (ISZ (SUB n m) ) ZERO (INCR (rec (SUB n m) m))))
+let MOD     = FIX (\rec n m -> ITE (EQL n m) ZERO (ITE (ISZ (SUB n m) ) n (rec (SUB n m) m)))
+let INSERT  = \n m -> (PAIR n m)
+let APPEND' = FIX (\rec n m -> ITE (EMPTY n) m (INSERT (FST n) (rec (SND n) m)))
+            \end{lstlisting}
         \end{adjustbox}
     \end{center}
 \end{multicols}
