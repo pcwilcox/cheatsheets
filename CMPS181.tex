@@ -87,11 +87,11 @@
 
 \begin{document}
 \footnotesize
-\begin{multicols}{4}
-    \setlength{\premulticols}{1pt}
-    \setlength{\postmulticols}{1pt}
-    \setlength{\multicolsep}{1pt}
-    \setlength{\columnsep}{2pt}
+\begin{multicols}{5}
+    \setlength{\premulticols}{0pt}
+    \setlength{\postmulticols}{0pt}
+    \setlength{\multicolsep}{0pt}
+    \setlength{\columnsep}{1pt}
     \begin{itemize}
         \item \code{ACID}
               \begin{itemize}
@@ -363,154 +363,363 @@
                   \item Can use \code{XOR} operation to reduce number of maps needed by one.
               \end{itemize}
         \item \code{External Sorting:}
-        \begin{itemize}
-            \item Goal: Need to sort more data than will fit in memory, efficiently.
-            \item \code{2-Way Sort:} Requires 3 buffers
-            \begin{itemize}
-                \item Pass 0: read a page, sort it, write it out (only one buffer page used)
-                \item Pass 1, 2, 3, ...: Read and merge pairs of runs. (Three buffer pages are used)
-            \end{itemize}
-            \item Sorting $N=2^k Pages of Data$:
-            \begin{itemize}
-                \item Pass 0: read, sort, write $\rightarrow 2^k$ 1-page runs
-                \item Pass 1: Read + merge 1-page pairs, write $\rightarrow 2^{k-1}$ 2-page runs
-                \item Pass 2: Read + merge 2-page pairs, write $\rightarrow 2^{k-2}$ 4-page runs
-                \item Pass $k-1$: Read + merge $2^{k-2}$-page pairs, write $\rightarrow 2 2^{k-1}$-page runs
-                \item Pass $k$: Read + merge $2^{k-1}$-page pairs, write $\rightarrow 1 2^k$-page result
-            \end{itemize}
-            \item 2-Way External merge sort: $N$ pages in file $\implies \lceil \log_2 N \rceil + 1$ passes, total I/O cost $= 2 N \left ( \lceil \log_2 N \rceil + 1 \right )$
-            \item \emph{General} external merge sort:
-            \begin{itemize}
-                \item Sorting a file with $N$ pages using $B$ buffer pages.
-                \item Pass 0: use $B$ buffer pages. Produce $\lceil N / B \rceil$ sorted runs of $B$ pages each.
-                \item Pass 2, ... etc: merge $b - 1$ runs
-                \item Number of passes: $1 + \left \lceil \log_{B-1} \lceil N / B \rceil \right \rceil $
-                \item Cost $= 2N * ($\# of passes $)$
-            \end{itemize}
-            \item \emph{Double Buffering}
-            \begin{itemize}
-                \item To reduce wait time for I/O request to complete, can \emph{prefetch} into \code{shadow block}
-                \item Potentially more passes; in practice, most files still sorted in 2-3 passes.
-            \end{itemize}
-            \item \emph{B+ Tree as ``Sorted Access Path''}
-            \begin{itemize}
-                \item Scenario: table to be retrieved in some order has a B+ tree index on the ordering columns
-                \item Idea: retrieve records in order by traversing the B+ tree's leaf pages
-                \item Very good idea if the tree is clustered, otherwise probably a bad idea
-            \end{itemize}
-        \end{itemize}
+              \begin{itemize}
+                  \item Goal: Need to sort more data than will fit in memory, efficiently.
+                  \item \code{2-Way Sort:} Requires 3 buffers
+                        \begin{itemize}
+                            \item Pass 0: read a page, sort it, write it out (only one buffer page used)
+                            \item Pass 1, 2, 3, ...: Read and merge pairs of runs. (Three buffer pages are used)
+                        \end{itemize}
+                  \item Sorting $N=2^k Pages of Data$:
+                        \begin{itemize}
+                            \item Pass 0: read, sort, write $\rightarrow 2^k$ 1-page runs
+                            \item Pass 1: Read + merge 1-page pairs, write $\rightarrow 2^{k-1}$ 2-page runs
+                            \item Pass 2: Read + merge 2-page pairs, write $\rightarrow 2^{k-2}$ 4-page runs
+                            \item Pass $k-1$: Read + merge $2^{k-2}$-page pairs, write $\rightarrow 2 2^{k-1}$-page runs
+                            \item Pass $k$: Read + merge $2^{k-1}$-page pairs, write $\rightarrow 1 2^k$-page result
+                        \end{itemize}
+                  \item 2-Way External merge sort: $N$ pages in file $\implies \lceil \log_2 N \rceil + 1$ passes, total I/O cost $= 2 N \left ( \lceil \log_2 N \rceil + 1 \right )$
+                  \item \emph{General} external merge sort:
+                        \begin{itemize}
+                            \item Sorting a file with $N$ pages using $B$ buffer pages.
+                            \item Pass 0: use $B$ buffer pages. Produce $\lceil N / B \rceil$ sorted runs of $B$ pages each.
+                            \item Pass 2, ... etc: merge $b - 1$ runs
+                            \item Number of passes: $1 + \left \lceil \log_{B-1} \lceil N / B \rceil \right \rceil $
+                            \item Cost $= 2N * ($\# of passes $)$
+                        \end{itemize}
+                  \item \emph{Double Buffering}
+                        \begin{itemize}
+                            \item To reduce wait time for I/O request to complete, can \emph{prefetch} into \code{shadow block}
+                            \item Potentially more passes; in practice, most files still sorted in 2-3 passes.
+                        \end{itemize}
+                  \item \emph{B+ Tree as ``Sorted Access Path''}
+                        \begin{itemize}
+                            \item Scenario: table to be retrieved in some order has a B+ tree index on the ordering columns
+                            \item Idea: retrieve records in order by traversing the B+ tree's leaf pages
+                            \item Very good idea if the tree is clustered, otherwise probably a bad idea
+                        \end{itemize}
+              \end{itemize}
         \item \code{Query Processing}
-        \begin{itemize}
-            \item \emph{Access Paths:}
-            \begin{itemize}
-                \item An access path is a method of retrieving tuples: file scan or index that matches a selection in the query
-                \item A tree index \emph{matches} (a conjunction of) terms that involve only attributes in a \emph{prefix} of the search key.
-                \item A hash index \emph{matches} (a conjunction of) terms that has a term \emph{attribute = value} for every attribute in the search key of the index.
-            \end{itemize}
-            \item Selection conditions often first converted to be in CNF (\code{AND}ing of \code{OR}s)
-            \item One approach to selections:
-            \begin{itemize}
-                \item Find the \emph{most selective access path}, retrieve tuples using it, then apply any remaining terms which don't match the index
-                \item Most selective access path: an index or file scan that we estimate will require the fewest page I/Os
-                \item Terms that match this index reduce the number of tuples retrieved; other terms used to filter the retrieved tuples on the fly, but don't prevent retrieval of the tuples/pages
-            \end{itemize}
-            \item Using an index for selections: cost depends on \# qualifying tuples and clustering
-            \begin{itemize}
-                \item Cost of finding qualifying data entries (typically small) plus cost of retrieving the actual records themselves (can be large without clustering)
-            \end{itemize}
-            \item \emph{Duplicate Elimination}
-            \begin{itemize}
-                \item Relational algebra projection removes duplicates: SQL systems don't remove duplicates unless the keyword \code{DISTINCT} is specified
-                \item Sorting approach: sort on \code{<sid, bid>} and remove duplicates. Can optimize by dropping unwanted columns while sorting.
-                \item Hashing approach: hash on \code{<sid, bid>} to create \emph{partitions}. Load partitions into memory one at a time, build an in-memory hash structure, and eliminate duplicates within it.
-            \end{itemize}
-            \item Notation:
-            \begin{itemize}
-                \item Pages in a heap relation $R$: Pages$_R$
-                \item Tuples per page for a relation $R$: TPP$_R$
-                \item Number of tuples in $R$: Card$_R$
-                \item Card$_R = $ Pages$_R * $ TPP$_R$
-            \end{itemize}
-            \item \emph{Simple Nested Loops Join}: foreach tuple in $R$, for each tuple in $S$, if $r_i == s_j$ then add \code{<r,s>} to result.
-            \begin{itemize}
-                \item For each tuple in the \emph{outer} relation $R$ we scan the entire \emph{inner} relation $S$. Cost: Pages$_R$ + Card$_R * $ Pages$_S$
-                \item Page-oriented nested loops join: for each \emph{page} of $R$ get each \emph{page} of $S$ and write out matching pairs of tuples
-            \end{itemize}
-            \item \emph{Index Nested Loops}
-            \begin{itemize}
-                \item If there is an index on the join column of one relation, can make it the inner and exploit the index. Cost: Pages$_R$ + Card$_R$ * cost of finding matching $S$ tuples
-                \item For each $R$ tuple, cost of probing $S$ index is about 1.2 for hash index, 2-4 for B+ tree. Cost of then finding $S$ tuples (assuming alt. 2 or 3) depends on clustering. Clustered typically 1 I/O, unclustered up to 1 I/O per matching $S$ tuple.
-            \end{itemize}
-            \item \emph{Block Nexted Loops Join}
-            \begin{itemize}
-                \item Use one page as an input buffer for scanning the inner $S$, one pas as the output buffer, and use \emph{all} remaining pages to hold ``block'' of pages of outer $R$.
-                \item For each block of $R$, hash each data entry to a hash table. Then compare all entries in $S$.
-            \end{itemize}
-            \item \emph{Join: Sort-Merge } $\left (R \bowtie_{i=j} S \right)$
-            \begin{itemize}
-                \item Sort $R$ and $S$ on the join column, then scan them to do a `merge' (on join column) and then output result tupls.
-                \item $R$ is scanned once; each $S$ group is scanned once per matching $R$ tuple.
-            \end{itemize}
-            \item \emph{Statistics and Catalogs}
-            \begin{itemize}
-                \item Catalogs typically contain at least: \emph{\# tuples} and \emph{\# pages} in each relation; \emph{\# distinct key values} and \emph{\# pages} for each index; \emph{index height}, \emph{low/high key values} for each tree index
-                \item Catalogs updated periodically: updating each time data changes is too expensive and approximation is fine
-            \end{itemize}
-            \item \emph{Cost estimation:} For each plan must estimate cost
-            \begin{itemize}
-                \item Estimate \emph{Cost} of each operation in plan-tree: depends on input cardinalities
-                \item Estimate \emph{Size} of result for each operation in the tree; for seelctions and joins assume independence of predicates
-            \end{itemize}
-            \item \emph{Size estimation and reduction factors}
-            \begin{itemize}
-                \item Maximum \# of tuples in result is the product of cardinalities in the \code{FROM} clause
-                \item Reduction Factor $RF$ associated with each \emph{term} reflects the impact of \emph{term} in reducing result size
-            \end{itemize}
-            \item \emph{Grace Hash-Join}
-            \begin{itemize}
-                \item Like a two-phase index nested loop join
-                \item \emph{Build phase:} Partition both relations using hash function $h$: $R$ tuples in partition $i$ will only match $S$ tuples in partition $i$.
-                \item \emph{Match phase:} Read in a partition of $R$, hash it using $h_2 (<>h)$. Scan matching partition of $S$ searching for its $R$ matches.
-                \item \# partitions $k \leq B-1$ and Pages$_R /k$ (size of largest partition to be held in memory) $< B-1$.
-                \item Assuming uniformy-sized partitions and maximizing $k$: $k = B-1$ and Pages$_R /k < B-1$ so $(B-1)^2 > $Pages$_R \implies B > \sqrt{\text{Pages}_R}$
-                \item Can hash-join \emph{recursively} to reduce the amount of memory needed
-                \item In build phase: Read + write both relations: $2*($Pages$_R + $Pages$_S)$
-                \item In match phase: Read both relations; Pages$_R + $Pages$_S$ I/Os
-            \end{itemize}
-            \item Sort-Merge Join vs Hash Join:
-            \begin{itemize}
-                \item Given a a reasonable amount of memory $(B > \sqrt{\text{Pages}_R})$, both have cost $3*(\text{Pages}_R + \text{Pages}_s)$ I/Os
-                \item Hash join is superior is relation sizes differ greatly because it needs less memory, and is also highly parallelizable
-                \item Sort-Merge is less sensitive to data skew and its result is sorted
-            \end{itemize}
-            \item \emph{More general join conditions:}
-            \begin{itemize}
-                \item Equalities over several attributes: for INL, build index on composite key. For sort-merge and hash join, sort/hash-partition on the combination of the join columns
-                \item Inequality conditions: for INL, need (clustered!) B+ tree index; hash-join not usable; merge-join possible; block NL the best
-            \end{itemize}
-        \end{itemize}
+              \begin{itemize}
+                  \item \emph{Access Paths:}
+                        \begin{itemize}
+                            \item An access path is a method of retrieving tuples: file scan or index that matches a selection in the query
+                            \item A tree index \emph{matches} (a conjunction of) terms that involve only attributes in a \emph{prefix} of the search key.
+                            \item A hash index \emph{matches} (a conjunction of) terms that has a term \emph{attribute = value} for every attribute in the search key of the index.
+                        \end{itemize}
+                  \item Selection conditions often first converted to be in CNF (\code{AND}ing of \code{OR}s)
+                  \item One approach to selections:
+                        \begin{itemize}
+                            \item Find the \emph{most selective access path}, retrieve tuples using it, then apply any remaining terms which don't match the index
+                            \item Most selective access path: an index or file scan that we estimate will require the fewest page I/Os
+                            \item Terms that match this index reduce the number of tuples retrieved; other terms used to filter the retrieved tuples on the fly, but don't prevent retrieval of the tuples/pages
+                        \end{itemize}
+                  \item Using an index for selections: cost depends on \# qualifying tuples and clustering
+                        \begin{itemize}
+                            \item Cost of finding qualifying data entries (typically small) plus cost of retrieving the actual records themselves (can be large without clustering)
+                        \end{itemize}
+                  \item \emph{Duplicate Elimination}
+                        \begin{itemize}
+                            \item Relational algebra projection removes duplicates: SQL systems don't remove duplicates unless the keyword \code{DISTINCT} is specified
+                            \item Sorting approach: sort on \code{<sid, bid>} and remove duplicates. Can optimize by dropping unwanted columns while sorting.
+                            \item Hashing approach: hash on \code{<sid, bid>} to create \emph{partitions}. Load partitions into memory one at a time, build an in-memory hash structure, and eliminate duplicates within it.
+                        \end{itemize}
+                  \item Notation:
+                        \begin{itemize}
+                            \item Pages in a heap relation $R$: Pages$_R$
+                            \item Tuples per page for a relation $R$: TPP$_R$
+                            \item Number of tuples in $R$: Card$_R$
+                            \item Card$_R = $ Pages$_R * $ TPP$_R$
+                        \end{itemize}
+                  \item \emph{Simple Nested Loops Join}: foreach tuple in $R$, for each tuple in $S$, if $r_i == s_j$ then add \code{<r,s>} to result.
+                        \begin{itemize}
+                            \item For each tuple in the \emph{outer} relation $R$ we scan the entire \emph{inner} relation $S$. Cost: Pages$_R$ + Card$_R * $ Pages$_S$
+                            \item Page-oriented nested loops join: for each \emph{page} of $R$ get each \emph{page} of $S$ and write out matching pairs of tuples
+                        \end{itemize}
+                  \item \emph{Index Nested Loops}
+                        \begin{itemize}
+                            \item If there is an index on the join column of one relation, can make it the inner and exploit the index. Cost: Pages$_R$ + Card$_R$ * cost of finding matching $S$ tuples
+                            \item For each $R$ tuple, cost of probing $S$ index is about 1.2 for hash index, 2-4 for B+ tree. Cost of then finding $S$ tuples (assuming alt. 2 or 3) depends on clustering. Clustered typically 1 I/O, unclustered up to 1 I/O per matching $S$ tuple.
+                        \end{itemize}
+                  \item \emph{Block Nexted Loops Join}
+                        \begin{itemize}
+                            \item Use one page as an input buffer for scanning the inner $S$, one pas as the output buffer, and use \emph{all} remaining pages to hold ``block'' of pages of outer $R$.
+                            \item For each block of $R$, hash each data entry to a hash table. Then compare all entries in $S$.
+                        \end{itemize}
+                  \item \emph{Join: Sort-Merge } $\left (R \bowtie_{i=j} S \right)$
+                        \begin{itemize}
+                            \item Sort $R$ and $S$ on the join column, then scan them to do a `merge' (on join column) and then output result tupls.
+                            \item $R$ is scanned once; each $S$ group is scanned once per matching $R$ tuple.
+                        \end{itemize}
+                  \item \emph{Statistics and Catalogs}
+                        \begin{itemize}
+                            \item Catalogs typically contain at least: \emph{\# tuples} and \emph{\# pages} in each relation; \emph{\# distinct key values} and \emph{\# pages} for each index; \emph{index height}, \emph{low/high key values} for each tree index
+                            \item Catalogs updated periodically: updating each time data changes is too expensive and approximation is fine
+                        \end{itemize}
+                  \item \emph{Cost estimation:} For each plan must estimate cost
+                        \begin{itemize}
+                            \item Estimate \emph{Cost} of each operation in plan-tree: depends on input cardinalities
+                            \item Estimate \emph{Size} of result for each operation in the tree; for seelctions and joins assume independence of predicates
+                        \end{itemize}
+                  \item \emph{Size estimation and reduction factors}
+                        \begin{itemize}
+                            \item Maximum \# of tuples in result is the product of cardinalities in the \code{FROM} clause
+                            \item Reduction Factor $RF$ associated with each \emph{term} reflects the impact of \emph{term} in reducing result size
+                        \end{itemize}
+                  \item \emph{Grace Hash-Join}
+                        \begin{itemize}
+                            \item Like a two-phase index nested loop join
+                            \item \emph{Build phase:} Partition both relations using hash function $h$: $R$ tuples in partition $i$ will only match $S$ tuples in partition $i$.
+                            \item \emph{Match phase:} Read in a partition of $R$, hash it using $h_2 (<>h)$. Scan matching partition of $S$ searching for its $R$ matches.
+                            \item \# partitions $k \leq B-1$ and Pages$_R /k$ (size of largest partition to be held in memory) $< B-1$.
+                            \item Assuming uniformy-sized partitions and maximizing $k$: $k = B-1$ and Pages$_R /k < B-1$ so $(B-1)^2 > $Pages$_R \implies B > \sqrt{\text{Pages}_R}$
+                            \item Can hash-join \emph{recursively} to reduce the amount of memory needed
+                            \item In build phase: Read + write both relations: $2*($Pages$_R + $Pages$_S)$
+                            \item In match phase: Read both relations; Pages$_R + $Pages$_S$ I/Os
+                        \end{itemize}
+                  \item Sort-Merge Join vs Hash Join:
+                        \begin{itemize}
+                            \item Given a a reasonable amount of memory $(B > \sqrt{\text{Pages}_R})$, both have cost $3*(\text{Pages}_R + \text{Pages}_s)$ I/Os
+                            \item Hash join is superior is relation sizes differ greatly because it needs less memory, and is also highly parallelizable
+                            \item Sort-Merge is less sensitive to data skew and its result is sorted
+                        \end{itemize}
+                  \item \emph{More general join conditions:}
+                        \begin{itemize}
+                            \item Equalities over several attributes: for INL, build index on composite key. For sort-merge and hash join, sort/hash-partition on the combination of the join columns
+                            \item Inequality conditions: for INL, need (clustered!) B+ tree index; hash-join not usable; merge-join possible; block NL the best
+                        \end{itemize}
+              \end{itemize}
+        \item \code{Two Approaches to General Selections}
+              \begin{itemize}
+                  \item \emph{First Approach:} Find the \emph{most selective access path}, retrieve tuples using it, and apply any remaining terms which don't match the index
+                        \begin{itemize}
+                            \item \emph{Most selective access path}: an index or file scan that we estimate will require the fewest page I/Os
+                            \item Terms that match this index reduce \# of tuples \emph{retrieved}; other terms are used to \emph{discard} some retrieved tuples but do not reduce number of pages read
+                        \end{itemize}
+                  \item \emph{Second approach:} Intersection of RIDs
+                        \begin{itemize}
+                            \item Get sets of RIDs for data records using each matching index
+                            \item Then \emph{intersect} these sets
+                            \item Finally retrieve the records and apply any remaining terms
+                        \end{itemize}
+              \end{itemize}
+        \item \code{The Projection Operation}
+              \begin{itemize}
+                  \item An approach based on \emph{sorting}:
+                        \begin{itemize}
+                            \item Modify pass 0 of external sort so that it also elminates unwanted fields. Thus, runs of pages are produced, but tuples in runs are smaller than input tuples.
+                            \item Modify merging passes to eliminate duplicates (!). Thus, \# of result tuples is smaller than number of tuples in input.
+                            \item Cost: in pass 0, read original relation ($M$ pages), write out same tuples but \emph{fewer columns}. In merging passes, \emph{fewer tuples} written out in each pass.
+                        \end{itemize}
+                  \item Projection based on \emph{hashing}:
+                        \begin{itemize}
+                            \item \emph{Partitioning phase:} Read $R$ using one input buffer. For each tuple, discard unwanted fields and use hash function $h_1 ($tuple$)$ to pick one of the $B-1$ output buffers.
+                            \item \emph{Duplicate elimination phase:} For each partition, read it in, and build an in-memory hash table with hash function $h_2 \neq h_1$ on ``wanted'' fields while discarding duplicates (!).
+                            \item \emph{Cost:} For partitioning, read $R$, write out each tuple, but with fewer fields. Less data read in next phase.
+                        \end{itemize}
+              \end{itemize}
+        \item \code{Relational Set Operations}
+              \begin{itemize}
+                  \item Intersection and Cross-Product are special cases of Join.
+                        \begin{itemize}
+                            \item Intersection does Join matching \emph{all columns} in join predicates
+                            \item Cross-Product does Join matching \emph{no columns} in join predicates
+                        \end{itemize}
+                  \item Union (which is \code{DISTINCT} not \code{ALL}) and Except are similar, here is a sorting-based approach to Union:
+                        \begin{itemize}
+                            \item Sort both relations (on combination of all attributes)
+                            \item Scan sorted relations and merge them, discarding duplicates
+                            \item \emph{Alternative}: merge runs from pass 0 for \emph{both} relations (!) discarding duplicates.
+                        \end{itemize}
+                  \item Hash-based approach to Union (from Grace)
+                        \begin{itemize}
+                            \item Partition both $R$ and $S$ using hash function $h_1$
+                            \item For each $S$-partition build in-memory hash table using $h_2$, then scan corresponding $R$-partition, adding truly new $S$ tuples to hash table while discarding duplicates
+                        \end{itemize}
+              \end{itemize}
+        \item Aggregate operations (\code{AVG}, \code{MIN}\ldots)
+              \begin{itemize}
+                  \item Without grouping: In general, requires scanning the full relation. Given an index whose search key includes all attributes in the \code{SELECT}/\code{WHERE} clauses, can do an index-only scan
+                  \item With grouping:
+                        \begin{itemize}
+                            \item Sort on group-by attributes, then scan relation and compute the aggregate for each group.
+                            \item Or, similar approach using hashing
+                            \item Given tree index whose search key includes all attributes in \code{SELECT}, \code{WHERE}, \code{GROUP BY} clauses, can do an index-only scan
+                        \end{itemize}
+              \end{itemize}
+        \item \code{Query Optimization}
+              \begin{itemize}
+                  \item \emph{Query blocks}: an SQL query is parsed into a collection and they are optimized one block at a time
+                  \item Nested subquery blocks are usually treated as calls to a subroutine
+                  \item For each block, plans considered are:
+                        \begin{itemize}
+                            \item All available access methods for each relation in the \code{FROM} clause
+                            \item All \emph{left-deep join trees} i.e. all ways to join the relations one-by-one
+                            \item Access an initial relation as outer, then take the next (inner) relation in the \code{FROM} clause, considering all relation permutations and join methods
+                        \end{itemize}
+                  \item \emph{Relational Algebra Equivalences} allow us to choose different join orders and to `push' selections and projects ahead of joins
+                        \begin{itemize}
+                            \item \code{Selections:} $\sigma_{c_1 \land \dots \land c_n} (R) = \sigma_{c_1} ( \ldots \sigma_{c_n} (R))$
+                            \item \code{Selections:} $\sigma_{c_1}(\sigma_{c_2}(R)) = \sigma_{c_2}(\sigma_{c_1}(R))$
+                            \item \code{Projections:} $\pi_{a_1 \land \dots \land a_n}(R) = \pi_{a_1}(\dots (\pi_{a_n}(R)))$
+                            \item \code{Joins:} $R \bowtie (S \bowtie T) = (R \bowtie S) \bowtie T$
+                            \item \code{Joins:} $(R \bowtie S) = (S \bowtie R)$
+                            \item A projection commutes with a selection that only uses the attributes retained by the projection
+                            \item Selection between attributes of the two arguments of a cross-product converts the cross-product to a join
+                            \item A selection on just attributes of $R$ commutes with $R \bowtie S$: $\sigma(R \bowtie S) = \sigma(R) \bowtie S$
+                            \item Similarly if a projection follows a join $R \bowtie S$ we can push parts of the projection into $R$ and $S$
+                        \end{itemize}
+                  \item Cost Estimates for Single-Relation Plans:
+                        \begin{itemize}
+                            \item Index $I$ on primary key matching selection: cost is height of $I+1$ for a B+ tree, about 1.2 for a hash index
+                            \item Clustered index $I$ matching one or more selects: $(Pages_I + Pages_R) *$ product of RF's of matching selects
+                            \item Non-clustered index $I$ matching one or more selects: $(Tuples_R) *$ product of RF's of matching selects
+                            \item Sequential scan of file: $Pages_R$
+                        \end{itemize}
+                  \item \emph{Enumeration of Left-Deep Plans}
+                        \begin{itemize}
+                            \item Left-Deep plans differ only in the order of relations, the access method, and the join method
+                            \item Enumerated using N stages: stage 1 finds best plan for each relation, stage 2 finds best plan joining result of each 1-relation plan to another relation (all 2-relation plans), and so on
+                            \item For each subset of relations, retain only the cheapest plan overall and the cheapest plan for \emph{interesting order} of tuples
+                        \end{itemize}
+                  \item \emph{Interesting orders:} A given data order is \emph{interesting} if it has the potential to save work later on
+                        \begin{itemize}
+                            \item Ordering on Join attributes
+                            \item Ordering on \code{GROUP BY} attributes
+                            \item Ordering on \code{DISTINCT} attributes
+                            \item Ordering on \code{ORDER BY} attributes
+                        \end{itemize}
+                  \item A partial plan on $k$ relations is combined with an additional relation only if there is a join condition between them, except if all join predicates in the \code{WHERE} clause combining the $k$ relations with another relation have been used up
+              \end{itemize}
+        \item Intermediate result size estimation:
+              \begin{itemize}
+                  \item For each relation $R$: Cardinality $|R|$, avg $R$-tuple width, and \# of pages in $R$
+                  \item For each indexed attribute of $R$:
+                        \begin{itemize}
+                            \item Number of distinct values $|\pi_A(R)|$
+                            \item Range of values (low to high)
+                            \item Number of index leaf pages
+                            \item Number of index levels (if B+ tree)
+                        \end{itemize}
+              \end{itemize}
+        \item Simple selection queries $\sigma_P$
+              \begin{itemize}
+                  \item Equality predicate ($p$ is ``$A = val$'')
+                        \begin{itemize}
+                            \item $|Q| \approx |R| / |\pi_A(R)|$
+                            \item $R$'s cardinality divided by the number of distinct $A$ values, assumes all values equally likely
+                        \end{itemize}
+                  \item Range predicate ($p$ is ``$val_1 \leq A \leq val_2$'')
+                        \begin{itemize}
+                            \item $|Q| \approx |R| * ((val_2 - val_1 + 1) / ((high(R.A) - low(R.A))))$
+                            \item Selected range size divided by full range size, assumes all values equally likely
+                        \end{itemize}
+                  \item Boolean selection predicates
+                        \begin{itemize}
+                            \item Conjunctive (``$p_1$ and $p_2$''): $RF_p \approx RF_{p_1} * RF_{p_2}$
+                            \item Negative (``not $p_1$''): $RF_p \approx 1 - RF_{p_1}$
+                            \item Disjunctive (``$p_1$ or $p_2$''): $RF_p \approx RF_{p_1} + RF_{p_2} - (RF_{p_1} * RF_{P_2})$
+                        \end{itemize}
+              \end{itemize}
+        \item Two-way Equijoin Predicates
+              \begin{itemize}
+                  \item Query $Q$: $R$ join $S$ on $R.A = S.B$
+                  \item Assume \emph{join value set containment} (foreign key/primary key)
+                  \item $\pi_A (R)$ is a subset of $\pi_B (S)$ or vice versa
+                  \item $|Q| \approx (|R| * |S|) / \max{(|\pi_A(R)|, |\pi_B(S)|)}$
+              \end{itemize}
+        \item Lock types:
+              \begin{itemize}
+                  \item $S$ is a read-lock and is compatible with other $S$ locks
+                  \item $X$ is a write-lock and is incompatible with all locks
+              \end{itemize}
+        \item \code{TRANSACTION SCHEDULING}
+              \begin{itemize}
+                  \item A \emph{serializable schedule} is equivalent to a serial schedule of \emph{committed} transactions
+                  \item \emph{Cascading Rollbacks:} If transaction $T_2$ is dependent on data written by $T_1$, and $T_1$ is rolled back, $T_2$ must be rolled back as well.
+                  \item \emph{ACR Avoid Cascading Rollbacks} schedule prevents this
+                  \item \code{TWO-PHASE LOCKING 2PL}
+                        \begin{itemize}
+                            \item If transaction $T$ wants to read/modify an object it first obtains an $S$ or $X$ lock
+                            \item If $T$ releases a lock it can acquire no new locks
+                            \item Guarantees serializability
+                            \item \emph{Strict 2PL}: hold all locks until the commit point, guarantees ACR
+                        \end{itemize}
+                  \item Thm: A schedule is conflict serializable iff its precedence graph is acyclic.
+                  \item Thm: 2PL ensures that the precedence graph will be acyclic.
+              \end{itemize}
+        \item \code{ISOLATION LEVELS}
+              \begin{itemize}
+                  \item \code{Serializable}: default, long-term R/W locks on phantoms too
+                  \item \code{Repeatable read}: long-term R/W locks on real objects; read only committed records, between two reads by the same transaction, no updates by another transaction
+                  \item \code{Read committed}: long-term W locks, short-term R locks; read only committed records
+                  \item \code{Read uncommitted}: read ignoring locks!
+              \end{itemize}
+        \item \code{WRITE-AHEAD LOGS}
+              \begin{itemize}
+                  \item Append to the log any time a transaction updates a record with the `before' and `after' values
+                  \item Append to the log any time a transaction commits
+                  \item Write the log to disk before writing the data
+                  \item Create a \emph{checkpoint} periodically to minimize crash recovery time; includes a description of transactions that were active and (possibly) dirty pages at time it started
+              \end{itemize}
+        \item \code{CRASH RECOVERY}: 3 phases
+              \begin{itemize}
+                  \item \emph{Analysis}: read the most recent checkpoint, scan log forward to id all transactions that were active + dirty pages in buffer pool
+                  \item \emph{Redo}: write out all dirty pages in buffer pool and redo all updates in log by applying \emph{after values} of their updates
+                  \item \emph{Undo}: Undo all the writes of transactions which were active at the crash as well as all rolled by transactions
+              \end{itemize}
+        \item Indexes:
+              \begin{itemize}
+                  \item Terms:
+                        \begin{itemize}
+                            \item $B$: the number of data pages
+                            \item $R$: number of records per page
+                            \item $D$: average time to read or write a page
+                            \item $F$: average fanout for a non-leaf page
+                            \item $P$: \# matching pages
+                        \end{itemize}
+                  \item \code{Heap}
+                        \begin{itemize}
+                            \item Scan: $BD$
+                            \item Equality: $0.5 BD$
+                            \item Range: $BD$
+                            \item Insert: $2D$
+                            \item Delete: Search + $D$
+                        \end{itemize}
+                  \item \code{Sorted}
+                        \begin{itemize}
+                            \item Scan: $BD$
+                            \item Equality: $D \log_2 B$
+                            \item Range: $D(\log_2 B + P)$
+                            \item Insert: Search + $BD$
+                            \item Delete: Search + $BD$
+                        \end{itemize}
+                  \item \code{Clustered}
+                        \begin{itemize}
+                            \item Scan: $1.5 BD$
+                            \item Equality: $D \log_F 1.5 B$
+                            \item Range: $D(\log_F 1.5B + P)$
+                            \item Insert: Search + $D$
+                            \item Delete: Search + $D$
+                        \end{itemize}
+                  \item \code{Unclust. Tree}
+                        \begin{itemize}
+                            \item Scan: $BD(R+0.15)$
+                            \item Equality: $D(1 + \log_F 0.15 B)$
+                            \item Range: $D(\log_F 0.15B + P)$
+                            \item Insert: Search + $2D$
+                            \item Delete: Search + $2D$
+                        \end{itemize}
+                  \item \code{Unclust. Hash}
+                        \begin{itemize}
+                            \item Scan: $BD(R+0.125)$
+                            \item Equality: $2D$
+                            \item Range: $BD$
+                            \item Insert: Search + $2D$
+                            \item Delete: Search + $2D$
+                        \end{itemize}
+              \end{itemize}
     \end{itemize}
-    \begin{center}
-        \begin{tabular}{ | c | c | } \hline
-            Var     & Desc                                      \\ \hline
-            $B$     & the number of data pages                  \\ \hline
-            $R$     & number of records per page                \\ \hline
-            $D$     & average time to read or write a disk page \\ \hline
-            $F$     & average fanout for a non-leaf page        \\ \hline
-        \end{tabular}
-    \end{center}
-    \begin{center}
-        \begin{adjustbox}{angle=270}
-            \begin{tabular}{ | c | c | c | c | c | c | } \hline
-                ()            & Scan          & Equality              & Range                                    & Insert        & Delete        \\ \hline
-                Heap          & $BD$          & $0.5 BD$              & $BD$                                     & $2D$          & Search + $D$  \\ \hline
-                Sorted        & $BD$          & $D \log_2 B$          & $D(\log_2 B +$ \# matching pages$)$      & Search + $BD$ & Search + $BD$ \\ \hline
-                Clustered     & $1.5 BD$      & $D \log_F 1.5 B$      & $D(\log_F 1.5B + $ \# matching pages$)$  & Search + $D$  & Search + $D$  \\ \hline
-                Unclust. Tree & $BD(R+0.15)$  & $D(1 + \log_F 0.15B)$ & $D(\log_F 0.15B + $ \# matching pages$)$ & Search + $2D$ & Search + $2D$ \\ \hline
-                Unclust. Hash & $BD(R+0.125)$ & $2D$                  & $BD$                                     & Search + $2D$ & Search + $2D$ \\ \hline
-            \end{tabular}
-        \end{adjustbox}
-    \end{center}
 \end{multicols}
 
 \end{document}
