@@ -55,8 +55,8 @@
   escapeinside={*'}{'*},
   language=haskell,
   tabsize=2,
-  aboveskip=2mm,
-  belowskip=2mm,
+  aboveskip=0mm,
+  belowskip=0mm,
   emphstyle={\bf},
   commentstyle=\it,
   stringstyle=\mdseries\ttfamily,
@@ -453,57 +453,7 @@ size t = loop 0 [] t
     loop acc (t:ts) Empty           = loop acc ts t
     loop acc ts     (Node _ l r)    = loop (acc + 1) (r:ts) l
 \end{lstlisting}
-        \item \emph{Lambda Calculus Functions}
-              \begin{lstlisting}
-ZERO    = \f x -> x
-ONE     = \f x -> f x
-TWO     = \f x -> f (f x)
-SUCC    = \n f x -> f (n f x)
-EXP     = \n m -> n (MULT m) ONE
-
-TRUE    = \x y -> x
-FALSE   = \x y -> y
-ITE     = \b x y -> b x y
-AND     = \b1 b2 -> b1 b2 FALSE
-OR      = \b1 b2 -> b1 TRUE b2
-NOT     = \b1 -> b1 FALSE TRUE
-NOR     = \b1 b2 -> NOT (OR b1 b2)
-NAND    = \b1 b2 -> NOT (AND b1 b2)
-XOR     = \b1 b2 -> AND (NAND b1 b2) (OR b1 b2)
-INCR    = \n f x -> f (n f x)
-PAIR    = \x y b -> b x y
-FST     = \p     -> p TRUE
-SND     = \p     -> p FALSE
-SKIP1   = \j k -> (\b ->
-    b TRUE ((AND TRUE (k(TRUE))) (j(k(FALSE))) (k(FALSE))))
-DECR    =  \n -> (n (SKIP1 INCR) (PAIR FALSE ZERO)) FALSE
-SUB     = \m n -> (n DECR) m
-ISZ     =  \n -> n(\a -> FALSE) TRUE
-EQL     = \n m -> AND (ISZ (SUB m n)) (ISZ (SUB n m))
-SUC   = \n f x -> f (n f x)
-ADD     = \n m -> n SUC m
-MUL     = \n m -> n (ADD m) ZERO
-REPEAT  = \n m -> n (PAIR m) FALSE
-EMPTY   = \p -> p (\x y z -> FALSE) TRUE
-FIX     = \stp -> (\x -> stp (x x)) (\x -> stp (x x))
-LEN     = FIX (\rec n -> (EMPTY n) ZERO (INCR (rec (SND n))))
-STEP    = \rec n -> (ISZ n) ZERO (ADD n (rec (DECR n)))
-SUM     = FIX STEP
-DIV     = FIX (\rec n m ->
-    (EQL n m) ONE ((ISZ (SUB n m) ) ZERO (INCR (rec (SUB n m) m))))
-MOD     = FIX (\rec n m ->
-    (EQL n m) ZERO ((ISZ (SUB n m) ) n (rec (SUB n m) m)))
-INSERT  = \n m -> (PAIR n m)
-APPEND' = FIX (\rec n m ->
-    (EMPTY n) m (INSERT (FST n) (rec (SND n) m)))
-
--- sets
-EMPTY   = \x -> FALSE
-INSERT  = \n s x -> ITE (EQL n x) TRUE (s x)
-HAS     = \s x -> s x
-INTERSECT   = \s1 s2 x -> AND (s1 x) (s2 x)
-            \end{lstlisting}
-        \item \emph{TYPE INFERENCE}
+       \item \emph{TYPE INFERENCE}
               \begin{itemize}
                   \item \code{Typing Rules:}
                         \begin{itemize}
@@ -585,7 +535,7 @@ let id = \x -> x in
                   \begin{itemize}
                       \item There are no reduction rules for \code{n} or \code{x}
                       \item Both of these expresssions are normal forms already; however, \code{n} is a \emph{value} and \code{x} is \emph{not a value}
-                      \item Thus is we reduce to just \code{x} the program is \emph{stuck}
+                      \item Thus if we reduce to just \code{x} the program is \emph{stuck}
                   \end{itemize}
                   \item \code{Evaluation relation:}
                   \begin{itemize}
@@ -593,6 +543,101 @@ let id = \x -> x in
                       \item The evaluation relation \code{e =~> e'} iff \code{e =*> e'} and \code{e'} is in normal form
                   \end{itemize}
               \end{itemize}
+            \item Remove all duplicate numbers from a list.
+\begin{lstlisting}
+DEDUP = FIX (\r l -> (EMPTY l)
+    FALSE ((INLIST (FST l) (SND l))
+    (r (SND l)) (PAIR (FST l) (r (SND l))))
+
+-- A function that checks to see if a number is in a list
+INLIST = FIX (\r e l -> (EMPTY l)
+    FALSE ((EQ (FST l) e) TRUE (r e (SND l))))
+\end{lstlisting}
+\item Return the tail element of a list
+\begin{lstlisting}
+let TAIL = FIX (\r l -> (EMPTY l)
+            FALSE ((EMPTY (SND l)) (FST l) (r (SND l))))
+\end{lstlisting}
+\item Transpose matrices
+\begin{lstlisting}
+tranpose list = map (\x -> map (\row -> row !! x) list)
+    [0..((length (head list)) - 1)]
+\end{lstlisting}
+\item Check for a balanced BST
+\begin{lstlisting}
+balanced tree = fst (helper tree)
+    where
+      helper Nil = (True, 0)
+      helper (Tree _ t1 t2) = (b1 && b2 && d1 == d2, d1 + 1)
+        where
+          (b1, d1) = helper t1
+          (b2, d2) = helper t2
+\end{lstlisting}
+\item \emph{How to work on lists}
+\begin{itemize}
+    \item Get the length: \code{length xs}
+    \item Get the list backwards: \code{reverse xs}
+    \item Get the first element: \code{head xs}
+    \item Get the $n^{th}$ element: \code{xs !! n}
+    \item Get the last element: \code{last xs}
+    \item Get the max: \code{maximum xs}
+    \item Get the min: \code{minimum xs}
+    \item Empty list: \code{null xs}
+    \item Check if any element passes: \code{any mytest xs}
+    \item Check if all elements pass: \code{all mytest xs}
+    \item Number the elements: \code{zip xs [0..]}
+\end{itemize}
+        \item \emph{Lambda Calculus Functions}
+              \begin{lstlisting}
+ZERO    = \f x -> x
+ONE     = \f x -> f x
+TWO     = \f x -> f (f x)
+SUCC    = \n f x -> f (n f x)
+EXP     = \n m -> n (MULT m) ONE
+
+TRUE    = \x y -> x
+FALSE   = \x y -> y
+ITE     = \b x y -> b x y
+AND     = \b1 b2 -> b1 b2 FALSE
+OR      = \b1 b2 -> b1 TRUE b2
+NOT     = \b1 -> b1 FALSE TRUE
+NOR     = \b1 b2 -> NOT (OR b1 b2)
+NAND    = \b1 b2 -> NOT (AND b1 b2)
+XOR     = \b1 b2 -> AND (NAND b1 b2) (OR b1 b2)
+INCR    = \n f x -> f (n f x)
+PAIR    = \x y b -> b x y
+FST     = \p     -> p TRUE
+SND     = \p     -> p FALSE
+SKIP1   = \j k -> (\b ->
+    b TRUE ((AND TRUE (k(TRUE))) (j(k(FALSE))) (k(FALSE))))
+DECR    =  \n -> (n (SKIP1 INCR) (PAIR FALSE ZERO)) FALSE
+SUB     = \m n -> (n DECR) m
+ISZ     =  \n -> n(\a -> FALSE) TRUE
+EQL     = \n m -> AND (ISZ (SUB m n)) (ISZ (SUB n m))
+SUC   = \n f x -> f (n f x)
+ADD     = \n m -> n SUC m
+MUL     = \n m -> n (ADD m) ZERO
+REPEAT  = \n m -> n (PAIR m) FALSE
+EMPTY   = \p -> p (\x y z -> FALSE) TRUE
+FIX     = \stp -> (\x -> stp (x x)) (\x -> stp (x x))
+LEN     = FIX (\rec n -> (EMPTY n) ZERO (INCR (rec (SND n))))
+STEP    = \rec n -> (ISZ n) ZERO (ADD n (rec (DECR n)))
+SUM     = FIX STEP
+DIV     = FIX (\rec n m ->
+    (EQL n m) ONE ((ISZ (SUB n m) ) ZERO (INCR (rec (SUB n m) m))))
+MOD     = FIX (\rec n m ->
+    (EQL n m) ZERO ((ISZ (SUB n m) ) n (rec (SUB n m) m)))
+INSERT  = \n m -> (PAIR n m)
+APPEND' = FIX (\rec n m ->
+    (EMPTY n) m (INSERT (FST n) (rec (SND n) m)))
+
+-- sets
+EMPTY   = \x -> FALSE
+INSERT  = \n s x -> ITE (EQL n x) TRUE (s x)
+HAS     = \s x -> s x
+INTERSECT   = \s1 s2 x -> AND (s1 x) (s2 x)
+            \end{lstlisting}
+
     \end{itemize}
 \end{multicols}
 
