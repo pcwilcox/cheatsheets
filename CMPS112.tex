@@ -403,6 +403,21 @@ listReverse :: [a] -> [a]
 listReverse []      = []
 listReverse (x:xs)  = listReverse xs ++ [x]
 \end{lstlisting}
+\item \emph{Higher order functions from practice final}
+\begin{lstlisting}
+reverse :: [a] -> [a]
+reverse xs = foldl (\res x -> x : res) [] xs
+\end{lstlisting}
+\begin{lstlisting}
+absValues :: [Int] -> [Int]
+absValues = map (\x -> if x < 0 then -x else x)
+\end{lstlisting}
+\begin{lstlisting}
+dedup :: [Int] -> [Int]
+dedup = foldr insert []
+  where
+    insert x ys = x : (filter (/= x) ys)
+\end{lstlisting}
         \item \emph{Binary Search Trees}
               \begin{lstlisting}
 size :: Tree->Int
@@ -455,13 +470,10 @@ NOT     = \b1 -> b1 FALSE TRUE
 NOR     = \b1 b2 -> NOT (OR b1 b2)
 NAND    = \b1 b2 -> NOT (AND b1 b2)
 XOR     = \b1 b2 -> AND (NAND b1 b2) (OR b1 b2)
-
 INCR    = \n f x -> f (n f x)
-
 PAIR    = \x y b -> b x y
 FST     = \p     -> p TRUE
 SND     = \p     -> p FALSE
-
 SKIP1   = \j k -> (\b ->
     b TRUE ((AND TRUE (k(TRUE))) (j(k(FALSE))) (k(FALSE))))
 DECR    =  \n -> (n (SKIP1 INCR) (PAIR FALSE ZERO)) FALSE
@@ -484,6 +496,12 @@ MOD     = FIX (\rec n m ->
 INSERT  = \n m -> (PAIR n m)
 APPEND' = FIX (\rec n m ->
     (EMPTY n) m (INSERT (FST n) (rec (SND n) m)))
+
+-- sets
+EMPTY   = \x -> FALSE
+INSERT  = \n s x -> ITE (EQL n x) TRUE (s x)
+HAS     = \s x -> s x
+INTERSECT   = \s1 s2 x -> AND (s1 x) (s2 x)
             \end{lstlisting}
         \item \emph{TYPE INFERENCE}
               \begin{itemize}
@@ -547,6 +565,33 @@ let id = \x -> x in
                             \item Whenever we infer a type for a let-defined variable, generalize
                             \item Whenever we see a variable with a polymorphic type, instantiate it with a fresh type variable
                         \end{itemize}
+              \end{itemize}
+              \item \emph{Formalizing Nano}
+              \begin{itemize}
+                  \item Want to guarantee properties about programs such as: all programs terminate, evaluations is deterministic, certain programs never fail at run time, etc
+                  \item \code{Operational Semantics}
+                  \begin{itemize}
+                      \item Defines how to execute a program step by step
+                      \item A \emph{step relation} or \emph{reduction relation} \code{e => e'} as: ``expression \code{e} makes a step to an expression \code{e'}''
+                      \item Defined inductively through a set of rules
+\begin{lstlisting}
+             e1 => e1'        -- premise
+[Add-L] -------------
+        e1 + e2 => e1' + e2  -- conclusion
+\end{lstlisting}
+\item A reduction is \emph{valid} if we can build its \emph{derivation} by ``stacking'' the rules
+                  \end{itemize}
+                  \item \code{Normal forms:}
+                  \begin{itemize}
+                      \item There are no reduction rules for \code{n} or \code{x}
+                      \item Both of these expresssions are normal forms already; however, \code{n} is a \emph{value} and \code{x} is \emph{not a value}
+                      \item Thus is we reduce to just \code{x} the program is \emph{stuck}
+                  \end{itemize}
+                  \item \code{Evaluation relation:}
+                  \begin{itemize}
+                      \item Like in $\lambda$-calculus we define the \emph{multi-step reduction} relation \code{e =*> e'} iff there exists a sequence of expressions \code{e1, ... en} such that \code{e = e1}, \code{en = e'}, and \code{ei => e(i+1)} for each \code{i} in \code{0..n)}
+                      \item The evaluation relation \code{e =~> e'} iff \code{e =*> e'} and \code{e'} is in normal form
+                  \end{itemize}
               \end{itemize}
     \end{itemize}
 \end{multicols}
