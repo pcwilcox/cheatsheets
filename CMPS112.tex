@@ -369,14 +369,14 @@ concat xss  = [x | xs <- xss, x <- xs]
                           ok _ = []
                       in concat (map ok xs)
             \end{lstlisting}
-            \item \emph{Functions from Homework:}
-\begin{lstlisting}
+        \item \emph{Functions from Homework:}
+              \begin{lstlisting}
 sumList :: [Int] -> Int
 sumList []      = 0
 sumList (x:xs)  = x + sumList xs
 \end{lstlisting}
 
-\begin{lstlisting}
+              \begin{lstlisting}
 digitsOfInt :: Int -> [Int]
 digitsOfInt n
     | n < 0     = []
@@ -386,30 +386,30 @@ digitsOfInt n
 digits :: Int -> [Int]
 digits n = digitsOfInt (abs n)
 \end{lstlisting}
-\begin{lstlisting}
+              \begin{lstlisting}
 additivePersistence :: Int -> Int
 additivePersistence n~
     | n < 10    = 0
     | otherwise = 1 + additivePersistence (sumList (digitsOfInt n))
 \end{lstlisting}
-\begin{lstlisting}
+              \begin{lstlisting}
 digitalRoot :: Int -> Int
 digitalRoot n
     | n < 10    = n
     | otherwise = digitalRoot (sumList (digitsOfInt n))
 \end{lstlisting}
-\begin{lstlisting}
+              \begin{lstlisting}
 listReverse :: [a] -> [a]
 listReverse []      = []
 listReverse (x:xs)  = listReverse xs ++ [x]
 \end{lstlisting}
-\item \emph{Binary Search Trees}
-\begin{lstlisting}
+        \item \emph{Binary Search Trees}
+              \begin{lstlisting}
 size :: Tree->Int
 size Empty = 0
 size (Node_ l r) = 1 + size l + size r
 \end{lstlisting}
-\begin{lstlisting}
+              \begin{lstlisting}
 insert :: Int -> Tree -> Tree
 insert x Empty = Node x Empty Empty
 insert x (Node y l r)
@@ -417,7 +417,7 @@ insert x (Node y l r)
     | x < y     = Node y (insert x l) r
     | otherwise = Node y l (insert x r)
 \end{lstlisting}
-\begin{lstlisting}
+              \begin{lstlisting}
 sort :: [Int] -> [Int]
 sort xs = toList (fromList xs)
   where
@@ -429,7 +429,7 @@ toList :: Tree -> [Int]
 toList Empty        = []
 toList (Node x l r) = toList l ++ [x] ++ toList r
 \end{lstlisting}
-\begin{lstlisting}
+              \begin{lstlisting}
 size :: Tree -> Int
 size t = loop 0 [] t
   where
@@ -438,9 +438,8 @@ size t = loop 0 [] t
     loop acc (t:ts) Empty           = loop acc ts t
     loop acc ts     (Node _ l r)    = loop (acc + 1) (r:ts) l
 \end{lstlisting}
-
-\item \emph{Lambda Calculus Functions}
-            \begin{lstlisting}
+        \item \emph{Lambda Calculus Functions}
+              \begin{lstlisting}
 ZERO    = \f x -> x
 ONE     = \f x -> f x
 TWO     = \f x -> f (f x)
@@ -486,9 +485,70 @@ INSERT  = \n m -> (PAIR n m)
 APPEND' = FIX (\rec n m ->
     (EMPTY n) m (INSERT (FST n) (rec (SND n) m)))
             \end{lstlisting}
-        \end{itemize}
-
-
+        \item \emph{TYPE INFERENCE}
+              \begin{itemize}
+                  \item \code{Typing Rules:}
+                        \begin{itemize}
+                            \item \code{G |- e :: T}
+                            \item An expression \code{e} has type \code{T} in context \code{G} if we can derive \code{G |- e :: T} using these rules
+                            \item An expression \code{e} is \emph{well-typed} in \code{G} if we can derive \code{G |- e :: T} for some type \code{T}
+                            \item \emph{ill-typed} otherwise
+                        \end{itemize}
+                  \item \code{Polymorphic Types}
+                        \begin{itemize}
+                            \item \code{forall a . a -> a}
+                            \item \code{a} is a (bound) type variable
+                            \item also called a \emph{type scheme}
+                            \item We \emph{instantiate} this scheme into different types by replacing \code{a} in the body with some type e.g. instantiating with \code{Int} gives \code{Int -> Int}
+                        \end{itemize}
+                  \item \code{Inference with polymorphic types}
+                        \begin{itemize}
+                            \item We can derive \code{e :: Int -> Int} where \code{e} is
+                                  \begin{lstlisting}
+let id = \x -> x in
+  let y = id 5 in
+    id (\z -> z + y)
+\end{lstlisting}
+                            \item When we have to pick a type \code{T} for \code{x} we pick a \code{fresh type variable} \code{a}
+                            \item So the type of \code{\x -> x} comes out as \code{a -> a}
+                            \item We can \code{generalize} this type to \code{forall a . a -> a}
+                            \item When we apply \code{id} the first time we \emph{instantiate} this polymorphic type with \code{Int}
+                            \item When we apply \code{id} the second time we \emph{instantiate} this polymorphic type with \code{Int -> Int}
+                        \end{itemize}
+                        \item \code{Type substitutions}
+                        \begin{itemize}
+                            \item A finite map from type variables to types: \code{U : TVar -> Type}
+                            \item Example: \code{U1 = [a / Int, b / (c -> c)]}
+                            \item To apply a substitution \code{U} to a type \code{T} means replace all type vars in \code{T} with whatever they are mapped to in \code{U}
+                            \item Example: \code{U1 (a -> a) = Int -> Int}
+                        \end{itemize}
+                        \item \code{Type inference algorithm}
+                        \begin{itemize}
+                            \item Given a context \code{G} and an expression \code{e}
+                            \item return a type \code{T} such that \code{G |- e :: T}
+                            \item or report a type error if \code{e} is ill-typed in \code{G}
+                            \item Depending on what kind of expression \code{e} is, find a typing rule that applies to
+                            \item If the rule has premises, recursively call \code{infer} to obtain the types of sub-expressions
+                            \item Combine the types of sub-expressions according to the conclusion of the rule
+                            \item If no rule applies, report a type error
+                        \end{itemize}
+                        \item \code{Constraint-based type inference}
+                        \begin{itemize}
+                            \item Whenever you need to `guess' a type, don't. Just use a \emph{fresh} type variable
+                            \item Whenever a rule imposes a constraint on a type, try to find the right substitution for the free type variables to satisfy the constraint
+                        \end{itemize}
+                        \item \code{Unification}
+                        \begin{itemize}
+                            \item The \emph{unification} problem: given two types \code{T1} and \code{T2}, find a type substitution \code{U} such that \code{U T1 = U T2}
+                            \item Such a substitution is called a \emph{unifier} of \code{T1} and \code{T2}
+                        \end{itemize}
+                        \item \code{Generalization and INstantiation:}
+                        \begin{itemize}
+                            \item Whenever we infer a type for a let-defined variable, generalize
+                            \item Whenever we see a variable with a polymorphic type, instantiate it with a fresh type variable
+                        \end{itemize}
+              \end{itemize}
+    \end{itemize}
 \end{multicols}
 
 \end{document}
